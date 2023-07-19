@@ -4,11 +4,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="User")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE user SET deletedAt = true WHERE userId = ?")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +48,17 @@ public class User {
     @OneToOne
     @JoinColumn(name="schoolId")
     private School school;
+
+    @Column(name="createdAt")
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @Column(name="updatedAt")
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @Column(name="deleatedAt")
+    @ColumnDefault("false")
+    private Boolean deletedAt;
 
 }
