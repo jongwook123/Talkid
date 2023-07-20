@@ -1,13 +1,13 @@
 package com.talkids.backend.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name="Language")
-@Getter
-@Setter
+@Data
 public class Language {
 
     @Id

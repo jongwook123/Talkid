@@ -1,6 +1,7 @@
 package com.talkids.backend.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -12,8 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="User")
-@Getter
-@Setter
+@Data
 @SQLDelete(sql = "UPDATE user SET deletedAt = true WHERE userId = ?")
 public class User {
     @Id
@@ -37,15 +37,15 @@ public class User {
     @Column(name="userProfile", nullable = false, columnDefinition = "LONGTEXT")
     private String userProfile;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="languageId")
     private Language language;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="userTypeId")
     private UserType userType;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="schoolId")
     private School school;
 
