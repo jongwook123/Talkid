@@ -1,13 +1,11 @@
 package com.talkids.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
 @Table(name="School")
-@Getter
-@Setter
+@Data
 public class School {
 
     @Id
@@ -27,8 +25,14 @@ public class School {
     @Column(name="schoolLng", nullable=false)
     private Double schoolLng;
 
-    @OneToOne
+    /* ---------------------------------- */
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="countryId")
     private Country country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="timeZoneId")
+    private TimeZone timeZone;
 
 }
