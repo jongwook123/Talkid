@@ -27,7 +27,7 @@ export const Button = styled.button`
         top: 8px;
         transition: all 0.2s;
         transform: ${props => props.clicked ? "translate(5px, -1px) rotate(225deg);" : "translate(0, -1px) rotate(225deg)" };
-        border-top: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : `${props.theme.colors.border.light_black}`};
+        border-top: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : `${props.theme.colors.border.light_black2}`};
     }
 
     &::after {
@@ -40,7 +40,7 @@ export const Button = styled.button`
         top: 8px;
         transition: all 0.2s;
         transform: ${props => props.clicked ? "translate(-4px, -1px) rotate(135deg);" : "translate(0, -1px) rotate(135deg)" };
-        border-top: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : `${props.theme.colors.border.light_black}`};
+        border-top: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : `${props.theme.colors.border.light_black2}`};
     }
 `
 

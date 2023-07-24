@@ -17,6 +17,7 @@ export const theme = {
         border: {
             light_gray: "#DDDDDD",
             light_black: "#2B2D36",
+            light_black2: "#525463",
         },
         box_shadow: {
             gray: "#CECECE"
