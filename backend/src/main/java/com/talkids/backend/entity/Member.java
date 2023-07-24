@@ -7,6 +7,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE Member SET deletedAt = true WHERE memberId = ?")
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     @Id
@@ -69,7 +71,7 @@ public class Member {
 
     /* ---------------------------------- */
 
-    @Column(name="createdAt")
+    @Column(name="createdAt", updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
 
