@@ -2,8 +2,6 @@ package com.talkids.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name="Country")
@@ -14,9 +12,13 @@ public class Country {
     @Column(name="countryId")
     private int countryId;
 
+    @Column(name="countryCode")
+    private int countryCode;
+
     @Column(name="countryName", nullable=false, length=100)
     private String countryName;
 
-    @Column(name="countryCode", nullable=false, length=3)
-    private String countryCode;
+    @Column(name="countryImage", nullable = false, columnDefinition = "LONGTEXT")
+    private String countryImage;
+
 }
