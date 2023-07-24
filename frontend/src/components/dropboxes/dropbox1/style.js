@@ -71,5 +71,6 @@ export const ListButton = styled.button`
 
     &:hover {
         background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_light}` : props.color === 'green' ? `${props.theme.colors.theme.green_light}` : `${props.theme.colors.theme.blue_light}`};
+        color: ${props => props.theme.colors.font.white};
     }
 `
