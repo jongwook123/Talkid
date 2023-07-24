@@ -1,11 +1,11 @@
 import * as S from './style';
 
-export default function LongInput1({ props: { id, desc, color, placeholder, value, callback } }) {
+export default function LongInput1({ props: { id, desc, color, placeholder, type, value, callback } }) {
     return (
-        <S.FieldSet>
+        <S.FieldSet color={color} isFill={!!value}>
             <legend>{desc} 입력 영역</legend>
-            <S.Label htmlFor={id}>{desc}</S.Label>
-            <S.Input type="text" id={id} name={id} placeholder={placeholder} color={color} value={value} onChange={callback} />
+            <label htmlFor={id}>{placeholder}</label>
+            <S.Input type={type} id={id} name={id} color={color} value={value} onChange={callback} isFill={!!value}/>
         </S.FieldSet>
     )
 }

@@ -3,31 +3,57 @@ import IROnly from "styles/IROnly";
 
 export const FieldSet = styled.fieldset`
     width: 100%;
+    position: relative;
     display: flex;
     flex-direction: column;
 
     & > legend {
         ${IROnly}
     }
-`
 
-export const Label = styled.label`
-    width: 100%;
-    margin-bottom: 8px;
-    color: ${props => props.theme.colors.font.light_black};
-    font-size: ${props => props.theme.font_size.lv3};
+    & > label {
+        width: fit-content;
+        position: absolute;
+        top: ${props => props.isFill ? "0%" : "50%"};
+        left: 6px;
+        transform: translate(0, -50%);
+        transition: all 0.15s;
+        z-index: 200;
+        padding: 0 2px;
+        background-color: ${props => props.theme.colors.background_color.white};
+        color: ${props => props.isFill ? props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : props.theme.colors.font.light_gray};
+        font-size: ${props => props.isFill ? props.theme.font_size.lv2 : props.theme.font_size.lv3};
+    }
+
+    &:focus-within > label {
+        top: 0;
+        left: 10px;
+        color: ${(props) => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+        font-size: ${props => props.theme.font_size.lv2};
+    }
 `
 
 export const Input = styled.input`
     width: 100%;
     display: block;
     height: 32px;
-    padding: 0 8px;
-    border: 2px solid ${props => props.theme.colors.border.light_gray};
+    padding: 0 4px;
+    border: 0;
+    position: relative;
+    border: 2px solid ${props => props.isFill ? props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : "0"};
+    border-bottom: 2px solid ${props => props.isFill ? props.theme.colors.theme.orange : props.theme.colors.border.light_gray};
     font-size: ${props => props.theme.font_size.lv3};
+    border-radius: ${props => props.isFill ? props.theme.border_radius.lv2 : "0"};
 
     &:focus {
         outline: 0;
-        border: 2px solid ${(props) => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+        border: 2px solid ${(props) => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};    
+        border-radius: ${props => props.theme.border_radius.lv2};
     }
+
+    &::placeholder {
+        color: ${props => props.theme.colors.font.light_gray2};
+    }
+
+   
 `

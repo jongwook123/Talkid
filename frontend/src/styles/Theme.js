@@ -25,6 +25,7 @@ export const theme = {
         font: {
             light_black: "#525463",
             light_gray: "#858899",
+            light_gray2: "#CDCDCD",
             white: "#FFFFFF",
         }
     },
