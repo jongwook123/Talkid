@@ -25,6 +25,7 @@ export const theme = {
         font: {
             light_black: "#525463",
             light_gray: "#858899",
+            white: "#FFFFFF",
         }
     },
     border_radius: {
