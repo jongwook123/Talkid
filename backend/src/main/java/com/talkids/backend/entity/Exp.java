@@ -25,7 +25,7 @@ public class Exp {
 
     /* ---------------------------------- */
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberId")
     private Member member;
 }

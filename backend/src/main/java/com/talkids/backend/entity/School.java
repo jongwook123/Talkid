@@ -27,11 +27,11 @@ public class School {
 
     /* ---------------------------------- */
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="countryId")
     private Country country;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="timeZoneId")
     private TimeZone timeZone;
 

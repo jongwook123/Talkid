@@ -1,17 +1,21 @@
 package com.talkids.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="Member")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE Member SET deletedAt = true WHERE memberId = ?")
 public class Member {
 
@@ -47,19 +51,19 @@ public class Member {
 
     /* ---------------------------------- */
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberTypeId")
     private MemberType memberType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="schoolId")
     private School school;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="languageId")
     private Language language;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="countryId")
     private Country country;
 
@@ -73,8 +77,12 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Column(name="deleatedAt")
+    @Column(name="deletedAt")
     @ColumnDefault("false")
     private Boolean deletedAt;
 
+
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.memberPassword = passwordEncoder.encode(memberPassword);
+    }
 }
