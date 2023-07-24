@@ -1,12 +1,12 @@
 package com.talkids.backend.entity;
 
+import com.talkids.backend.dto.MemberSignUpDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -37,16 +37,16 @@ public class Member {
     @Column(name="memberName", nullable = false, length = 100)
     private String memberName;
 
-    @Column(name="memberIntroduce", nullable = false, length = 200)
+    @Column(name="memberIntroduce", length = 200)
     private String memberIntroduce;
 
-    @Column(name="memberImage", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name="memberImage", columnDefinition = "LONGTEXT")
     private String memberImage;
 
     @Column(name="memberFilterCount")
     private int memberFilterCount;
 
-    @Column(name="refreshToken", nullable = false, length = 100)
+    @Column(name="refreshToken", length = 100)
     private String refreshToken;
 
     /* ---------------------------------- */
@@ -82,7 +82,5 @@ public class Member {
     private Boolean deletedAt;
 
 
-    public void encodePassword(PasswordEncoder passwordEncoder){
-        this.memberPassword = passwordEncoder.encode(memberPassword);
-    }
+
 }
