@@ -1,22 +1,10 @@
 package com.talkids.backend.dto;
 
-import com.talkids.backend.entity.Country;
-import com.talkids.backend.entity.Language;
-import com.talkids.backend.entity.Member;
-import com.talkids.backend.entity.School;
+import com.talkids.backend.entity.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class MemberSignUpDto {
-
-   @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Response{
-        private String memberMail;
-        private String memberPassword;
-    }
+public class SignUpDto {
 
     @Getter
     @AllArgsConstructor
@@ -33,17 +21,18 @@ public class MemberSignUpDto {
         @NotBlank(message = "이름을 입력해주세요")
         private String memberName;
 
-        @NotBlank(message = "학교를 입력해주세요")
         private String schoolName;
 
         @NotBlank(message = "국가를 입력해주세요")
         private String countryName;
 
         @NotBlank(message = "언어를 입력해주세요")
-        private String languageCode;
+        private String languageEng;
+
+        private int memberTypeId;
 
         @Builder
-        public Member saveTeacherDto(String encodePassword, School school, Language language, Country country){
+        public Member saveMemberDto(String encodePassword, School school, Language language, Country country, MemberType memberType){
             return Member.builder()
                     .memberMail(memberMail)
                     .memberPassword(encodePassword)
@@ -51,9 +40,8 @@ public class MemberSignUpDto {
                     .school(school)
                     .language(language)
                     .country(country)
+                    .memberType(memberType)
                     .build();
         }
     }
-
-
 }

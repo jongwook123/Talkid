@@ -12,13 +12,13 @@ public class Country {
     @Column(name="countryId")
     private int countryId;
 
-    @Column(name="countryCode")
-    private int countryCode;
+    @Column(name="countryCode", nullable=false, length=10)
+    private String countryCode;
 
     @Column(name="countryName", nullable=false, length=100)
     private String countryName;
 
-    @Column(name="countryImage", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name="countryImage", columnDefinition = "LONGTEXT")
     private String countryImage;
 
 }

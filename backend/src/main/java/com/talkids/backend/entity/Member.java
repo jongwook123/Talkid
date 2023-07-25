@@ -1,6 +1,5 @@
 package com.talkids.backend.entity;
 
-import com.talkids.backend.dto.MemberSignUpDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -82,7 +81,5 @@ public class Member {
     @Column(name="deletedAt")
     @ColumnDefault("false")
     private Boolean deletedAt;
-
-
 
 }

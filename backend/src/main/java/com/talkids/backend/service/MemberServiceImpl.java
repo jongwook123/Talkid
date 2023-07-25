@@ -3,15 +3,9 @@ package com.talkids.backend.service;
 import com.talkids.backend.common.token.JwtToken;
 import com.talkids.backend.common.token.JwtTokenProvider;
 import com.talkids.backend.dto.SignInDto;
-import com.talkids.backend.dto.TeacherSignUpDto;
-import com.talkids.backend.entity.Country;
-import com.talkids.backend.entity.Language;
-import com.talkids.backend.entity.Member;
-import com.talkids.backend.entity.School;
-import com.talkids.backend.repository.CountryRepository;
-import com.talkids.backend.repository.LanguageRepository;
-import com.talkids.backend.repository.MemberRepository;
-import com.talkids.backend.repository.SchoolRepository;
+import com.talkids.backend.dto.SignUpDto;
+import com.talkids.backend.entity.*;
+import com.talkids.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberTypeRepository memberTypeRepository;
     private final CountryRepository countryRepository;
     private final LanguageRepository languageRepository;
     private final SchoolRepository schoolRepository;
@@ -36,25 +31,26 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public String teacherSignUp(TeacherSignUpDto.Request req) throws Exception {
+    public String SignUp(SignUpDto.Request req) {
         if (memberRepository.findByMemberMail(req.getMemberMail()).isPresent()){
-            throw new Exception("이미 존재하는 이메일입니다.");
+            return null;
         }
 
-        School school = schoolRepository.findBySchoolName(req.getSchoolName());
-        Language language = languageRepository.findByLanguageCode(req.getLanguageCode());
         Country country = countryRepository.findByCountryName(req.getCountryName());
+        School school = schoolRepository.findBySchoolName(req.getSchoolName());
+        Language language = languageRepository.findByLanguageEng(req.getLanguageEng());
+        MemberType memberType = memberTypeRepository.findByMemberTypeId(req.getMemberTypeId());
 
         String encodePassword = passwordEncoder.encode(req.getMemberPassword()); // 비밀번호 암호화
-        Member member = memberRepository.save(req.saveTeacherDto(encodePassword, school, language, country));
 
-        System.out.println(member);
+        Member member = memberRepository.save(req.saveMemberDto(encodePassword, school, language, country, memberType));
+
         return member.getMemberMail();
     }
 
     @Transactional
     @Override
-    public String signIn(SignInDto.Request req) throws Exception {
+    public String signIn(SignInDto.Request req) {
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
