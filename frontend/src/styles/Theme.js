@@ -13,6 +13,8 @@ export const theme = {
         },
         background_color: {
             white: "#FFFFFF",
+            light_gray: "#7C7C7C",
+            gray: "#A6A6A6"
         },
         border: {
             light_gray: "#DDDDDD",
@@ -33,6 +35,7 @@ export const theme = {
         lv1: "5px",
         lv2: "7px",
         lv3: "10px",
+        circle: "50%",
     },
     font_size: {
         lv1: "10px",

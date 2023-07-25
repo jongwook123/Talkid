@@ -6,10 +6,11 @@ export const GlobalStyle = createGlobalStyle`
 
     *, *::before, *::after {
         box-sizing: border-box;
-        font-family: 'Ubuntu', sans-serif;
+        font-family: 'Righteous', sans-serif;
+        /* font-family: 'Ubuntu', sans-serif; */
     }
 
-    button, a {
+    button, a, label {
         cursor: pointer;
     }
 

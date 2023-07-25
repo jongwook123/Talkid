@@ -14,7 +14,8 @@ export const FieldSet = styled.fieldset`
     & > label {
         width: fit-content;
         position: absolute;
-        top: ${props => props.isFill ? "0%" : "50%"};
+        font-family: 'Righteous', sans-serif;
+        top: ${props => props.isFill ? "0" : "50%"};
         left: ${props => props.isFill ? "10px" : "6px"};
         transform: translate(0, -50%);
         transition: all 0.15s;
@@ -26,7 +27,7 @@ export const FieldSet = styled.fieldset`
     }
 
     &:focus-within > label {
-        top: -1px;
+        top: 0;
         left: 10px;
         color: ${(props) => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}`};
         font-size: ${props => props.theme.font_size.lv3};
