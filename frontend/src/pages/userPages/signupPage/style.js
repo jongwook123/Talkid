@@ -32,7 +32,7 @@ export const SigninSectionHeader = styled.header`
     padding: 0 20px;
     top: 0;
     left: 50%;
-    transform: translate(-50%, calc(-60% - 4px));
+    transform: translate(-50%, calc(-50% - 4px));
     background-color: ${props => props.theme.colors.background_color.white};
 
     & > h2 {
@@ -51,7 +51,7 @@ export const SigninForm = styled.form`
     flex-direction: column;
     
     & > fieldset + fieldset {
-        margin-top: 30px;
+        margin-top: 20px;
     }
 `
 
@@ -61,6 +61,6 @@ export const ButtonWrapper = styled.div`
     padding: 0 15px;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%, calc(40% + 4px));
+    transform: translate(-50%, calc(50% + 4px));
     background-color: ${props => props.theme.colors.background_color.white};
 `
