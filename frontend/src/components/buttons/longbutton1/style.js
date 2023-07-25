@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Button = styled.button`
     width: 100%;
-    height: 32px;
+    height: 48px;
     border: 0;
     transition: all 0.2s;
     background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};

@@ -50,8 +50,10 @@ export default function SigninPage() {
                     </S.SigninSectionHeader>
                     <S.SigninForm action="">
                         <LongInput1 props={{ id: "id", desc: "Insert your id", color: "orange", placeholder: "Your ID", type: "text", value: inputs.id, callback: onChangeHandler}} />
-                        <LongInput1 props={{ id: "password", desc: "Insert your password", color: "orange", placeholder: "Your Password", type: "password", value: inputs.password, callback: onChangeHandler}} />
-                        <LongButton1 props={{ color: "orange", text: "sign in" }} />
+                        <LongInput1 props={{ id: "password", desc: "Insert your password", color: "blue", placeholder: "Your Password", type: "password", value: inputs.password, callback: onChangeHandler}} />
+                        <S.ButtonWrapper>
+                            <LongButton1 props={{ color: "green", text: "Sign in", callback: buttonClickHandler }} />
+                        </S.ButtonWrapper>
                     </S.SigninForm>
                 </S.SigninSection>
             </main>

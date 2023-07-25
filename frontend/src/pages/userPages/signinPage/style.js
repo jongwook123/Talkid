@@ -18,21 +18,21 @@ export const PageMain = styled.main`
 export const SigninSection = styled.section`
     position: absolute;
     width: 620px;
-    padding: 80px 50px;
+    padding: 80px 40px 90px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 8px solid ${props => props.theme.colors.theme.green};
+    border: 8px solid ${props => props.theme.colors.theme.green_light};
     border-radius: ${props => props.theme.border_radius.lv2};
 `
 
 export const SigninSectionHeader = styled.header`
     width: fit-content;
     position: absolute;
-    padding: 10px;
-    top: -50px;
+    padding: 0 20px;
+    top: 0;
     left: 50%;
-    transform: translate(-50%);
+    transform: translate(-50%, calc(-50% - 4px));
     background-color: ${props => props.theme.colors.background_color.white};
 
     & > h2 {
@@ -53,8 +53,14 @@ export const SigninForm = styled.form`
     & > fieldset + fieldset {
         margin-top: 30px;
     }
+`
 
-    & > button {
-        /* position: absolute; */
-    }
+export const ButtonWrapper = styled.div`
+    position: absolute;
+    width: 520px;
+    padding: 0 15px;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, calc(50% + 4px));
+    background-color: ${props => props.theme.colors.background_color.white};
 `
