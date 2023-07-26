@@ -23,10 +23,10 @@ public class SignUpDto {
 
         private String schoolName;
 
-        @NotBlank(message = "국가를 입력해주세요")
+        @NotBlank(message = "국가를 선택해주세요")
         private String countryName;
 
-        @NotBlank(message = "언어를 입력해주세요")
+        @NotBlank(message = "언어를 선택해주세요")
         private String languageEng;
 
         private int memberTypeId;

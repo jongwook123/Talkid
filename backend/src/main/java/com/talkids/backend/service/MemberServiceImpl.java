@@ -3,10 +3,13 @@ package com.talkids.backend.service;
 import com.talkids.backend.common.token.JwtToken;
 import com.talkids.backend.common.token.JwtTokenProvider;
 import com.talkids.backend.dto.SignInDto;
+
 import com.talkids.backend.dto.SignUpDto;
+import com.talkids.backend.dto.UpdateInfoDto;
 import com.talkids.backend.entity.*;
 import com.talkids.backend.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -24,16 +27,25 @@ public class MemberServiceImpl implements MemberService {
     private final CountryRepository countryRepository;
     private final LanguageRepository languageRepository;
     private final SchoolRepository schoolRepository;
+    private final FileService fileService;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${com.talkids.backend.path}")
+    private String uploadDir;
+
+    @Override
+    public Member getMember(String memberMail) {
+        return memberRepository.findByMemberMail(memberMail).get();
+    }
+
     @Transactional
     @Override
     public String SignUp(SignUpDto.Request req) {
         if (memberRepository.findByMemberMail(req.getMemberMail()).isPresent()){
-            return null;
+            throw new IllegalArgumentException("다시 시도해 주세요");
         }
 
         Country country = countryRepository.findByCountryName(req.getCountryName());
@@ -73,5 +85,19 @@ public class MemberServiceImpl implements MemberService {
 
         System.out.println("jwtToken:" + jwtToken);
         return accessToken;
+    }
+
+    @Transactional
+    @Override
+    public String UpdateInfoDto(int memberId, UpdateInfoDto.Request req) {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
+
+        member.setMemberPassword(passwordEncoder.encode(req.getMemberPassword()));
+        member.setCountry(countryRepository.findByCountryName(req.getCountryName()));
+        member.setLanguage(languageRepository.findByLanguageEng(req.getLanguageEng()));
+        member.setMemberIntroduce(req.getMemberIntroduce());
+
+        return member.getMemberMail();
     }
 }

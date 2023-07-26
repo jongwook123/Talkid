@@ -1,0 +1,33 @@
+package com.talkids.backend.dto;
+
+import com.talkids.backend.entity.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+public class UpdateInfoDto {
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Request{
+
+        @NotBlank(message = "비밀번호를 입력해주세요")
+        private String memberPassword;
+
+        private String countryName;
+
+        private String languageEng;
+
+        // 사진
+        // private MultipartFile file;
+
+        // 자기소개
+        private String memberIntroduce;
+
+    }
+}

@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         System.out.println("createUserDetails : " + member);
 
         return User.builder()
-                .username(member.getMemberName())
+                .username(member.getMemberMail())
                 .password(member.getMemberPassword())
                 .build();
     }
