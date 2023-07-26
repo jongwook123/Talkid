@@ -1,5 +1,6 @@
 package com.talkids.backend.service;
 
+import com.talkids.backend.dto.LogoutDto;
 import com.talkids.backend.dto.SignInDto;
 import com.talkids.backend.dto.SignUpDto;
 import com.talkids.backend.dto.UpdateInfoDto;
@@ -21,4 +22,6 @@ public interface MemberService {
     /** 회원 정보 수정*/
     String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) throws Exception;
 
+    /** 로그아웃 */
+    String logout(LogoutDto.Request req) throws Exception;
 }

@@ -1,15 +1,20 @@
 package com.talkids.backend.service;
 
+import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.common.token.JwtToken;
 import com.talkids.backend.common.token.JwtTokenProvider;
+import com.talkids.backend.dto.LogoutDto;
 import com.talkids.backend.dto.SignInDto;
 
 import com.talkids.backend.dto.SignUpDto;
 import com.talkids.backend.dto.UpdateInfoDto;
 import com.talkids.backend.entity.*;
 import com.talkids.backend.repository.*;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -18,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +36,11 @@ public class MemberServiceImpl implements MemberService {
     private final CountryRepository countryRepository;
     private final LanguageRepository languageRepository;
     private final SchoolRepository schoolRepository;
-    private final FileService fileService;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-
-    @Value("${com.talkids.backend.path}")
-    private String uploadDir;
+    private final RedisTemplate redisTemplate;
 
     @Override
     public Member getMember(String memberMail) {
@@ -103,5 +107,33 @@ public class MemberServiceImpl implements MemberService {
         member.setMemberIntroduce(req.getMemberIntroduce());
 
         return member.getMemberMail();
+    }
+
+    @Transactional
+    @Override
+    public String logout(LogoutDto.Request req) {
+        // 1. Access Token 검증
+        if (!jwtTokenProvider.validateToken(req.getAccessToken())) {
+            throw new NotFoundException("잘못된 접근입니다.");
+        }
+
+        // 2. Access Token 에서 User email 을 가져옵니다.
+        Authentication authentication = jwtTokenProvider.getAuthentication(req.getAccessToken());
+
+        // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
+            // Refresh Token 삭제
+            redisTemplate.delete("RT:" + authentication.getName());
+        }
+
+        // Refresh Token DB에서 삭제
+        memberRepository.findByMemberMail(authentication.getName()).get().setRefreshToken(null);
+
+        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
+        Long expiration = jwtTokenProvider.getExpiration(req.getAccessToken());
+        redisTemplate.opsForValue()
+                .set(req.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+
+        return authentication.getName();
     }
 }
