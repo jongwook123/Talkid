@@ -51,6 +51,7 @@ export const List = styled.ul`
     position: absolute;
     top: 37px;
     padding: 4px 0;
+    z-index: 1000;
     box-shadow: 0 0 5px 1px ${props => props.theme.colors.box_shadow.gray};;
     border-radius: ${props => props.theme.border_radius.lv1};
     background-color: ${props => props.theme.colors.background_color.white};

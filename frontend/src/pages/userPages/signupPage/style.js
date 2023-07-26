@@ -62,7 +62,7 @@ export const RadioFieldset = styled.fieldset`
     display: flex;
     align-items: center;
     padding-top: 10px;
-    margin-bottom: -10px;
+    margin-bottom: 10px;
 
     & > legend {
         ${IROnly}
@@ -108,11 +108,9 @@ export const RadioFieldset = styled.fieldset`
     }
 `
 
-export const CertifyFieldset = styled.fieldset`
-`
-
 export const StyledImageFieldset = styled.fieldset`
     width: 100%;
+    margin-top: 0 !important;
     display: ${props => props.visible ? "block" : "none"};
 
     & > legend {
@@ -155,12 +153,12 @@ export const ImagePreviewIconWrapper = styled.div`
     width: 20px;
     height: 20px;
     margin: 5px;
-    background-color: #c4c4c4;
-    border-radius: 50%;
+    background-color: ${props => props.theme.colors.background_color.light_gray};
+    border-radius: ${props => props.theme.border_radius.circle};
 
     & > span {
-        color: white;
-        vertical-align: 10px;
+        padding-bottom: 5px;
+        color: ${props => props.theme.colors.font.white};
     }
 `
 
@@ -173,7 +171,7 @@ export const StyledImageUploadBox = styled.div`
 
     & > * {
         width: 100%;
-        border-radius: 3px;
+        border-radius: ${props => props.theme.border_radius.lv1};
     }
 
     & > input {
@@ -244,6 +242,16 @@ export const StyledPreviewContainer = styled.div`
     &::-webkit-scrollbar-track {
         background: ${props => props.theme.colors.background_color.white};
         border-radius: 10px;
+    }
+`
+
+export const DropboxFieldset = styled.fieldset`
+    & > p {
+        font-weight: 700;
+        margin-bottom: 10px;
+        margin-left: 5px;
+        color: ${props => props.theme.colors.font.light_black};
+        font-size: ${props => props.theme.font_size.lv3_1};
     }
 `
 

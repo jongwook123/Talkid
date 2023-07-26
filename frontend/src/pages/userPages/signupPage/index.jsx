@@ -4,8 +4,12 @@ import * as S from './style'
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
+import DropBox1 from "components/dropboxes/dropbox1";
 import { useRef } from "react";
 import { useEffect } from "react";
+
+const dummyCountryList = ["Republic of Korea", "United States of America", "Japan", "China"];
+const dummyLanguageList = ["Korean", "English", "Japanese", "Chinese"];
 
 function ImagePreview({ image, deleteFunc }) {
     return (
@@ -103,12 +107,43 @@ export default function SignupPage({ max = 10 }) {
         setPreviewImages(imageJSXs);
     }, [uploadedImages]);
 
+    // 나라 관련
+    const [counrtyList, setCountryList] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState("");
+
+    useEffect(() => {
+        setCountryList(dummyCountryList);
+    }, []);
+
+    useEffect(() => {
+        if (counrtyList.length === 0) {
+            return;
+        }
+
+        setSelectedCountry("Select your country!");
+    }, [counrtyList]);
+
+    // 언어 관련
+    const [languageList, setLanguageList] = useState([]);
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+
+    useEffect(() => {
+        setLanguageList(dummyLanguageList);
+    }, []);
+
+    useEffect(() => {
+        if (languageList.length === 0) {
+            return;
+        }
+
+        setSelectedLanguage("Select your language!");
+    }, [languageList]);
+
+
     // 확인 버튼 클릭
     const buttonClickHandler = (e) => {
         e.preventDefault();
     }
-
-    console.log(uploadedImages);
 
     return (
         <>
@@ -148,6 +183,14 @@ export default function SignupPage({ max = 10 }) {
                                     </S.StyledPreviewWrapper>
                                 </S.StyledImageUploadBox>
                             </S.StyledImageFieldset>
+                            <S.DropboxFieldset>
+                                <p>Country</p>
+                                <DropBox1 props={{ list: counrtyList, target: selectedCountry, callback: setSelectedCountry }} />
+                            </S.DropboxFieldset>
+                            <S.DropboxFieldset>
+                                <p>Language</p>
+                                <DropBox1 props={{ list: languageList, target: selectedLanguage, callback: setSelectedLanguage }} />
+                            </S.DropboxFieldset>
                             <S.ButtonWrapper>
                                 <LongButton1 props={{ color: "green", text: "Sign up", callback: buttonClickHandler }} />
                             </S.ButtonWrapper>

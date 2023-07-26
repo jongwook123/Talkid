@@ -41,6 +41,7 @@ export const theme = {
         lv1: "10px",
         lv2: "11px",
         lv3: "14px",
+        lv3_1: "16px",
         lv4: "18px",
         lv5: "24px",
         lv6: "32px",
