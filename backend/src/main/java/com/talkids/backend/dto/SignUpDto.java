@@ -21,13 +21,11 @@ public class SignUpDto {
         @NotBlank(message = "이름을 입력해주세요")
         private String memberName;
 
-        private String schoolName;
+        private int schoolId;
 
-        @NotBlank(message = "국가를 선택해주세요")
-        private String countryName;
+        private int countryId;
 
-        @NotBlank(message = "언어를 선택해주세요")
-        private String languageEng;
+        private int languageId;
 
         private int memberTypeId;
 

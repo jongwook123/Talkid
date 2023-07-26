@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -48,9 +50,9 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("다시 시도해 주세요");
         }
 
-        Country country = countryRepository.findByCountryName(req.getCountryName());
-        School school = schoolRepository.findBySchoolName(req.getSchoolName());
-        Language language = languageRepository.findByLanguageEng(req.getLanguageEng());
+        Country country = countryRepository.findByCountryId(req.getCountryId());
+        School school = schoolRepository.findBySchoolId(req.getSchoolId());
+        Language language = languageRepository.findByLanguageId(req.getLanguageId());
         MemberType memberType = memberTypeRepository.findByMemberTypeId(req.getMemberTypeId());
 
         String encodePassword = passwordEncoder.encode(req.getMemberPassword()); // 비밀번호 암호화
@@ -89,13 +91,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public String UpdateInfoDto(int memberId, UpdateInfoDto.Request req) {
+    public String UpdateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) {
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
 
+//        member = getMember(principal.getName());
+
         member.setMemberPassword(passwordEncoder.encode(req.getMemberPassword()));
-        member.setCountry(countryRepository.findByCountryName(req.getCountryName()));
-        member.setLanguage(languageRepository.findByLanguageEng(req.getLanguageEng()));
+        member.setCountry(countryRepository.findByCountryId(req.getCountryId()));
+        member.setLanguage(languageRepository.findByLanguageId(req.getLanguageId()));
         member.setMemberIntroduce(req.getMemberIntroduce());
 
         return member.getMemberMail();
