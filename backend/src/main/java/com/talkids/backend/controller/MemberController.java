@@ -28,8 +28,8 @@ public class MemberController {
     }
 
     @PostMapping("/signUp")
-    public ApiResult<String> SignUp(@Valid @RequestBody SignUpDto.Request req) throws Exception {
-        return success(memberService.SignUp(req));
+    public ApiResult<String> signUp(@Valid @RequestBody SignUpDto.Request req) throws Exception {
+        return success(memberService.signUp(req));
     }
 
     @PostMapping("/signIn")
@@ -38,8 +38,8 @@ public class MemberController {
     }
 
     @PutMapping("/{memberId}")
-    public ApiResult<String> updateInfo(@PathVariable int memberId, @Valid @RequestBody UpdateInfoDto.Request req) throws Exception {
-        return success(memberService.UpdateInfoDto(memberId, req));
+    public ApiResult<String> updateInfo(@PathVariable int memberId, @Valid @RequestBody UpdateInfoDto.Request req, Principal principal) throws Exception {
+        return success(memberService.updateInfoDto(memberId, req, principal));
     }
 
 }

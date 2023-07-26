@@ -13,12 +13,12 @@ public interface MemberService {
     Member getMember(String memberMail);
 
     /** 회원가입 */
-    String SignUp(SignUpDto.Request req) throws Exception;
+    String signUp(SignUpDto.Request req) throws Exception;
 
     /** 로그인 */
     String signIn(SignInDto.Request req) throws Exception;
 
     /** 회원 정보 수정*/
-    String UpdateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) throws Exception;
+    String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) throws Exception;
 
 }

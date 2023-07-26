@@ -45,7 +45,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public String SignUp(SignUpDto.Request req) {
+    public String signUp(SignUpDto.Request req) {
         if (memberRepository.findByMemberMail(req.getMemberMail()).isPresent()){
             throw new IllegalArgumentException("다시 시도해 주세요");
         }
@@ -91,7 +91,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public String UpdateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) {
+    public String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) {
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
 

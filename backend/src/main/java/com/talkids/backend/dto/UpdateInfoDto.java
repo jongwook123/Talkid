@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UpdateInfoDto {
@@ -16,12 +17,13 @@ public class UpdateInfoDto {
     @Builder
     public static class Request{
 
+        @Length(min = 1, max = 100)
         @NotBlank(message = "비밀번호를 입력해주세요")
         private String memberPassword;
 
-        private String countryName;
+        private int countryId;
 
-        private String languageEng;
+        private int languageId;
 
         // 사진
         // private MultipartFile file;

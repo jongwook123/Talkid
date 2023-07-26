@@ -1,8 +1,10 @@
 package com.talkids.backend.dto;
 
 import com.talkids.backend.entity.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 public class SignUpDto {
 
@@ -12,12 +14,16 @@ public class SignUpDto {
     @Builder
     public static class Request{
 
+        @Email
+        @Length(min = 1, max = 45)
         @NotBlank(message = "이메일을 입력해주세요")
         private String memberMail;
 
+        @Length(min = 1, max = 100)
         @NotBlank(message = "비밀번호를 입력해주세요")
         private String memberPassword;
 
+        @Length(min = 1, max = 100)
         @NotBlank(message = "이름을 입력해주세요")
         private String memberName;
 
