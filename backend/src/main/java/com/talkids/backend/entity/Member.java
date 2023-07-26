@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE Member SET deletedAt = true WHERE memberId = ?")
-@Where(clause = "deleted_at is null")
+@SQLDelete(sql = "UPDATE Member SET deleted_at = true WHERE memberId = ?")
+@Where(clause = "deleted_at = false")
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 

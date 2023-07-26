@@ -45,6 +45,8 @@ public class SignUpDto {
                     .language(language)
                     .country(country)
                     .memberType(memberType)
+                    .memberActive(false)
+                    .deletedAt(false)
                     .build();
         }
     }
