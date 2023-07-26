@@ -25,7 +25,6 @@ public interface MemberService {
     /** 비밀번호 찾기 - 임시 비밀번호 발급 */
     String findPw(FindPwDto.Request req) throws Exception;
 
-    /** 임시 비밀번호 생성 */
+    /** 임시 비밀번호 생성 **/
     String getTmpPassword() throws Exception;
-
 }
