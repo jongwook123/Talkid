@@ -3,18 +3,12 @@ package com.talkids.backend.service;
 import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.common.token.JwtToken;
 import com.talkids.backend.common.token.JwtTokenProvider;
-import com.talkids.backend.dto.LogoutDto;
-import com.talkids.backend.dto.SignInDto;
+import com.talkids.backend.dto.*;
 
-import com.talkids.backend.dto.SignUpDto;
-import com.talkids.backend.dto.UpdateInfoDto;
 import com.talkids.backend.entity.*;
 import com.talkids.backend.repository.*;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -23,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -41,12 +34,14 @@ public class MemberServiceImpl implements MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
+    private final MailService mailService;
 
     @Override
     public Member getMember(String memberMail) {
         return memberRepository.findByMemberMail(memberMail).get();
     }
 
+    /** 회원가입 */
     @Transactional
     @Override
     public String signUp(SignUpDto.Request req) {
@@ -66,6 +61,7 @@ public class MemberServiceImpl implements MemberService {
         return member.getMemberMail();
     }
 
+    /** 로그인 */
     @Transactional
     @Override
     public String signIn(SignInDto.Request req) {
@@ -93,6 +89,7 @@ public class MemberServiceImpl implements MemberService {
         return accessToken;
     }
 
+    /** 회원 정보 수정 */
     @Transactional
     @Override
     public String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) {
@@ -109,6 +106,7 @@ public class MemberServiceImpl implements MemberService {
         return member.getMemberMail();
     }
 
+    /** 로그아웃 */
     @Transactional
     @Override
     public String logout(LogoutDto.Request req) {
@@ -135,5 +133,41 @@ public class MemberServiceImpl implements MemberService {
                 .set(req.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
 
         return authentication.getName();
+    }
+
+    /** 비밀번호 찾기 - 임시 비밀번호 발급 */
+    @Transactional
+    @Override
+    public String findPw(FindPwDto.Request req) throws Exception {
+        Member member = memberRepository.findByMemberMail(req.getMemberMail())
+                .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
+
+        // 임시 비밀번호를 생성하여 저장
+        String tmpPassword = getTmpPassword();
+        member.setMemberPassword(passwordEncoder.encode(tmpPassword)); // 암호화
+
+        MailDto mail = mailService.createMail(tmpPassword, req.getMemberMail());
+        mailService.sendMail(mail);
+
+        return member.getMemberMail();
+    }
+
+    /** 임시 비밀번호 생성 **/
+    @Override
+    public String getTmpPassword() throws Exception {
+        char[] charSet = new char[]{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+
+        String pwd = "";
+
+        /* 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 조합 */
+        int idx = 0;
+        for(int i = 0; i < 10; i++){
+            idx = (int)(charSet.length * Math.random());
+            pwd += charSet[idx];
+        }
+
+        return pwd;
     }
 }

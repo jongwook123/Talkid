@@ -2,15 +2,13 @@ package com.talkids.backend.controller;
 
 import com.talkids.backend.common.filter.JwtAuthenticationFilter;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
-import com.talkids.backend.dto.LogoutDto;
-import com.talkids.backend.dto.SignInDto;
-import com.talkids.backend.dto.SignUpDto;
-import com.talkids.backend.dto.UpdateInfoDto;
+import com.talkids.backend.dto.*;
 import com.talkids.backend.entity.Member;
 import com.talkids.backend.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -48,5 +46,10 @@ public class MemberController {
     @PostMapping("/logout")
     public ApiResult<String> logout(@Valid @RequestBody LogoutDto.Request req) throws Exception {
         return success(memberService.logout(req));
+    }
+
+    @PostMapping("/findPw")
+    public ApiResult<String> findPw(@Valid @RequestBody FindPwDto.Request req) throws Exception {
+        return success(memberService.findPw(req));
     }
 }

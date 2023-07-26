@@ -1,9 +1,6 @@
 package com.talkids.backend.service;
 
-import com.talkids.backend.dto.LogoutDto;
-import com.talkids.backend.dto.SignInDto;
-import com.talkids.backend.dto.SignUpDto;
-import com.talkids.backend.dto.UpdateInfoDto;
+import com.talkids.backend.dto.*;
 import com.talkids.backend.entity.Member;
 
 import java.security.Principal;
@@ -19,9 +16,16 @@ public interface MemberService {
     /** 로그인 */
     String signIn(SignInDto.Request req) throws Exception;
 
-    /** 회원 정보 수정*/
+    /** 회원 정보 수정 */
     String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) throws Exception;
 
     /** 로그아웃 */
     String logout(LogoutDto.Request req) throws Exception;
+
+    /** 비밀번호 찾기 - 임시 비밀번호 발급 */
+    String findPw(FindPwDto.Request req) throws Exception;
+
+    /** 임시 비밀번호 생성 */
+    String getTmpPassword() throws Exception;
+
 }
