@@ -68,11 +68,11 @@ public class MemberServiceImpl implements MemberService {
         List<?> ret = new ArrayList<>();
 
         if(info.equals("school")){
-            ret = schoolRepository.findAllBy();
+            ret = schoolRepository.findAll();
         } else if(info.equals("language")){
-            ret = languageRepository.findAllBy();
+            ret = languageRepository.findAll();
         } else if(info.equals("country")){
-            ret = countryRepository.findAllBy();
+            ret = countryRepository.findAll();
         }
 
         return ret;

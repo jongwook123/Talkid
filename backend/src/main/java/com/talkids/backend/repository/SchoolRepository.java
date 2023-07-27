@@ -8,6 +8,6 @@ import java.util.List;
 public interface SchoolRepository extends JpaRepository<School, String> {
 
     School findBySchoolId(int schoolId);
-    List<School> findAllBy();
+    List<School> findAll();
 
 }

@@ -8,5 +8,5 @@ import java.util.List;
 public interface LanguageRepository extends JpaRepository<Language, String> {
 
     Language findByLanguageId(int languageId);
-    List<Language> findAllBy();
+    List<Language> findAll();
 }
