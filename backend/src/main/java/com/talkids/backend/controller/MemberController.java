@@ -28,12 +28,12 @@ public class MemberController {
         return success(memberService.getMember(principal.getName()));
     }
 
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public ApiResult<String> signUp(@Valid @RequestBody SignUpDto.Request req) throws Exception {
         return success(memberService.signUp(req));
     }
 
-    @PostMapping("/signIn")
+    @PostMapping("/signin")
     public ApiResult<String> signIn(@Valid @RequestBody SignInDto.Request req) throws Exception {
         return success(memberService.signIn(req));
     }
@@ -48,7 +48,7 @@ public class MemberController {
         return success(memberService.logout(req));
     }
 
-    @PostMapping("/findPw")
+    @PostMapping("/findpw")
     public ApiResult<String> findPw(@Valid @RequestBody FindPwDto.Request req) throws Exception {
         return success(memberService.findPw(req));
     }
