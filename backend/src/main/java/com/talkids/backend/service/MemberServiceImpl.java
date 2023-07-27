@@ -135,6 +135,21 @@ public class MemberServiceImpl implements MemberService {
         return authentication.getName();
     }
 
+    /** 회원 탈퇴 */
+    @Transactional
+    @Override
+    public String deleteInfoDto(int memberId, Principal principal) throws Exception {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
+
+        // 로그인 확인
+        if(member.getRefreshToken()!=null){
+            member.setDeletedAt(true);
+        } else throw new NotFoundException("잘못된 접근입니다.");
+
+        return member.getMemberMail();
+    }
+
     /** 비밀번호 찾기 - 임시 비밀번호 발급 */
     @Transactional
     @Override

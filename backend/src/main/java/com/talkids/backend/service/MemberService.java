@@ -22,9 +22,13 @@ public interface MemberService {
     /** 로그아웃 */
     String logout(LogoutDto.Request req) throws Exception;
 
+    /** 회원 탈퇴 */
+    String deleteInfoDto(int memberId, Principal principal) throws Exception;
+
     /** 비밀번호 찾기 - 임시 비밀번호 발급 */
     String findPw(FindPwDto.Request req) throws Exception;
 
     /** 임시 비밀번호 생성 **/
     String getTmpPassword() throws Exception;
+
 }

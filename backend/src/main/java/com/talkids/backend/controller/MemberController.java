@@ -48,8 +48,14 @@ public class MemberController {
         return success(memberService.logout(req));
     }
 
+    @DeleteMapping("/{memberId}")
+    public ApiResult<String> deleteInfo(@PathVariable int memberId, Principal principal) throws Exception {
+        return success(memberService.deleteInfoDto(memberId, principal));
+    }
+
     @PostMapping("/findpw")
     public ApiResult<String> findPw(@Valid @RequestBody FindPwDto.Request req) throws Exception {
         return success(memberService.findPw(req));
     }
+
 }
