@@ -2,6 +2,8 @@ import { useState } from "react"
 
 import * as S from './style';
 
+import { TrySignin } from "apis/SigninPageAPIs";
+
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
@@ -34,7 +36,7 @@ export default function SigninPage() {
             return;
         }
 
-
+        TrySignin(inputs.id, inputs.password);
     }
 
     return (

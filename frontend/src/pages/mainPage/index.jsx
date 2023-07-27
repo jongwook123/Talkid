@@ -34,6 +34,9 @@ export default function MainPage() {
 
     return (
         <Wrapper>
+            <i className="far fa-envelope"></i>
+            <i className="fas fa-envelope"></i>
+            <i class="fas fa-times"></i>
             <LongButton1 props={{ color: 'orange', text: 'asdf' }} />
             <DropBox1 props={{ list: testList, target: test, callback: setTest }} />
             <LongInput1 props={{ id: "test", desc: "test", color: "blue", placeholder: "test", value: input.test, callback: onChangeHandler }} />
