@@ -146,7 +146,6 @@ public class MemberServiceImpl implements MemberService {
         String tmpPassword = getTmpPassword();
         member.setMemberPassword(passwordEncoder.encode(tmpPassword)); // 암호화
 
-//        MailDto mail = mailService.createMail(tmpPassword, req.getMemberMail());
         mailService.sendEmailMessage(tmpPassword, req.getMemberMail());
 
         return member.getMemberMail();
