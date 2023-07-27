@@ -2,6 +2,8 @@ import { useState } from "react"
 
 import * as S from './style';
 
+import { TryFindPassword } from "apis/FindpasswordPageAPIs";
+
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
@@ -28,13 +30,7 @@ export default function FindPasswordPage() {
             return;
         }
 
-        if (!inputs.password) {
-            alert("Password를 입력하세요.");
-
-            return;
-        }
-
-
+        TryFindPassword(inputs.email);
     }
 
     return (
@@ -45,7 +41,7 @@ export default function FindPasswordPage() {
             <main>
                 <S.FindPasswordSection>
                     <S.FindPasswordSectionHeader>
-                        <h2>로그인 영역</h2>
+                        <h2>비밀번호찾기 영역</h2>
                         <img src={TALKIDS} alt="" />
                     </S.FindPasswordSectionHeader>
                     <S.FindPasswordForm action="">
