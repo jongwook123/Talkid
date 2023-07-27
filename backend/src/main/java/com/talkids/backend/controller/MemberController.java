@@ -1,17 +1,15 @@
 package com.talkids.backend.controller;
 
-import com.talkids.backend.common.filter.JwtAuthenticationFilter;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.dto.*;
 import com.talkids.backend.entity.Member;
 import com.talkids.backend.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 import static com.talkids.backend.common.utils.ApiUtils.success;
 
@@ -28,12 +26,17 @@ public class MemberController {
         return success(memberService.getMember(principal.getName()));
     }
 
-    @PostMapping("/signUp")
+    @GetMapping("/{info}")
+    public ApiResult<List<?>> getSignUpInfo(@PathVariable String info) throws Exception {
+        return success(memberService.getSignUpInfo(info));
+    }
+
+    @PostMapping("/signup")
     public ApiResult<String> signUp(@Valid @RequestBody SignUpDto.Request req) throws Exception {
         return success(memberService.signUp(req));
     }
 
-    @PostMapping("/signIn")
+    @PostMapping("/signin")
     public ApiResult<String> signIn(@Valid @RequestBody SignInDto.Request req) throws Exception {
         return success(memberService.signIn(req));
     }
@@ -48,8 +51,14 @@ public class MemberController {
         return success(memberService.logout(req));
     }
 
-    @PostMapping("/findPw")
+    @DeleteMapping("/{memberId}")
+    public ApiResult<String> deleteInfo(@PathVariable int memberId, Principal principal) throws Exception {
+        return success(memberService.deleteInfoDto(memberId, principal));
+    }
+
+    @PostMapping("/findpw")
     public ApiResult<String> findPw(@Valid @RequestBody FindPwDto.Request req) throws Exception {
         return success(memberService.findPw(req));
     }
+
 }

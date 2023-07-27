@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -59,6 +61,21 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.save(req.saveMemberDto(encodePassword, school, language, country, memberType));
 
         return member.getMemberMail();
+    }
+
+    /** 회원가입 - 국가, 학교, 언어 리스트 */
+    public List<?> getSignUpInfo(String info){
+        List<?> ret = new ArrayList<>();
+
+        if(info.equals("school")){
+            ret = schoolRepository.findAll();
+        } else if(info.equals("language")){
+            ret = languageRepository.findAll();
+        } else if(info.equals("country")){
+            ret = countryRepository.findAll();
+        }
+
+        return ret;
     }
 
     /** 로그인 */
@@ -135,6 +152,21 @@ public class MemberServiceImpl implements MemberService {
         return authentication.getName();
     }
 
+    /** 회원 탈퇴 */
+    @Transactional
+    @Override
+    public String deleteInfoDto(int memberId, Principal principal) throws Exception {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
+
+        // 로그인 확인
+        if(member.getRefreshToken()!=null){
+            member.setDeletedAt(true);
+        } else throw new NotFoundException("잘못된 접근입니다.");
+
+        return member.getMemberMail();
+    }
+
     /** 비밀번호 찾기 - 임시 비밀번호 발급 */
     @Transactional
     @Override
@@ -146,7 +178,6 @@ public class MemberServiceImpl implements MemberService {
         String tmpPassword = getTmpPassword();
         member.setMemberPassword(passwordEncoder.encode(tmpPassword)); // 암호화
 
-//        MailDto mail = mailService.createMail(tmpPassword, req.getMemberMail());
         mailService.sendEmailMessage(tmpPassword, req.getMemberMail());
 
         return member.getMemberMail();

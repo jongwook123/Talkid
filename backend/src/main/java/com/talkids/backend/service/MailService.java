@@ -1,11 +1,9 @@
 package com.talkids.backend.service;
 
-import com.talkids.backend.dto.MailDto;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,6 @@ public class MailService {
 
     private static final String title = "TalKids 임시 비밀번호 안내 이메일입니다.";
     private static final String fromAddress = "talkids5@naver.com";
-
 
     /** 이메일 전송 **/
     public void sendEmailMessage(String tmpPassword, String email) throws Exception {
