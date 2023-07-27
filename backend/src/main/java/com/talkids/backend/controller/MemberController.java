@@ -1,17 +1,15 @@
 package com.talkids.backend.controller;
 
-import com.talkids.backend.common.filter.JwtAuthenticationFilter;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.dto.*;
 import com.talkids.backend.entity.Member;
 import com.talkids.backend.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 import static com.talkids.backend.common.utils.ApiUtils.success;
 
@@ -26,6 +24,11 @@ public class MemberController {
     @ResponseBody
     public ApiResult<Member> getUser(Principal principal)  {
         return success(memberService.getMember(principal.getName()));
+    }
+
+    @GetMapping("/{info}")
+    public ApiResult<List<?>> getSignUpInfo(@PathVariable String info) throws Exception {
+        return success(memberService.getSignUpInfo(info));
     }
 
     @PostMapping("/signup")

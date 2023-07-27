@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -59,6 +61,21 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.save(req.saveMemberDto(encodePassword, school, language, country, memberType));
 
         return member.getMemberMail();
+    }
+
+    /** 회원가입 - 국가, 학교, 언어 리스트 */
+    public List<?> getSignUpInfo(String info){
+        List<?> ret = new ArrayList<>();
+
+        if(info.equals("school")){
+            ret = schoolRepository.findAllBy();
+        } else if(info.equals("language")){
+            ret = languageRepository.findAllBy();
+        } else if(info.equals("country")){
+            ret = countryRepository.findAllBy();
+        }
+
+        return ret;
     }
 
     /** 로그인 */

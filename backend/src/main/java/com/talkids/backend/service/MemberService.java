@@ -4,6 +4,7 @@ import com.talkids.backend.dto.*;
 import com.talkids.backend.entity.Member;
 
 import java.security.Principal;
+import java.util.List;
 
 public interface MemberService {
 
@@ -12,6 +13,9 @@ public interface MemberService {
 
     /** 회원가입 */
     String signUp(SignUpDto.Request req) throws Exception;
+
+    /** 회원가입 - 국가, 학교, 언어 리스트 */
+    List<?> getSignUpInfo(String info) throws Exception;
 
     /** 로그인 */
     String signIn(SignInDto.Request req) throws Exception;
