@@ -28,9 +28,7 @@ public class DmRoomServiceImpl implements DmRoomService {
     /** 회원별 채팅방 리스트 조회 */
     @Override
     public List<DmJoinMember> getDmRoomList(int memberId) {
-        return dmJoinMemberRepository.findAll()
-                .stream().filter(x->x.getMember().getMemberId()==memberId).findAny()
-                .stream().toList();
+        return dmJoinMemberRepository.findByDmJoinMemberId(memberId);
     }
 
     /** 채팅방 입장 */
@@ -71,7 +69,7 @@ public class DmRoomServiceImpl implements DmRoomService {
         return dmRoom.getDmRoomId();
     }
 
-    /** 채팅방 퇴장 */
+    /** 채팅방 퇴장/삭제 */
 
 
 }

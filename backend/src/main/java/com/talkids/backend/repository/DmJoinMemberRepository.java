@@ -11,6 +11,10 @@ public interface DmJoinMemberRepository extends JpaRepository<DmJoinMember, Stri
 
     List<DmJoinMember> findAll();
 
+    @Query("SELECT j FROM DmJoinMember j WHERE j.member.memberId = :memberId")
+    List<DmJoinMember> findByDmJoinMemberId(@Param("memberId") int memberId);
+
+
     @Query("SELECT j FROM DmJoinMember j WHERE j.member.memberId = :memberId and j.dmRoom.dmRoomId = :dmRoomId")
     List<?> findByDmJoinMemberId(@Param("memberId") int memberId , @Param("dmRoomId") int dmRoomId);
 

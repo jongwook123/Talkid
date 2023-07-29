@@ -26,7 +26,7 @@ public class DmRoomController {
     private final DmRoomService dmRoomService;
 
     /** 회원별 채팅방 리스트 조회 */
-    @GetMapping("{memberId}")
+    @GetMapping("/{memberId}")
     public ApiResult<List<DmJoinMember>> getDMRoomList(@PathVariable int memberId) throws Exception {
         List<DmJoinMember> dmRoomList = dmRoomService.getDmRoomList(memberId);
         Collections.reverse(dmRoomList); // 생성 최신순으로
