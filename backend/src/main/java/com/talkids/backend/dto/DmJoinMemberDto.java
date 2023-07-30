@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class DmRoomJoinDto {
+public class DmJoinMemberDto {
 
     @Data
     @AllArgsConstructor
@@ -17,7 +17,7 @@ public class DmRoomJoinDto {
         private int memberId;
 
         @Builder
-        public static DmJoinMember saveDmRoomJoinDto(DmRoom dmRoom, Member member){
+        public static DmJoinMember saveDmJoinMemberDto(DmRoom dmRoom, Member member){
             return DmJoinMember.builder()
                     .dmRoom(dmRoom)
                     .member(member)
