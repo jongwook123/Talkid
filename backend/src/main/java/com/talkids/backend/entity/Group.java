@@ -1,5 +1,6 @@
 package com.talkids.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,8 +12,8 @@ import java.util.List;
 
 @Entity
 @Table(name="Groups")
-@Data
 @Builder
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -32,6 +33,7 @@ public class Group {
     /* ---------------------------------- */
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
+    @JsonManagedReference
     private List<GroupJoinMember> groupJoinMember = new ArrayList<>();
 
     /* ---------------------------------- */
