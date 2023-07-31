@@ -2,8 +2,11 @@ HELP.md
 .gradle
 build/classes
 build/generated
+build/reports
 build/resources
+build/test-results
 build/tmp
+build/resolvedMainClassName
 
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
