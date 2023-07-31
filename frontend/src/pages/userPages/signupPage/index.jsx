@@ -1,5 +1,8 @@
 import { useState } from "react"
+
 import * as S from './style'
+
+import { TrySignup } from "apis/SignupPageAPIs";
 
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
@@ -8,8 +11,31 @@ import DropBox1 from "components/dropboxes/dropbox1";
 import { useRef } from "react";
 import { useEffect } from "react";
 
-const dummyCountryList = ["Republic of Korea", "United States of America", "Japan", "China"];
-const dummyLanguageList = ["Korean", "English", "Japanese", "Chinese"];
+const dummyCountryList = [
+    {
+        "country_id": 119,
+        "country_name": 'Korea, Republic of',
+        "country_code": 'KOR',
+    },
+    {
+        "country_id": 239,
+        "country_name": 'United States',
+        "country_code": 'USA',
+    }]
+
+const dummyLanguageList = [
+    {
+        "language_id": 1,
+        "language_code": 'af',
+        "language_eng": 'Afrikaans',
+        "language_ori": '',
+    },
+    {
+        "language_id": 2,
+        "language_code": 'sq',
+        "language_eng": 'Albanian',
+        "language_ori": 'shqip',
+    }];
 
 function ImagePreview({ image, deleteFunc }) {
     return (
@@ -112,7 +138,7 @@ export default function SignupPage({ max = 10 }) {
     const [selectedCountry, setSelectedCountry] = useState("");
 
     useEffect(() => {
-        setCountryList(dummyCountryList);
+        setCountryList(dummyCountryList.map(country => country['country_name']));
     }, []);
 
     useEffect(() => {
@@ -128,7 +154,7 @@ export default function SignupPage({ max = 10 }) {
     const [selectedLanguage, setSelectedLanguage] = useState("");
 
     useEffect(() => {
-        setLanguageList(dummyLanguageList);
+        setLanguageList(dummyLanguageList.map(language => language['language_eng']));
     }, []);
 
     useEffect(() => {
@@ -143,6 +169,28 @@ export default function SignupPage({ max = 10 }) {
     // 확인 버튼 클릭
     const buttonClickHandler = (e) => {
         e.preventDefault();
+
+        const schoolid = Math.floor(Math.random() * 4 + 1)
+        
+        const membertypeid = inputs.type === 'student' ? 1 : 2
+
+        const selectedCountryId = dummyCountryList.filter((country) => {
+            if (country["country_name"] === selectedCountry) {
+                return true;
+            } else {
+                return false;
+            }
+        })[0].country_id
+
+        const selectedLanguageId = dummyLanguageList.filter((language) => {
+            if (language["language_eng"] === selectedLanguage) {
+                return true;
+            } else {
+                return false;
+            }
+        })[0].language_id
+
+        TrySignup(inputs.id, inputs.password, inputs.name, schoolid, selectedCountryId, selectedLanguageId, membertypeid);
     }
 
     return (
