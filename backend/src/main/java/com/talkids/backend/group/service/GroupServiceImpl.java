@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -83,7 +84,24 @@ public class GroupServiceImpl implements GroupService {
         return memberApplyRepository.findByGroup(groupId);
     }
 
+    /** 선생님 - 신청 승인 */
+    @Transactional
+    @Override
+    public int applyApproved(MemberApplyDto.Request req) throws Exception {
+        memberApplyRepository.findByMember(req.getMemberId(), req.getGroupId())
+                .orElseThrow(()-> new NotFoundException("신청 정보가 없습니다."));
 
+        // memberApply 테이블에서 해당 신청내역 지우기
+        memberApplyRepository.deleteByMemberApplyId(req.getMemberId(), req.getGroupId());
 
+        // groupJoinMember에 학생 정보 넣기
+        groupJoinMemberRepository.save(
+            GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
+                    groupRepository.findByGroupId(req.getGroupId()),
+                    memberRepository.findByMemberId(req.getMemberId()).get()
+            )
+        );
 
+        return req.getMemberId();
+    }
 }

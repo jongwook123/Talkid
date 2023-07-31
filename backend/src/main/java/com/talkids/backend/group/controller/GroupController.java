@@ -48,7 +48,10 @@ public class GroupController {
     }
 
     /** 선생님 - 신청 승인 */
-
+    @PostMapping("/approve")
+    public ApiResult<Integer> applyApproved(@Valid @RequestBody MemberApplyDto.Request req) throws Exception {
+        return success(groupService.applyApproved(req));
+    }
 
     /** 학생 - 그룹 신청 */
     @PostMapping("/apply")
