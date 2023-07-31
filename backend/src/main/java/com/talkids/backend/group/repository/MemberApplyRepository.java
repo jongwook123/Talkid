@@ -11,13 +11,13 @@ import java.util.Optional;
 
 public interface MemberApplyRepository extends JpaRepository<MemberApply, String> {
 
-    @Query("SELECT a.member FROM MemberApply a WHERE a.member.memberId = :memberId and a.group.groupId = :groupId")
-    Optional<MemberApply> findByMember(@Param("memberId") int memberId, @Param("groupId") int groupId);
+    @Query("SELECT a FROM MemberApply a WHERE a.group.groupId = :groupId and a.member.memberId = :memberId")
+    Optional<MemberApply> findByMember(@Param("groupId") int groupId, @Param("memberId") int memberId);
 
     @Query("SELECT a.member FROM MemberApply a WHERE a.group.groupId = :groupId")
     List<?> findByGroup(@Param("groupId") int groupId);
 
     @Modifying
-    @Query("Delete FROM MemberApply a WHERE a.member.memberId = :memberId and a.group.groupId = :groupId")
-    int deleteByMemberApplyId(@Param("memberId") int memberId, @Param("groupId") int groupId);
+    @Query("Delete FROM MemberApply a WHERE a.group.groupId = :groupId and a.member.memberId = :memberId")
+    int deleteByMemberApplyId(@Param("groupId") int groupId, @Param("memberId") int memberId);
 }

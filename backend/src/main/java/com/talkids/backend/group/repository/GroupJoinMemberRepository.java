@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface GroupJoinMemberRepository  extends JpaRepository<GroupJoinMember, String> {
 
-    @Query("SELECT a.member FROM GroupJoinMember a WHERE a.member.memberId = :memberId and a.group.groupId = :groupId")
-    Optional<GroupJoinMember> findByMember(@Param("memberId") int memberId, @Param("groupId") int groupId);
+    @Query("SELECT a FROM GroupJoinMember a WHERE a.group.groupId = :groupId and a.member.memberId = :memberId")
+    Optional<GroupJoinMember> findByMember(@Param("groupId") int groupId, @Param("memberId") int memberId);
 
 }

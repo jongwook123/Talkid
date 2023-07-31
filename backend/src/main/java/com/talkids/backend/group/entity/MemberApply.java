@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class MemberApply {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="memberApplyId")
     private int memberApplyId;
 

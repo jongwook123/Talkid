@@ -5,6 +5,7 @@ import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.group.entity.MemberApply;
 import com.talkids.backend.group.repository.MemberApplyRepository;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.group.repository.GroupJoinMemberRepository;
@@ -48,7 +49,7 @@ public class GroupServiceImpl implements GroupService {
         // group_member_join 테이블에 저장
         groupJoinMemberRepository.save(
             GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
-                groupRepository.findByGroupId(group.getGroupId()),
+                groupRepository.findByGroupId(group.getGroupId()).get(),
                 member
             )
         );
@@ -62,19 +63,20 @@ public class GroupServiceImpl implements GroupService {
     public int joinGroup(MemberApplyDto.Request req) throws Exception {
         Member member = memberRepository.findByMemberId(req.getMemberId())
                 .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+        Group group = groupRepository.findByGroupId(req.getGroupId())
+                .orElseThrow(()-> new NotFoundException("그룹 정보가 없습니다."));
 
-        if(member.getMemberType().getMemberTypeId() == 1)
+        if(member.getMemberType().getMemberTypeId() == 1) {
             throw new Exception("선생님은 다른 그룹에 가입할 수 없습니다.");
-
-        if(groupJoinMemberRepository.findByMember(req.getMemberId(), req.getGroupId()).isPresent())
+        } else if(memberApplyRepository.findByMember(req.getGroupId(), req.getMemberId()).isPresent()) {
+            throw new Exception("이미 가입 신청한 학생입니다.");
+        } else if(groupJoinMemberRepository.findByMember(req.getGroupId(), req.getMemberId()).isPresent())
             throw new Exception("이미 가입한 학생입니다.");
+
 
         // memberApply 테이블에 저장
         memberApplyRepository.save(
-            req.saveMemberApplyDto(
-                    groupRepository.findByGroupId(req.getGroupId()),
-                    member
-            )
+            req.saveMemberApplyDto(group, member)
         );
 
         return req.getMemberId();
@@ -90,19 +92,31 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public int applyApproved(MemberApplyDto.Request req) throws Exception {
-        memberApplyRepository.findByMember(req.getMemberId(), req.getGroupId())
+        if(groupJoinMemberRepository.findByMember(req.getGroupId(), req.getMemberId()).isPresent())
+                throw new NotFoundException("이미 가입한 학생입니다.");
+
+        MemberApply memberApply = memberApplyRepository.findByMember(req.getGroupId(), req.getMemberId())
                 .orElseThrow(()-> new NotFoundException("신청 정보가 없습니다."));
 
         // memberApply 테이블에서 해당 신청내역 지우기
-        memberApplyRepository.deleteByMemberApplyId(req.getMemberId(), req.getGroupId());
+        memberApplyRepository.deleteByMemberApplyId(req.getGroupId(), req.getMemberId());
+
+        System.out.println("group : " + memberApply.getGroup());
+        System.out.println("member : " + memberApply.getMember());
 
         // groupJoinMember 테이블에 학생 정보 넣기
         groupJoinMemberRepository.save(
             GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
-                    groupRepository.findByGroupId(req.getGroupId()),
-                    memberRepository.findByMemberId(req.getMemberId()).get()
+                    memberApply.getGroup(),
+                    memberApply.getMember()
             )
         );
+
+//        groupRepository.findByGroupId(req.getGroupId()).get(),
+//        memberRepository.findByMemberId(req.getMemberId()).get()
+
+        // memberActive 변경
+        memberApply.getMember().setMemberActive(true);
 
         return req.getMemberId();
     }
