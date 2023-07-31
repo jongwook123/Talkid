@@ -74,7 +74,16 @@ public class GroupServiceImpl implements GroupService {
             )
         );
 
-        return 0;
+        return req.getMemberId();
     }
+
+    /** 선생님 - 신청 내역 조회 */
+    @Override
+    public List<?> getApplyList(int groupId) throws Exception {
+        return memberApplyRepository.findByGroup(groupId);
+    }
+
+
+
 
 }

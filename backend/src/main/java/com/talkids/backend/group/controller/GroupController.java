@@ -5,6 +5,7 @@ import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.group.entity.MemberApply;
 import com.talkids.backend.group.service.GroupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +38,22 @@ public class GroupController {
         return success(groupService.createGroup(req));
     }
 
+    /** 선생님 - 신청 내역 조회 */
+    @GetMapping("/apply/{groupId}")
+    public ApiResult<List<?>> getApplyList(@PathVariable int groupId) throws Exception {
+        List<?> applyList = groupService.getApplyList(groupId);
+        Collections.reverse(applyList); // 신청 최신순으로
+
+        return success(applyList);
+    }
+
+    /** 선생님 - 신청 승인 */
+
+
     /** 학생 - 그룹 신청 */
-    @PostMapping("/join")
+    @PostMapping("/apply")
     public ApiResult<Integer> joinGroup(@Valid @RequestBody MemberApplyDto.Request req) throws Exception {
         return success(groupService.joinGroup(req));
     }
-    
-    /** 선생님 - 신청 승인 */
-
 
 }

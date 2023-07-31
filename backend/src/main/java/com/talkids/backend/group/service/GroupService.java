@@ -4,6 +4,7 @@ import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.group.entity.MemberApply;
 
 import java.util.List;
 
@@ -17,5 +18,8 @@ public interface GroupService {
 
     /** 학생 - 그룹 신청 */
     int joinGroup(MemberApplyDto.Request req) throws Exception;
+
+    /** 선생님 - 신청 내역 조회 */
+    List<?> getApplyList(int groupId) throws Exception;
 
 }
