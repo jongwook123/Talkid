@@ -3,7 +3,10 @@ package com.talkids.backend.group.service;
 import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
+import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.group.entity.MemberApply;
+import com.talkids.backend.group.repository.MemberApplyRepository;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.group.repository.GroupJoinMemberRepository;
 import com.talkids.backend.group.repository.GroupRepository;
@@ -22,6 +25,7 @@ public class GroupServiceImpl implements GroupService {
     private final MemberRepository memberRepository;
     private final GroupJoinMemberRepository groupJoinMemberRepository;
     private final GroupRepository groupRepository;
+    private final MemberApplyRepository memberApplyRepository;
 
     /** 그룹 리스트 조회 */
     @Override
@@ -43,12 +47,34 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.save(req.saveGroupDto());
 
         // group_member_join 테이블에 저장
-        groupJoinMemberRepository.save(GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
+        groupJoinMemberRepository.save(
+            GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
                 groupRepository.findByGroupId(group.getGroupId()),
                 member
-        ));
+            )
+        );
 
         return group.getGroupId();
+    }
+
+    /** 학생 - 그룹 신청 */
+    @Transactional
+    @Override
+    public int joinGroup(MemberApplyDto.Request req) throws Exception {
+        Member member = memberRepository.findByMemberId(req.getMemberId())
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+
+        if(member.getMemberType().getMemberTypeId() == 1)
+            throw new Exception("선생님은 다른 그룹에 가입할 수 없습니다.");
+
+        memberApplyRepository.save(
+            req.saveMemberApplyDto(
+                    groupRepository.findByGroupId(req.getGroupId()),
+                    member
+            )
+        );
+
+        return 0;
     }
 
 }

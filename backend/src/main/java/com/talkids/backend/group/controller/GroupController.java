@@ -2,6 +2,8 @@ package com.talkids.backend.group.controller;
 
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.group.dto.GroupDto;
+import com.talkids.backend.group.dto.GroupJoinMemberDto;
+import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
 import jakarta.validation.Valid;
@@ -35,10 +37,13 @@ public class GroupController {
         return success(groupService.createGroup(req));
     }
 
-//    /** 학생 - 그룹 신청 */
-//    @PostMapping("/join")
-//    public ApiResult<Integer> joinGroup(@Valid @RequestBody GroupJoinMemberDto.Request req) throws Exception {
-//        return success(groupService.joinGroup(req));
-//    }
+    /** 학생 - 그룹 신청 */
+    @PostMapping("/join")
+    public ApiResult<Integer> joinGroup(@Valid @RequestBody MemberApplyDto.Request req) throws Exception {
+        return success(groupService.joinGroup(req));
+    }
+    
+    /** 선생님 - 신청 승인 */
+
 
 }
