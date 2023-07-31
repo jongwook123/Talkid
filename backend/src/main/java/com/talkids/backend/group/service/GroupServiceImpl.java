@@ -120,4 +120,18 @@ public class GroupServiceImpl implements GroupService {
 
         return req.getMemberId();
     }
+
+    /** 선생님 - 신청 거절 */
+    @Transactional
+    @Override
+    public int applyReject(MemberApplyDto.Request req) throws Exception {
+
+        if(memberApplyRepository.findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId()).isEmpty())
+            throw new NotFoundException("신청 정보가 없습니다.");
+
+        // memberApply 테이블에서 해당 신청내역 지우기
+        memberApplyRepository.deleteByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId());
+
+        return req.getMemberId();
+    }
 }

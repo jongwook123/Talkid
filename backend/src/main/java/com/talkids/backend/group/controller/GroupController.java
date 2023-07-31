@@ -44,6 +44,12 @@ public class GroupController {
         return success(groupService.applyApproved(req));
     }
 
+    /** 선생님 - 신청 거절 */
+    @PostMapping("/reject")
+    public ApiResult<Integer> applyReject(@Valid @RequestBody MemberApplyDto.Request req) throws Exception {
+        return success(groupService.applyReject(req));
+    }
+
     /** 학생 - 그룹 신청 */
     @PostMapping("/apply")
     public ApiResult<Integer> joinGroup(@Valid @RequestBody MemberApplyDto.Request req) throws Exception {
