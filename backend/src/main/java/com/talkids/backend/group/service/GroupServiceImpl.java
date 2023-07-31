@@ -5,7 +5,6 @@ import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
-import com.talkids.backend.group.entity.MemberApply;
 import com.talkids.backend.group.repository.MemberApplyRepository;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.group.repository.GroupJoinMemberRepository;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +26,13 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final MemberApplyRepository memberApplyRepository;
 
-    /** 그룹 리스트 조회 */
+    /** 선생님 - 그룹 리스트 조회 */
     @Override
     public List<Group> getGroupList(int memberId) {
         return groupRepository.findByGroup(memberId);
     }
 
-    /** 그룹 개설 */
+    /** 선생님 - 그룹 개설 */
     @Transactional
     @Override
     public int createGroup(GroupDto.Request req) throws NotFoundException, Exception {
@@ -68,6 +66,10 @@ public class GroupServiceImpl implements GroupService {
         if(member.getMemberType().getMemberTypeId() == 1)
             throw new Exception("선생님은 다른 그룹에 가입할 수 없습니다.");
 
+        if(groupJoinMemberRepository.findByMember(req.getMemberId(), req.getGroupId()).isPresent())
+            throw new Exception("이미 가입한 학생입니다.");
+
+        // memberApply 테이블에 저장
         memberApplyRepository.save(
             req.saveMemberApplyDto(
                     groupRepository.findByGroupId(req.getGroupId()),
@@ -94,7 +96,7 @@ public class GroupServiceImpl implements GroupService {
         // memberApply 테이블에서 해당 신청내역 지우기
         memberApplyRepository.deleteByMemberApplyId(req.getMemberId(), req.getGroupId());
 
-        // groupJoinMember에 학생 정보 넣기
+        // groupJoinMember 테이블에 학생 정보 넣기
         groupJoinMemberRepository.save(
             GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
                     groupRepository.findByGroupId(req.getGroupId()),
