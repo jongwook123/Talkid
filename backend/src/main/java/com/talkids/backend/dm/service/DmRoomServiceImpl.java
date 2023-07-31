@@ -6,6 +6,7 @@ import com.talkids.backend.dm.entity.DmJoinMember;
 import com.talkids.backend.dm.entity.DmRoom;
 import com.talkids.backend.dm.repository.DmJoinMemberRepository;
 import com.talkids.backend.dm.repository.DmRoomRepository;
+import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -35,6 +36,7 @@ public class DmRoomServiceImpl implements DmRoomService {
     @Transactional
     @Override
     public int createDmRoom(int memberId) throws Exception {
+
         DmRoom dmRoom = DmRoomDto.Request.saveDmRoomDto();
         dmRoomRepository.save(dmRoom);
 
@@ -53,18 +55,18 @@ public class DmRoomServiceImpl implements DmRoomService {
     public int getDmRoom(DmJoinMemberDto.Request req) {
 
         DmRoom dmRoom = dmRoomRepository.findByDmRoomId(req.getDmRoomId());
+        Member member = memberRepository.findByMemberId(req.getMemberId()).get();
 
         messagingTemplate.convertAndSend(
-                "/sub/dm/room/" + req.getDmRoomId(),
-                memberRepository.findByMemberId(req.getMemberId()).get()
-                        .getMemberName() + "님이 채팅방에 참여하셨습니다.");
+            "/sub/dm/room/" + dmRoom.getDmRoomId(),
+            member.getMemberName() + "님이 채팅방에 참여하셨습니다."
+        );
 
         // DB에 없으면 insert
         if (dmJoinMemberRepository.findByDmJoinMemberId(req.getMemberId(), req.getDmRoomId()).isEmpty()) {
             dmJoinMemberRepository.save(
-                    req.saveDmJoinMemberDto(
-                            dmRoom,
-                            memberRepository.findByMemberId(req.getMemberId()).get()));
+                req.saveDmJoinMemberDto(dmRoom, member)
+            );
         }
         return dmRoom.getDmRoomId();
     }
@@ -74,19 +76,17 @@ public class DmRoomServiceImpl implements DmRoomService {
     @Override
     public int deleteDmRoom(DmJoinMemberDto.Request req) throws Exception {
 
-        int member = req.getMemberId();
-        int room = req.getDmRoomId();
-
-        DmRoom dmRoom = dmRoomRepository.findByDmRoomId(room);
+        DmRoom dmRoom = dmRoomRepository.findByDmRoomId(req.getDmRoomId());
+        Member member = memberRepository.findByMemberId(req.getMemberId()).get();
 
         // 지워도 되는 부분 !
         messagingTemplate.convertAndSend(
-                "/sub/dm/room/" + room,
-                memberRepository.findByMemberId(member).get()
-                        .getMemberName() + "님이 채팅방에서 퇴장하셨습니다.");
+            "/sub/dm/room/" + dmRoom.getDmRoomId(),
+            member.getMemberName() + "님이 채팅방에서 퇴장하셨습니다."
+        );
 
         // dmJoinMemberDto에서 사람 정보 지우기
-        dmJoinMemberRepository.deleteByDmJoinMemberId(member, room);
+        dmJoinMemberRepository.deleteByDmJoinMemberId(member.getMemberId(), dmRoom.getDmRoomId());
 
         // 채팅방에 남은 사람없으면 채팅방 지우기 => 메시지가 있을 때 문제 ?
 //        if (dmJoinMemberRepository.findByDmRoom(room).size()==0) {
