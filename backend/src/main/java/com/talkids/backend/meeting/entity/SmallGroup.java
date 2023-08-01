@@ -14,7 +14,7 @@ public class SmallGroup {
     @Id
     @Column(name="smallGroupId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int smallGroup;
+    private int smallGroupId;
 
     @Column(name="smallGroupName", nullable = false, length = 20)
     private String smallGroupName;
