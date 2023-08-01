@@ -14,7 +14,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws/dm") // stomp 설정
                 .setAllowedOriginPatterns("*")
-                .setAllowedOrigins("http://localhost:8080");
+                .setAllowedOrigins("http://localhost:8080", "http://i9d106.p.ssafy.io:8080");
     }
 
     @Override

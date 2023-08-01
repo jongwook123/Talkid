@@ -12,4 +12,5 @@ const FetchTemplate = ({ path, method, body }) => {
     });
 }
 
+
 export default FetchTemplate;
