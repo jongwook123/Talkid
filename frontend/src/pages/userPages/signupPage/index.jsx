@@ -169,7 +169,7 @@ export default function SignupPage({ max = 10 }) {
     // 확인 버튼 클릭
     const buttonClickHandler = (e) => {
         e.preventDefault();
-
+        
         const schoolid = Math.floor(Math.random() * 4 + 1)
         
         const membertypeid = inputs.type === 'student' ? 1 : 2

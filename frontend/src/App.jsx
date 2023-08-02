@@ -9,6 +9,8 @@ import SigninPage from "pages/userPages/signinPage"
 import SignupPage from "pages/userPages/signupPage"
 import UserEditPage from "pages/userPages/userEditPage"
 import FindPasswordPage from "pages/userPages/findpasswordPage"
+import ChattingPage from "pages/chattingPage"
+
 
 export default function App() {
     return (
@@ -21,6 +23,8 @@ export default function App() {
                     <Route path="/signup" element={<SignupPage />} />
                     <Route path="/modifyuser" element={<UserEditPage />} />
                     <Route path="/findpassword" element={<FindPasswordPage />} />
+                    <Route path="/chatting" element={<ChattingPage />} />
+                    
                     
                 </Routes>
             </BrowserRouter>
