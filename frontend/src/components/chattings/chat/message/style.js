@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-export const Message1 = styled.div`
+export const Message1 = styled.span`
     display: flex;
     align-items: center;
     padding: 20px;
@@ -10,7 +10,7 @@ export const Message1 = styled.div`
     /* background-color: #CAD4DF; */
     
 `
-export const MessageInfo = styled.div`
+export const MessageInfo = styled.span`
     background-color: #9BBA8E;
     border-radius: 5px;
     padding: 10px;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-export const Listbar = styled.div`
+export const Listbar = styled.section`
   margin:0;
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-export const ChatHeader1 = styled.div`
+export const ChatHeader1 = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10,7 +10,7 @@ export const ChatHeader1 = styled.div`
     border-bottom: 1px solid #CAD4DF;
 `
 
-export const ChatHeaderleft = styled.div`
+export const ChatHeaderleft = styled.span`
     font-size: large;
     display: flex;
     align-items: center;
@@ -18,7 +18,7 @@ export const ChatHeaderleft = styled.div`
 
 `
 
-export const ChatHeaderright = styled.div`
+export const ChatHeaderright = styled.span`
     display: flex;
     align-items: center;
     flex: 0.5;
@@ -37,7 +37,7 @@ export const ChatHeaderhash = styled.span`
     font-size:30px;
     padding: 10px;
 `
-export const ChatHeadersearch = styled.div`
+export const ChatHeadersearch = styled.span`
     display: flex;
     align-items: center;
     color: gray;

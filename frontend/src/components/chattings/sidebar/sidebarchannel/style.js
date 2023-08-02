@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const SidebarChannel = styled.div`
+export const SidebarChannel = styled.article`
  &:hover {
     color:white;
     background-color: #C3CEDA;

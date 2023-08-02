@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-export const Chat = styled.div`
+export const Chat = styled.section`
     display: flex;
     flex-direction: column;
     flex: 0.75;
@@ -11,7 +11,7 @@ export const Chat = styled.div`
     
 `
 
-export const Chatmessage = styled.div`
+export const Chatmessage = styled.article`
     flex: 1;
     background-color: #FFECDF;
     border-top-left-radius: 10px;
@@ -28,7 +28,7 @@ export const Chatmessage = styled.div`
     } */
     
 `
-export const Chatinput = styled.div`
+export const Chatinput = styled.article`
     color: lightgray;
     display: flex;
     align-items: center; /* Vertically center the content */
@@ -70,13 +70,13 @@ export const Chatinput = styled.div`
 export const ChatinputButton = styled.button`
 display: none;
 `
-export const ChatinputIcons = styled.div`
+export const ChatinputIcons = styled.button`
  & > .MuiSvgIcon-root {
     padding: 5px;
     margin-bottom:10px;
  }
 `
-export const ChatSlider = styled.div`
+export const ChatSlider = styled.span`
     ${(props) => 
             !props.cambutton && `
             display: none;

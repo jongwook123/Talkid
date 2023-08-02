@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 
-export const Sidebar = styled.div`
+export const Sidebar = styled.section`
   margin:0;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@ export const Sidebar = styled.div`
     
 `
 
-export const Sidebartop = styled.div`
+export const Sidebartop = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,11 +24,11 @@ export const Sidebartop = styled.div`
     font-size: large;
 `
 
-export const Sidebarchannel = styled.div`
+export const Sidebarchannel = styled.article`
     flex:1;
 `
 
-export const SidebarchannelHeader = styled.div`
+export const SidebarchannelHeader = styled.span`
     display:flex;
     justify-content: space-between;
     align-items: center;
@@ -39,7 +39,7 @@ export const SidebarchannelHeader = styled.div`
     
 `
 
-export const SidebarHeader = styled.div`
+export const SidebarHeader = styled.span`
     display: flex;
     align-items: center;
 `
@@ -53,33 +53,33 @@ export const Sidebaraddchannel = styled.button`
     }
 `
 
-export const SidebarchannelList = styled.div`
+export const SidebarchannelList = styled.article`
 `
 
-export const SidebarVoice = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: gray;
-    padding: 10px;
-    border-top: 1px solid #C3CEDA;
-    background-color: #F2F3F5;
-`
+// export const SidebarVoice = styled.div`
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     color: gray;
+//     padding: 10px;
+//     border-top: 1px solid #C3CEDA;
+//     background-color: #F2F3F5;
+// `
 
-export const SidebarVoiceInfo = styled.div`
-    flex: 1;
-    padding: 10px;
-    color: #4fb185;
-    font-size: large;
-    & > p {
-        font-size:smaller;
-        color: gray;
-        }
-`
-export const SidebarVoiceIcons = styled.div`
+// export const SidebarVoiceInfo = styled.div`
+//     flex: 1;
+//     padding: 10px;
+//     color: #4fb185;
+//     font-size: large;
+//     & > p {
+//         font-size:smaller;
+//         color: gray;
+//         }
+// `
+// export const SidebarVoiceIcons = styled.div`
    
-`
-export const SidebarProfile = styled.div`
+// `
+export const SidebarProfile = styled.article`
    display: flex;
     justify-content: space-between;
     align-items: center;
@@ -88,7 +88,7 @@ export const SidebarProfile = styled.div`
     border-top: 1px solid #C3CEDA;
     background-color: #F2F3F5;
 `
-export const SidebarProfileInfo = styled.div`
+export const SidebarProfileInfo = styled.span`
    flex:1;
    padding: 10px;
    color: black;
@@ -99,7 +99,7 @@ export const SidebarProfileInfo = styled.div`
    }
 `
 
-export const SidebarProfileIcon = styled.div`
+export const SidebarProfileIcon = styled.span`
    flex: 1;
 
 `

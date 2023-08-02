@@ -35,7 +35,7 @@ function Sidebar() {
                     <SidebarChannel/>
                 </S.SidebarchannelList>
             </S.Sidebarchannel>
-            <S.SidebarVoice>
+            {/* <S.SidebarVoice>
                 <SignalCellularAltIcon style={{color:"#4fb185"}} fontSize="large"/>
                 <S.SidebarVoiceInfo>
                     Voice connected
@@ -45,7 +45,7 @@ function Sidebar() {
                     <InfoOutlinedIcon style={{margin:"10px"}}/>
                     <CallIcon style={{margin:"10px"}}/>
                 </S.SidebarVoiceIcons>
-            </S.SidebarVoice>
+            </S.SidebarVoice> */}
             <S.SidebarProfile>
                 <Avatar src="https://avatars2.githubusercontent.com/u/247129567"/>
                 <S.SidebarProfileInfo>
