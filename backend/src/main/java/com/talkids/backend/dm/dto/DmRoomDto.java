@@ -11,14 +11,36 @@ public class DmRoomDto {
     @NoArgsConstructor
     public static class Request{
 
-        private int dmRoomId;
+        private String sender;
+        private String receiver;
+        private String dmRoomId;
 
         @Builder
-        public static DmRoom saveDmRoomDto(){
+        public static DmRoom saveDmRoomDto(String sender, String receiver){
             return DmRoom.builder()
-                    .deletedAt(false)
+                    .dmRoomId(sender+"_"+receiver)
                     .build();
         }
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Response {
+        private int memberId;
+        private String dmRoomId;
+        private int uncheckMessage;
+        private String lastMessage;
+
+        public static Response messageResponseDto(String dmRoomId, int uncheckMessage, String lastMessage) {
+            Response response = new Response();
+            response.setDmRoomId(dmRoomId);
+            response.setUncheckMessage(uncheckMessage);
+            response.setLastMessage(lastMessage);
+            return response;
+        }
+    }
 }
+
+
+

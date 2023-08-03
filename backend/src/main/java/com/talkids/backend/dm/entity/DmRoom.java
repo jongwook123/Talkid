@@ -1,5 +1,6 @@
 package com.talkids.backend.dm.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -10,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="DmRoom")
@@ -17,15 +19,12 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE DmRoom SET deleted_at = true WHERE dmRoomId = ?")
-@Where(clause = "deleted_at = false")
 @EntityListeners(AuditingEntityListener.class)
 public class DmRoom {
 
     @Id
-    @Column(name="dmRoomId")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int dmRoomId;
+    @Column(name="dmRoomId", length=100)
+    private String dmRoomId;
 
     /* ---------------------------------- */
 
@@ -33,11 +32,7 @@ public class DmRoom {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name="updatedAt")
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    @Column(name="deletedAt")
-    @ColumnDefault("false")
-    private Boolean deletedAt;
+    @OneToMany(mappedBy = "dmRoom", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Message> messages; // 추가된 필드
 }

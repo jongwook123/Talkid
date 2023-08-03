@@ -15,7 +15,7 @@ public class DmJoinMemberDto {
     @NoArgsConstructor
     public static class Request{
 
-        private int dmRoomId;
+        private String dmRoomId;
         private int memberId;
 
         @Builder
