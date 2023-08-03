@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DmRoomRepository extends JpaRepository<DmRoom, String> {
 
     List<DmRoom> findAll();
-    DmRoom findByDmRoomId(String dmRoomId);
+    Optional<DmRoom> findByDmRoomId(String dmRoomId);
 
     @Query("SELECT r.dmRoomId, COUNT(um), MAX(m.messageContent) " +
             "FROM DmRoom r " +

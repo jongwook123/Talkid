@@ -37,7 +37,7 @@ public class DmRoomController {
 
     /** 메세지 전송 */
     @PostMapping("/message")
-    public ApiResult<Message> sendMessage(@Valid @RequestBody MessageDto.Request req) throws Exception {
+    public ApiResult<MessageDto.Response> sendMessage(@Valid @RequestBody MessageDto.Request req) throws Exception {
         return success(messageService.saveMessage(req));
     }
 

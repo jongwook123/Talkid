@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface MessageService {
 
-    Message saveMessage(MessageDto.Request req);
+    MessageDto.Response saveMessage(MessageDto.Request req);
     List<MessageDto.Response> getPreviousChatMessages(String dmRoomId);
 }

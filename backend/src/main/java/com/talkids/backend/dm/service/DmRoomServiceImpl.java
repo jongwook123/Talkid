@@ -52,26 +52,24 @@ public class DmRoomServiceImpl implements DmRoomService {
 
         DmRoom dmRoom = DmRoomDto.Request.saveDmRoomDto(req.getSender(), req.getReceiver());
 
-        System.out.println(dmJoinMemberRepository.findByDmRoom_DmRoomId(req.getSender()+"_"+req.getReceiver()));
         // 2.1 기존에 채팅방이 없는 경우 DM방 생성 및 DmJoinMember에 회원 정보 추가
-//        if (dmJoinMemberRepository.findByMember_MemberMailAndDmRoom_DmRoomId(
-//            req.getReceiver(), req.getDmRoomId()).isEmpty()) {
-//
-//            // dm 방 생성
-//            dmRoomRepository.save(dmRoom);
-//
-//            // DmJoinMember 테이블에 회원 정보 insert
-//            dmJoinMemberRepository.save(
-//                DmJoinMemberDto.Request.saveDmJoinMemberDto(
-//                    dmRoom,
-//                    memberRepository.findByMemberMail(req.getSender()).get()));
-//
-//            dmJoinMemberRepository.save(
-//                DmJoinMemberDto.Request.saveDmJoinMemberDto(
-//                    dmRoom,
-//                    memberRepository.findByMemberMail(req.getReceiver()).get()));
-//
-//        }
+        if (dmRoomRepository.findByDmRoomId(req.getSender()+"_"+req.getReceiver()).isEmpty()) {
+
+            // dm 방 생성
+            dmRoomRepository.save(dmRoom);
+
+            // DmJoinMember 테이블에 회원 정보 insert
+            dmJoinMemberRepository.save(
+                DmJoinMemberDto.Request.saveDmJoinMemberDto(
+                    dmRoom,
+                    memberRepository.findByMemberMail(req.getSender()).get()));
+
+            dmJoinMemberRepository.save(
+                DmJoinMemberDto.Request.saveDmJoinMemberDto(
+                    dmRoom,
+                    memberRepository.findByMemberMail(req.getReceiver()).get()));
+
+        }
 
         return messageService.getPreviousChatMessages(req.getSender()+"_"+req.getReceiver());
     }
@@ -81,7 +79,7 @@ public class DmRoomServiceImpl implements DmRoomService {
     @Override
     public String deleteDmRoom(DmJoinMemberDto.Request req) throws Exception {
 
-        DmRoom dmRoom = dmRoomRepository.findByDmRoomId(req.getDmRoomId());
+        DmRoom dmRoom = dmRoomRepository.findByDmRoomId(req.getDmRoomId()).get();
         Member member = memberRepository.findByMemberId(req.getMemberId()).get();
 
 

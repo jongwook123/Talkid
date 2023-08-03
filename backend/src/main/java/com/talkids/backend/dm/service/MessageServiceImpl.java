@@ -21,14 +21,20 @@ public class MessageServiceImpl implements MessageService {
     private final DmRoomRepository dmRoomRepository;
 
     /** 메세지 저장 */
-    public Message saveMessage(MessageDto.Request req) {
+    public MessageDto.Response saveMessage(MessageDto.Request req) {
 
         Message message = messageRepository.save(req.saveMessageDto(
-                dmRoomRepository.findByDmRoomId(req.getDmRoomId()),
+                dmRoomRepository.findByDmRoomId(req.getDmRoomId()).get(),
                 memberRepository.findByMemberMail(req.getMemberMail()).get()
                 ));
 
-        return message;
+        MessageDto.Response ret = MessageDto.Response.messageResponseDto(
+                message.getMember().getMemberMail(),
+                message.getMessageContent(),
+                message.getCreatedAt()
+        );
+
+        return ret;
     }
 
     /** 메세지 이전 기록 불러오기 */
