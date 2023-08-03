@@ -1,13 +1,13 @@
 import * as THREE from "three"
 import { shaderMaterial } from "@react-three/drei"
 import { extend } from "@react-three/fiber"
-
+// import texture1 from "assets/images/zzzz.jpg"
 const GrassMaterial = shaderMaterial(
   {
     bladeHeight: 1,
     map: null,
     alphaMap: null,
-    time: 0,
+    time: 1,
     tipColor: new THREE.Color(0.0, 0.6, 0.0).convertSRGBToLinear(),
     bottomColor: new THREE.Color(0.0, 0.1, 0.0).convertSRGBToLinear(),
   },

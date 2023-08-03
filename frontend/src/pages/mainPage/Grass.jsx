@@ -6,15 +6,17 @@ import { useFrame, useLoader } from "@react-three/fiber"
 
 
 
-import bladeDiffuse from "assets/images/blade_diffuse.jpg"
+import bladeDiffuse from "assets/images/grass.png"
 // import bladeDiffuse from "assets/images/zzzz.jpg"
+// import bladeDiffuse from "assets/images/blade_diffuse.jpg"
 import bladeAlpha from "assets/images/blade_alpha.jpg"
 
 import "./GrassMaterial"
 
+
 const simplex = new SimplexNoise(Math.random)
 
-export default function Grass({ options = { bW: 0.1, bH: 1.5, joints: 1 }, width = 300, instances = 2000000, ...props }) {
+export default function Grass({ options = { bW: 0.2, bH: 1.5, joints: 1}, width = 300, instances = 2000000, ...props }) {
   const { bW, bH, joints } = options
   const materialRef = useRef()
   const [texture, alphaMap] = useLoader(THREE.TextureLoader, [bladeDiffuse, bladeAlpha])
@@ -41,7 +43,7 @@ export default function Grass({ options = { bW: 0.1, bH: 1.5, joints: 1 }, width
   
     return new THREE.BufferGeometry().copy(geo);
   }, [width]);
-  useFrame((state) => (materialRef.current.uniforms.time.value = state.clock.elapsedTime / 4))
+  useFrame((state) => (materialRef.current.uniforms.time.value = state.clock.elapsedTime / 8))
   return (
     <group {...props}>
       <mesh>
