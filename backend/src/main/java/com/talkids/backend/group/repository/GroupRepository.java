@@ -13,7 +13,7 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     List<Group> findAll();
     Optional<Group> findByGroupId(int groupId);
 
-    @Query("SELECT g FROM Groups g JOIN GroupJoinMember gjm ON g.groupId = gjm.group.groupId WHERE gjm.member.memberId = :memberId")
+    @Query("SELECT g FROM Group g JOIN GroupJoinMember gjm ON g.groupId = gjm.group.groupId WHERE gjm.member.memberId = :memberId")
     List<Group> findByGroup(@Param("memberId") int memberId);
 
 
