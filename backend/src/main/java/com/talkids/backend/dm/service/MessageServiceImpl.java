@@ -2,8 +2,11 @@ package com.talkids.backend.dm.service;
 
 import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.dm.dto.MessageDto;
+import com.talkids.backend.dm.dto.UncheckMessageDto;
 import com.talkids.backend.dm.entity.Message;
+import com.talkids.backend.dm.entity.UncheckMessage;
 import com.talkids.backend.dm.repository.DmRoomRepository;
+import com.talkids.backend.dm.repository.UncheckMessageRepository;
 import com.talkids.backend.member.repository.MemberRepository;
 import com.talkids.backend.dm.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,19 +22,28 @@ public class MessageServiceImpl implements MessageService {
     private final MemberRepository memberRepository;
     private final MessageRepository messageRepository;
     private final DmRoomRepository dmRoomRepository;
+    private final UncheckMessageRepository uncheckMessageRepository;
 
     /** 메세지 저장 */
     public MessageDto.Response saveMessage(MessageDto.Request req) {
 
         Message message = messageRepository.save(req.saveMessageDto(
                 dmRoomRepository.findByDmRoomId(req.getDmRoomId()).get(),
-                memberRepository.findByMemberMail(req.getMemberMail()).get()
+                memberRepository.findByMemberMail(req.getSender()).get() // 발신자
                 ));
 
         MessageDto.Response ret = MessageDto.Response.messageResponseDto(
                 message.getMember().getMemberMail(),
                 message.getMessageContent(),
                 message.getCreatedAt()
+        );
+
+        // 상대방 접속 X -> 안읽은 메세지로
+        uncheckMessageRepository.save(
+            UncheckMessageDto.Request.saveUncheckMessageDto(
+                memberRepository.findByMemberMail(req.getReceiver()).get(), // 수신자
+                message
+            )
         );
 
         return ret;

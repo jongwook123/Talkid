@@ -17,7 +17,8 @@ public class MessageDto {
     @NoArgsConstructor
     public static class Request {
 
-        private String memberMail;
+        private String sender;
+        private String receiver;
         private String dmRoomId;
         private String messageContent;
 
