@@ -22,6 +22,9 @@ public interface GroupService {
     /** 선생님 - 신청 승인 */
     int applyApproved(MemberApplyDto.Request req) throws Exception;
 
+    /** 선생님 - 신청 거절 */
+    int applyReject(MemberApplyDto.Request req) throws Exception;
+
     /** 학생 - 그룹 신청 */
     int joinGroup(MemberApplyDto.Request req) throws Exception;
 

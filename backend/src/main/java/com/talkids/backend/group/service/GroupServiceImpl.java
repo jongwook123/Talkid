@@ -30,7 +30,7 @@ public class GroupServiceImpl implements GroupService {
     /** 선생님 - 그룹 리스트 조회 */
     @Override
     public List<Group> getGroupList(int memberId) {
-        return groupRepository.findByGroup(memberId);
+        return groupRepository.findByGroupJoinMember_Member_MemberIdOrderByCreatedAtDesc(memberId);
     }
 
     /** 선생님 - 그룹 개설 */
@@ -69,9 +69,13 @@ public class GroupServiceImpl implements GroupService {
 
         if(member.getMemberType().getMemberTypeId() == 1) {
             throw new Exception("선생님은 다른 그룹에 가입할 수 없습니다.");
-        } else if(memberApplyRepository.findByMember(req.getGroupId(), req.getMemberId()).isPresent()) {
+        } else if(memberApplyRepository
+                .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId())
+                .isPresent()) {
             throw new Exception("승인 대기 중인 학생입니다.");
-        } else if(groupJoinMemberRepository.findByMember(req.getGroupId(), req.getMemberId()).isPresent())
+        } else if(groupJoinMemberRepository
+                .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId())
+                .isPresent())
             throw new Exception("이미 가입한 학생입니다.");
         
         // memberApply 테이블에 저장
@@ -93,14 +97,15 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public int applyApproved(MemberApplyDto.Request req) throws Exception {
         
-        if(groupJoinMemberRepository.findByMember(req.getGroupId(), req.getMemberId()).isPresent())
+        if(groupJoinMemberRepository.findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId()).isPresent())
                 throw new NotFoundException("이미 가입한 학생입니다.");
 
-        MemberApply memberApply = memberApplyRepository.findByMember(req.getGroupId(), req.getMemberId())
+        MemberApply memberApply = memberApplyRepository
+                .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId())
                 .orElseThrow(()-> new NotFoundException("신청 정보가 없습니다."));
 
         // memberApply 테이블에서 해당 신청내역 지우기
-        memberApplyRepository.deleteByMemberApplyId(req.getGroupId(), req.getMemberId());
+        memberApplyRepository.deleteByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId());
 
         // groupJoinMember 테이블에 학생 정보 넣기
         groupJoinMemberRepository.save(
@@ -112,6 +117,20 @@ public class GroupServiceImpl implements GroupService {
 
         // memberActive 변경
         memberApply.getMember().setMemberActive(true);
+
+        return req.getMemberId();
+    }
+
+    /** 선생님 - 신청 거절 */
+    @Transactional
+    @Override
+    public int applyReject(MemberApplyDto.Request req) throws Exception {
+
+        if(memberApplyRepository.findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId()).isEmpty())
+            throw new NotFoundException("신청 정보가 없습니다.");
+
+        // memberApply 테이블에서 해당 신청내역 지우기
+        memberApplyRepository.deleteByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId());
 
         return req.getMemberId();
     }
