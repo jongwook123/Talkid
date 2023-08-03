@@ -2,7 +2,6 @@ package com.talkids.backend.dm.service;
 
 import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.dm.dto.DmJoinMemberDto;
-import com.talkids.backend.dm.entity.DmJoinMember;
 import com.talkids.backend.dm.entity.DmRoom;
 import com.talkids.backend.dm.repository.DmJoinMemberRepository;
 import com.talkids.backend.dm.repository.DmRoomRepository;
@@ -28,7 +27,7 @@ public class DmRoomServiceImpl implements DmRoomService {
 
     /** 회원별 채팅방 리스트 조회 */
     @Override
-    public List<DmJoinMember> getDmRoomList(int memberId) {
+    public List<?> getDmRoomList(int memberId) {
         return dmJoinMemberRepository.findByMember(memberId);
     }
 
@@ -63,7 +62,7 @@ public class DmRoomServiceImpl implements DmRoomService {
         );
 
         // DB에 없으면 insert
-        if (dmJoinMemberRepository.findByDmJoinMemberId(req.getMemberId(), req.getDmRoomId()).isEmpty()) {
+        if (dmJoinMemberRepository.findByMember_MemberIdAndDmRoom_DmRoomId(req.getMemberId(), req.getDmRoomId()).isEmpty()) {
             dmJoinMemberRepository.save(
                 req.saveDmJoinMemberDto(dmRoom, member)
             );
@@ -86,7 +85,7 @@ public class DmRoomServiceImpl implements DmRoomService {
         );
 
         // dmJoinMemberDto에서 사람 정보 지우기
-        dmJoinMemberRepository.deleteByDmJoinMemberId(member.getMemberId(), dmRoom.getDmRoomId());
+        dmJoinMemberRepository.deleteByMember_MemberIdAndDmRoom_DmRoomId(member.getMemberId(), dmRoom.getDmRoomId());
 
         // 채팅방에 남은 사람없으면 채팅방 지우기 => 메시지가 있을 때 문제 ?
 //        if (dmJoinMemberRepository.findByDmRoom(room).size()==0) {
