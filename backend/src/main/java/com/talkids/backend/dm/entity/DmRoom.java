@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name="DmRoom")
-@Data
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,5 +34,5 @@ public class DmRoom {
 
     @OneToMany(mappedBy = "dmRoom", fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Message> messages; // 추가된 필드
+    private List<Message> messages;
 }

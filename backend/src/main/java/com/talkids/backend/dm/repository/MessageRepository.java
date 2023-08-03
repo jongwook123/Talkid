@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, String> {
 
-    List<Message> findByMember_MemberMailAndDmRoom_DmRoomIdOrderByCreatedAtDesc(String memberMail, String dmRoomId);
+    List<Message> findByDmRoom_DmRoomIdOrderByCreatedAtDesc(String dmRoomId);
     
 }

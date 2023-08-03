@@ -15,7 +15,7 @@ public interface DmJoinMemberRepository extends JpaRepository<DmJoinMember, Stri
     @Query("SELECT j.dmRoom FROM DmJoinMember j WHERE j.member.memberId = :memberId")
     List<?> findByDmRoom(@Param("memberId") int memberId);
 
-    List<?> findByMember_MemberMailAndDmRoom_DmRoomId(String memberMail, String dmRoomId);
+    List<?> findByDmRoom_DmRoomId(String dmRoomId);
 
     int deleteByMember_MemberIdAndDmRoom_DmRoomId(int memberId, String dmRoomId);
 }

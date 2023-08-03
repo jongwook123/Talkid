@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class MessageDto {
 
     @Data
@@ -26,6 +28,24 @@ public class MessageDto {
                     .member(member)
                     .messageContent(messageContent)
                     .build();
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Response {
+
+        private String memberMail;
+        private String messageContent;
+        private LocalDateTime createdAt;
+
+        public static Response messageResponseDto(String memberMail, String messageContent, LocalDateTime createdAt) {
+            MessageDto.Response response = new MessageDto.Response();
+            response.setMemberMail(memberMail);
+            response.setMessageContent(messageContent);
+            response.setCreatedAt(createdAt);
+            return response;
         }
     }
 }

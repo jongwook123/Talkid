@@ -8,5 +8,5 @@ import java.util.List;
 public interface MessageService {
 
     Message saveMessage(MessageDto.Request req);
-    List<Message> getPreviousChatMessages(String memberMail, String dmRoomId);
+    List<MessageDto.Response> getPreviousChatMessages(String dmRoomId);
 }
