@@ -16,7 +16,7 @@ public class DmJoinMemberDto {
     public static class Request{
 
         private String dmRoomId;
-        private int memberId;
+        private String memberMail;
 
         @Builder
         public static DmJoinMember saveDmJoinMemberDto(DmRoom dmRoom, Member member){

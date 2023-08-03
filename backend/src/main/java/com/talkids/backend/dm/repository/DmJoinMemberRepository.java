@@ -11,11 +11,8 @@ public interface DmJoinMemberRepository extends JpaRepository<DmJoinMember, Stri
 
     List<DmJoinMember> findAll();
 
-    // 회원별 채팅방 리스트 뽑기
-    @Query("SELECT j.dmRoom FROM DmJoinMember j WHERE j.member.memberId = :memberId")
-    List<?> findByDmRoom(@Param("memberId") int memberId);
 
     List<?> findByDmRoom_DmRoomId(String dmRoomId);
 
-    int deleteByMember_MemberIdAndDmRoom_DmRoomId(int memberId, String dmRoomId);
+    int deleteByMember_MemberMailAndDmRoom_DmRoomId(String memberMail, String dmRoomId);
 }

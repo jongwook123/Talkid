@@ -79,19 +79,15 @@ public class DmRoomServiceImpl implements DmRoomService {
     @Override
     public String deleteDmRoom(DmJoinMemberDto.Request req) throws Exception {
 
-        DmRoom dmRoom = dmRoomRepository.findByDmRoomId(req.getDmRoomId()).get();
-        Member member = memberRepository.findByMemberId(req.getMemberId()).get();
+        // dmJoinMemberDto에서 사람 정보 지우기
+        dmJoinMemberRepository.deleteByMember_MemberMailAndDmRoom_DmRoomId(req.getMemberMail(), req.getDmRoomId());
 
+        // 채팅방에 남은 사람없으면 채팅방 지우기
+        if (dmJoinMemberRepository.findByDmRoom_DmRoomId(req.getDmRoomId()).size()==0) {
+            dmRoomRepository.deleteByDmRoomId(req.getDmRoomId());
+        }
 
-//        // dmJoinMemberDto에서 사람 정보 지우기
-//        dmJoinMemberRepository.deleteByMember_MemberIdAndDmRoom_DmRoomId(member.getMemberId(), dmRoom.getDmRoomId());
-//
-//        // 채팅방에 남은 사람없으면 채팅방 지우기
-//        if (dmJoinMemberRepository.findByDmRoom(room).size()==0) {
-//            dmRoom.setDeletedAt(true);
-//        }
-
-        return dmRoom.getDmRoomId();
+        return req.getDmRoomId();
     }
 
 }

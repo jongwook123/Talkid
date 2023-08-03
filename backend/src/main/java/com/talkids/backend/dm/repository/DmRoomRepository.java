@@ -21,4 +21,6 @@ public interface DmRoomRepository extends JpaRepository<DmRoom, String> {
             "GROUP BY r.dmRoomId " +
             "ORDER BY MAX(m.createdAt) DESC NULLS LAST")
     List<Object[]> getChatRoomsAndUncheckCounts(@Param("memberId") int memberId);
+
+    int deleteByDmRoomId(String dmRoomId);
 }

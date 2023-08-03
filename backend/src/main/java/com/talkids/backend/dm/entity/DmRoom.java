@@ -32,7 +32,7 @@ public class DmRoom {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "dmRoom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "dmRoom", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Message> messages;
 }
