@@ -18,7 +18,7 @@ public class DmRoomDto {
         @Builder
         public static DmRoom saveDmRoomDto(String sender, String receiver){
             return DmRoom.builder()
-                    .dmRoomId(sender+"_"+receiver)
+                    .dmRoomId(sender.compareTo(receiver) > 0 ? receiver+"_"+sender : sender+"_"+receiver)
                     .build();
         }
     }

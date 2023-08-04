@@ -27,8 +27,12 @@ public class MessageServiceImpl implements MessageService {
     /** 메세지 저장 */
     public MessageDto.Response saveMessage(MessageDto.Request req) {
 
+        String dmRoomId = req.getSender().compareTo(req.getReceiver()) > 0
+                ? req.getReceiver()+"_"+req.getSender()
+                : req.getSender()+"_"+req.getReceiver();
+
         Message message = messageRepository.save(req.saveMessageDto(
-                dmRoomRepository.findByDmRoomId(req.getDmRoomId()).get(),
+                dmRoomRepository.findByDmRoomId(dmRoomId).get(),
                 memberRepository.findByMemberMail(req.getSender()).get() // 발신자
                 ));
 

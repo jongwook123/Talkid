@@ -3,8 +3,10 @@ package com.talkids.backend.dm.service;
 import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.dm.dto.DmJoinMemberDto;
 import com.talkids.backend.dm.entity.DmRoom;
+import com.talkids.backend.dm.entity.UncheckMessage;
 import com.talkids.backend.dm.repository.DmJoinMemberRepository;
 import com.talkids.backend.dm.repository.DmRoomRepository;
+import com.talkids.backend.dm.repository.UncheckMessageRepository;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ public class DmRoomServiceImpl implements DmRoomService {
     private final MemberRepository memberRepository;
     private final DmRoomRepository dmRoomRepository;
     private final DmJoinMemberRepository dmJoinMemberRepository;
+    private final UncheckMessageRepository uncheckMessageRepository;
+
     private final MessageService messageService;
 
     /** 회원별 채팅방 리스트 조회 */
@@ -39,9 +43,6 @@ public class DmRoomServiceImpl implements DmRoomService {
             chatRooms.add(response);
         }
 
-//        dmJoinMemberRepository.findByDmRoom(memberId);
-
-
         return chatRooms;
     }
 
@@ -53,25 +54,30 @@ public class DmRoomServiceImpl implements DmRoomService {
         DmRoom dmRoom = DmRoomDto.Request.saveDmRoomDto(req.getSender(), req.getReceiver());
 
         // 2.1 기존에 채팅방이 없는 경우 DM방 생성 및 DmJoinMember에 회원 정보 추가
-        if (dmRoomRepository.findByDmRoomId(req.getSender()+"_"+req.getReceiver()).isEmpty()) {
+        if (dmRoomRepository.findByDmRoomId(dmRoom.getDmRoomId()).isEmpty()) {
 
             // dm 방 생성
             dmRoomRepository.save(dmRoom);
 
-            // DmJoinMember 테이블에 회원 정보 insert
+            // DmJoinMember 테이블에 Sender 정보 insert
             dmJoinMemberRepository.save(
                 DmJoinMemberDto.Request.saveDmJoinMemberDto(
                     dmRoom,
                     memberRepository.findByMemberMail(req.getSender()).get()));
 
+            // DmJoinMember 테이블에 Receiver 정보 insert
             dmJoinMemberRepository.save(
                 DmJoinMemberDto.Request.saveDmJoinMemberDto(
                     dmRoom,
                     memberRepository.findByMemberMail(req.getReceiver()).get()));
-
         }
 
-        return messageService.getPreviousChatMessages(req.getSender()+"_"+req.getReceiver());
+        // 안 읽은 메세지 -> 읽음 처리
+        Member member = memberRepository.findByMemberMail(req.getSender()).get();
+
+        uncheckMessageRepository.deleteByMember_MemberIdAndDmRoom_DmRoomId(member.getMemberId(), dmRoom.getDmRoomId());
+
+        return messageService.getPreviousChatMessages(dmRoom.getDmRoomId());
     }
 
     /** 채팅방 퇴장/삭제 */
