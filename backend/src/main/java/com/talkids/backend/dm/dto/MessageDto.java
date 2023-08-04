@@ -21,6 +21,7 @@ public class MessageDto {
         private String receiver;
         private String dmRoomId;
         private String messageContent;
+        private boolean readCheck;
 
         @Builder
         public Message saveMessageDto(DmRoom dmRoom, Member member){

@@ -25,7 +25,7 @@ public class MessageServiceImpl implements MessageService {
     private final UncheckMessageRepository uncheckMessageRepository;
 
     /** 메세지 저장 */
-    public MessageDto.Response saveMessage(MessageDto.Request req) {
+    public String saveMessage(MessageDto.Request req) {
 
         String dmRoomId = req.getSender().compareTo(req.getReceiver()) > 0
                 ? req.getReceiver()+"_"+req.getSender()
@@ -42,15 +42,17 @@ public class MessageServiceImpl implements MessageService {
                 message.getCreatedAt()
         );
 
-        // 상대방 접속 X -> 안읽은 메세지로
-        uncheckMessageRepository.save(
-            UncheckMessageDto.Request.saveUncheckMessageDto(
-                memberRepository.findByMemberMail(req.getReceiver()).get(), // 수신자
-                message
-            )
-        );
+        if(!req.isReadCheck()){
+            // 상대방 접속 X -> 안읽은 메세지로
+            uncheckMessageRepository.save(
+                    UncheckMessageDto.Request.saveUncheckMessageDto(
+                            memberRepository.findByMemberMail(req.getReceiver()).get(), // 수신자
+                            message
+                    )
+            );
+        }
 
-        return ret;
+        return "Success";
     }
 
     /** 메세지 이전 기록 불러오기 */
