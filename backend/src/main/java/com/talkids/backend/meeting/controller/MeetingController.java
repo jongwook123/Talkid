@@ -1,38 +1,40 @@
 package com.talkids.backend.meeting.controller;
 
-import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
-import com.talkids.backend.meeting.entity.MeetingSchedule;
-import com.talkids.backend.meeting.service.MeetingService;
-import com.talkids.backend.member.entity.Member;
-import com.talkids.backend.member.service.MemberService;
+import com.talkids.backend.meeting.dto.SmallGroupDto;
+import com.talkids.backend.meeting.entity.SmallGroup;
+import com.talkids.backend.meeting.service.SmallGroupService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
+
+import static com.talkids.backend.common.utils.ApiUtils.success;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meeting")
+@RequestMapping("/smallGroup")
 public class MeetingController {
 
-    private final MemberService memberService;
-    private final MeetingService meetingServiec;
+    private final SmallGroupService smallGroupService;
 
-    @GetMapping("/empty")
-    @ResponseBody
-    public ApiResult test(Principal principal){
-        if(principal == null){
-            //Authorization 헤더가 제대로 오지 않은 경우다
-            return ApiUtils.error("로그인 정보가 일치하지 않습니다", HttpStatus.UNAUTHORIZED);
-        }
-        Member member = memberService.getMember(principal.getName());
-        List<MeetingSchedule> schedules = meetingServiec.getMeetingScheduleByMember(member);
-        return ApiUtils.success(schedules);
+    /** 소그룹 리스트 조회 */
+    @GetMapping("/{meetingId}")
+    public ApiResult<List<SmallGroup>> getSmallGroupList(@PathVariable int meetingId) throws Exception {
+        return success(smallGroupService.getSmallGroupList(meetingId));
     }
+
+    /** 소그룹 생성 */
+    @PostMapping
+    public ApiResult<Integer> createSmallGroup(@Valid @RequestBody SmallGroupDto.Request req) throws Exception {
+        return success(smallGroupService.createSmallGroup(req));
+    }
+
+    /** 소그룹 삭제 */
+    @DeleteMapping("/{smallGroupId}")
+    public ApiResult<Integer> deleteSmallGroup(@PathVariable int smallGroupId) throws Exception {
+        return success(smallGroupService.deleteSmallGroup(smallGroupId));
+    }
+
 }
