@@ -16,6 +16,6 @@ public class MeetingServiceImpl implements MeetingService{
 
     //Member로부터 빈일정을 가져옵니다
     public List<MeetingSchedule> getMeetingScheduleByMember(Member member) {
-        return meetingScheduleRepository.findAllByMember(member);
+        return null;
     }
 }

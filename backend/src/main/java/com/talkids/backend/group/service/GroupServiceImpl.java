@@ -1,8 +1,9 @@
 package com.talkids.backend.group.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
-import com.talkids.backend.group.dto.GroupDto;
-import com.talkids.backend.group.dto.GroupJoinMemberDto;
+
+import com.talkids.backend.group.dto.CreateGroupDto;
+import com.talkids.backend.group.dto.CreateGroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.entity.MemberApply;
@@ -36,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
     /** 선생님 - 그룹 개설 */
     @Transactional
     @Override
-    public int createGroup(GroupDto.Request req) throws NotFoundException, Exception {
+    public int createGroup(CreateGroupDto.Request req) throws NotFoundException, Exception {
         Member member = memberRepository.findByMemberId(req.getMemberId())
                 .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
 
@@ -48,7 +49,7 @@ public class GroupServiceImpl implements GroupService {
 
         // group_member_join 테이블에 저장
         groupJoinMemberRepository.save(
-            GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
+            CreateGroupJoinMemberDto.Request.saveGroupJoinMemberDto(
                 groupRepository.findByGroupId(group.getGroupId()).get(),
                 member
             )
@@ -109,7 +110,7 @@ public class GroupServiceImpl implements GroupService {
 
         // groupJoinMember 테이블에 학생 정보 넣기
         groupJoinMemberRepository.save(
-            GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
+            CreateGroupJoinMemberDto.Request.saveGroupJoinMemberDto(
                     memberApply.getGroup(),
                     memberApply.getMember()
             )

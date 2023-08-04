@@ -41,5 +41,4 @@ public class Group {
     @Column(name="createdAt", updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
-
 }

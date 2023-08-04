@@ -1,7 +1,7 @@
 package com.talkids.backend.group.controller;
 
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
-import com.talkids.backend.group.dto.GroupDto;
+import com.talkids.backend.group.dto.CreateGroupDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
@@ -28,7 +28,7 @@ public class GroupController {
 
     /** 선생님 - 그룹 개설 */
     @PostMapping
-    public ApiResult<Integer> createGroup(@Valid @RequestBody GroupDto.Request req) throws Exception {
+    public ApiResult<Integer> createGroup(@Valid @RequestBody CreateGroupDto.Request req) throws Exception {
         return success(groupService.createGroup(req));
     }
 
