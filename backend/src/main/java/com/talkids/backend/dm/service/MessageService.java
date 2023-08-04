@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface MessageService {
 
-    String saveMessage(MessageDto.Request req) throws NotFoundException;
+    String saveMessage(MessageDto.Request req) throws Exception;
     List<MessageDto.Response> getPreviousChatMessages(String dmRoomId) throws NotFoundException;
 }

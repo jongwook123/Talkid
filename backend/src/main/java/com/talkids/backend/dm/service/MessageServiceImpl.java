@@ -6,9 +6,11 @@ import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.dm.dto.MessageDto;
 import com.talkids.backend.dm.dto.UncheckMessageDto;
+import com.talkids.backend.dm.entity.BadWords;
 import com.talkids.backend.dm.entity.DmRoom;
 import com.talkids.backend.dm.entity.Message;
 import com.talkids.backend.dm.entity.UncheckMessage;
+import com.talkids.backend.dm.repository.BadWordsRepository;
 import com.talkids.backend.dm.repository.DmRoomRepository;
 import com.talkids.backend.dm.repository.UncheckMessageRepository;
 import com.talkids.backend.member.entity.Member;
@@ -29,9 +31,10 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final DmRoomRepository dmRoomRepository;
     private final UncheckMessageRepository uncheckMessageRepository;
+    private final BadWordsRepository badWordsRepository;
 
     /** 메세지 저장 */
-    public String saveMessage(MessageDto.Request req) throws NotFoundException {
+    public String saveMessage(MessageDto.Request req) throws Exception {
 
         String dmRoomId = req.getSender().compareTo(req.getReceiver()) > 0
                 ? req.getReceiver()+"_"+req.getSender()
@@ -43,6 +46,15 @@ public class MessageServiceImpl implements MessageService {
                 .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
         DmRoom dmRoom =  dmRoomRepository.findByDmRoomId(dmRoomId)
                 .orElseThrow(()->new NotFoundException("존재하는 방이 없습니다."));
+
+        // 비속어 사용시 필터
+        List<BadWords> badwordsList = badWordsRepository.findAll();
+
+        BadWords badWords = badWordsRepository.findByWords(req.getMessageContent());
+        if(!badWords.getWords().isEmpty()){
+            sender.setMemberFilterCount(sender.getMemberFilterCount()+1);
+            throw new Exception("비속어를 사용하였습니다.");
+        }
 
         Message message = messageRepository.save(
                 req.saveMessageDto(dmRoom, sender)
