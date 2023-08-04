@@ -1,7 +1,6 @@
 package com.talkids.backend.group.dto;
 
 import com.talkids.backend.group.entity.Group;
-import com.talkids.backend.group.entity.GroupJoinMember;
 import com.talkids.backend.group.entity.MemberApply;
 import com.talkids.backend.member.entity.Member;
 import jakarta.validation.constraints.NotNull;
