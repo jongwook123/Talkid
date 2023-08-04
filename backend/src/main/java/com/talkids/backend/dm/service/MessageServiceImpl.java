@@ -1,15 +1,21 @@
 package com.talkids.backend.dm.service;
 
+import com.talkids.backend.common.exception.NotFoundException;
+import com.talkids.backend.common.utils.ApiUtils;
+import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.dm.dto.MessageDto;
 import com.talkids.backend.dm.dto.UncheckMessageDto;
+import com.talkids.backend.dm.entity.DmRoom;
 import com.talkids.backend.dm.entity.Message;
 import com.talkids.backend.dm.entity.UncheckMessage;
 import com.talkids.backend.dm.repository.DmRoomRepository;
 import com.talkids.backend.dm.repository.UncheckMessageRepository;
+import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.repository.MemberRepository;
 import com.talkids.backend.dm.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,30 +31,27 @@ public class MessageServiceImpl implements MessageService {
     private final UncheckMessageRepository uncheckMessageRepository;
 
     /** 메세지 저장 */
-    public String saveMessage(MessageDto.Request req) {
+    public String saveMessage(MessageDto.Request req) throws NotFoundException {
 
         String dmRoomId = req.getSender().compareTo(req.getReceiver()) > 0
                 ? req.getReceiver()+"_"+req.getSender()
                 : req.getSender()+"_"+req.getReceiver();
 
-        Message message = messageRepository.save(req.saveMessageDto(
-                dmRoomRepository.findByDmRoomId(dmRoomId).get(),
-                memberRepository.findByMemberMail(req.getSender()).get() // 발신자
-                ));
+        Member sender = memberRepository.findByMemberMail(req.getSender()) // 발신자
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+        Member receiver = memberRepository.findByMemberMail(req.getReceiver()) // 수신자
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+        DmRoom dmRoom =  dmRoomRepository.findByDmRoomId(dmRoomId)
+                .orElseThrow(()->new NotFoundException("존재하는 방이 없습니다."));
 
-        MessageDto.Response ret = MessageDto.Response.messageResponseDto(
-                message.getMember().getMemberMail(),
-                message.getMessageContent(),
-                message.getCreatedAt()
+        Message message = messageRepository.save(
+                req.saveMessageDto(dmRoom, sender)
         );
 
         if(!req.isReadCheck()){
             // 상대방 접속 X -> 안읽은 메세지로
             uncheckMessageRepository.save(
-                    UncheckMessageDto.Request.saveUncheckMessageDto(
-                            memberRepository.findByMemberMail(req.getReceiver()).get(), // 수신자
-                            message
-                    )
+                UncheckMessageDto.Request.saveUncheckMessageDto(receiver, message)
             );
         }
 
@@ -56,7 +59,9 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /** 메세지 이전 기록 불러오기 */
-    public List<MessageDto.Response> getPreviousChatMessages(String dmRoomId) {
+    public List<MessageDto.Response> getPreviousChatMessages(String dmRoomId) throws NotFoundException {
+        if(dmRoomRepository.findByDmRoomId(dmRoomId).isEmpty())
+            throw new NotFoundException("존재하는 방이 없습니다.");
 
         List<Message> messages = messageRepository.findByDmRoom_DmRoomIdOrderByCreatedAtDesc(dmRoomId);
         List<MessageDto.Response> message = new ArrayList<>();

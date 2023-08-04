@@ -1,7 +1,10 @@
 package com.talkids.backend.dm.dto;
 
 import com.talkids.backend.dm.entity.DmRoom;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 public class DmRoomDto {
@@ -11,9 +14,15 @@ public class DmRoomDto {
     @NoArgsConstructor
     public static class Request{
 
+        @Email
+        @Length(min = 1, max = 45)
+        @NotBlank(message = "이메일을 입력해주세요")
         private String sender;
+
+        @Email
+        @Length(min = 1, max = 45)
+        @NotBlank(message = "이메일을 입력해주세요")
         private String receiver;
-        private String dmRoomId;
 
         @Builder
         public static DmRoom saveDmRoomDto(String sender, String receiver){
