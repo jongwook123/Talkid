@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -52,9 +53,9 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("다시 시도해 주세요");
         }
 
-        Country country = countryRepository.findByCountryId(req.getCountryId());
-        School school = schoolRepository.findBySchoolId(req.getSchoolId());
-        Language language = languageRepository.findByLanguageId(req.getLanguageId());
+        Country country = countryRepository.findByCountryId(req.getCountryId()).get();
+        School school = schoolRepository.findBySchoolId(req.getSchoolId()).get();
+        Language language = languageRepository.findByLanguageId(req.getLanguageId()).get();
         MemberType memberType = memberTypeRepository.findByMemberTypeId(req.getMemberTypeId());
 
         String encodePassword = passwordEncoder.encode(req.getMemberPassword()); // 비밀번호 암호화
@@ -117,8 +118,8 @@ public class MemberServiceImpl implements MemberService {
 //        member = getMember(principal.getName());
 
         member.setMemberPassword(passwordEncoder.encode(req.getMemberPassword()));
-        member.setCountry(countryRepository.findByCountryId(req.getCountryId()));
-        member.setLanguage(languageRepository.findByLanguageId(req.getLanguageId()));
+        member.setCountry(countryRepository.findByCountryId(req.getCountryId()).get());
+        member.setLanguage(languageRepository.findByLanguageId(req.getLanguageId()).get());
         member.setMemberIntroduce(req.getMemberIntroduce());
 
         return member.getMemberMail();
@@ -202,4 +203,47 @@ public class MemberServiceImpl implements MemberService {
 
         return pwd.toString();
     }
+
+    /** 사용자 찾기 및 필터링 */
+    @Override
+    public List<?> findMember(FindMemberDto.Request req) throws NotFoundException {
+        List<?> ret = new ArrayList<>();
+
+        String info = req.getInfo();
+        int infoId = req.getInfoId();
+
+        // 내 정보 제외하고 출력하기 - 미완성
+
+        if(info.equals("all")){
+            // 회원 이메일로 검색
+            if(req.getMemberMail()!=null){
+                if(memberRepository.findByMemberMail(req.getMemberMail()).isEmpty())
+                    throw new NotFoundException("회원 정보가 없습니다.");
+
+                ret = Collections.singletonList(
+                        memberRepository.findByMemberMail(req.getMemberMail()));
+            }
+            // 모든 사용자 찾기
+            else{
+                ret = memberRepository.findAll();
+            }
+        } else if(info.equals("school")){
+            if(schoolRepository.findBySchoolId(infoId).isEmpty())
+                throw new NotFoundException("학교 정보가 없습니다.");
+            ret = memberRepository.findBySchool_SchoolId(infoId);
+        } else if(info.equals("language")){
+            if(languageRepository.findByLanguageId(infoId).isEmpty())
+                throw new NotFoundException("언어 정보가 없습니다.");
+            ret = memberRepository.findByLanguage_LanguageId(infoId);
+        } else if(info.equals("country")){
+            if(countryRepository.findByCountryId(infoId).isEmpty())
+                throw new NotFoundException("국가 정보가 없습니다.");
+            ret = memberRepository.findByCountry_CountryId(infoId);
+        } else {
+            throw new NotFoundException("정보를 정확하게 입력해 주세요.");
+        }
+
+        return ret;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.talkids.backend.member.service;
 
+import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.dto.*;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface MemberService {
 
-    /** 회원 정보 수정 */
+    /** 로그인 조회 */
     Member getMember(String memberMail);
 
     /** 회원가입 */
@@ -34,5 +35,8 @@ public interface MemberService {
 
     /** 임시 비밀번호 생성 **/
     String getTmpPassword() throws Exception;
+
+    /** 사용자 찾기 및 필터링 */
+    List<?> findMember(FindMemberDto.Request req) throws NotFoundException;
 
 }
