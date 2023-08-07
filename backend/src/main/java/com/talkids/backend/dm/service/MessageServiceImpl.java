@@ -69,20 +69,13 @@ public class MessageServiceImpl implements MessageService {
         if(detectLang!="unk" &&
                 sender.getLanguage().getLanguageCode() != detectLang){
 
-            Optional<Exp> exp = expRepository.findByMember_MemberId(sender.getMemberId());
-            if(exp.isPresent()){ // 현재 사용자의 경험치가 있으면 갱신
-                Exp senderExp = exp.get();
-                senderExp.setExpPoint(
-                        senderExp.getExpPoint() + req.getMessageContent().length()
-                );
-            } else { // 현재 사용자의 경험치가 없으면 DB insert
                 expRepository.save(
                     Exp.builder()
                         .expPoint(req.getMessageContent().length())
                         .member(sender)
                         .build()
                 );
-            }
+
         }
 
         // 메세지 저장
