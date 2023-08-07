@@ -114,9 +114,9 @@ function getAttributeData(instances, width) {
     angle = Math.random() * (max - min) + min
     RotationAxis = new THREE.Vector3(0, 0, 1)
     x = RotationAxis.x * Math.sin(angle / 2.0)
-    y = RotationAxis.y * Math.sin(angle / 2.0)
-    z = RotationAxis.z * Math.sin(angle / 2.0)
-    w = Math.cos(angle / 2.0)
+    y = RotationAxis.y * Math.sin(angle / 3.0)
+    z = RotationAxis.z * Math.sin(angle / 4.0)
+    w = Math.cos(angle / 3.0)
     quaternion_1.set(x, y, z, w).normalize()
 
     //Combine rotations to a single quaternion
