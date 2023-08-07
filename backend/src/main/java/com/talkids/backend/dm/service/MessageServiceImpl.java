@@ -1,15 +1,11 @@
 package com.talkids.backend.dm.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
-import com.talkids.backend.common.utils.ApiUtils;
-import com.talkids.backend.common.utils.ApiUtils.ApiResult;
-import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.dm.dto.MessageDto;
 import com.talkids.backend.dm.dto.UncheckMessageDto;
 import com.talkids.backend.dm.entity.BadWords;
 import com.talkids.backend.dm.entity.DmRoom;
 import com.talkids.backend.dm.entity.Message;
-import com.talkids.backend.dm.entity.UncheckMessage;
 import com.talkids.backend.dm.repository.BadWordsRepository;
 import com.talkids.backend.dm.repository.DmRoomRepository;
 import com.talkids.backend.dm.repository.UncheckMessageRepository;
@@ -17,14 +13,15 @@ import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.repository.MemberRepository;
 import com.talkids.backend.dm.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MessageServiceImpl implements MessageService {
 
     private final MemberRepository memberRepository;
@@ -34,6 +31,8 @@ public class MessageServiceImpl implements MessageService {
     private final BadWordsRepository badWordsRepository;
 
     /** 메세지 저장 */
+    @Transactional
+    @Override
     public String saveMessage(MessageDto.Request req) throws Exception {
 
         String dmRoomId = req.getSender().compareTo(req.getReceiver()) > 0
@@ -50,12 +49,14 @@ public class MessageServiceImpl implements MessageService {
         // 비속어 사용시 필터
         List<BadWords> badwordsList = badWordsRepository.findAll();
 
-        BadWords badWords = badWordsRepository.findByWords(req.getMessageContent());
-        if(!badWords.getWords().isEmpty()){
-            sender.setMemberFilterCount(sender.getMemberFilterCount()+1);
-            throw new Exception("비속어를 사용하였습니다.");
+        for (BadWords badWord : badwordsList) {
+            if (req.getMessageContent().contains(badWord.getWords())) {
+                sender.setMemberFilterCount(sender.getMemberFilterCount() + 1);
+                throw new Exception("비속어를 사용하였습니다.");
+            }
         }
 
+        // 메세지 저장
         Message message = messageRepository.save(
                 req.saveMessageDto(dmRoom, sender)
         );

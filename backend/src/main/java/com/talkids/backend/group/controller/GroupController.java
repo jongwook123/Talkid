@@ -75,6 +75,17 @@ public class GroupController {
         }
     }
 
+    /** 선생님 - 학생 관리 */
+    @GetMapping("/management/{groupId}")
+    public ApiResult<?> studentManagement(@PathVariable int groupId){
+        try{
+            List<?> result = groupService.studentManagement(groupId);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     /** 학생 - 그룹 신청 */
     @PostMapping("/apply")
     public ApiResult<?> joinGroup(@Valid @RequestBody MemberApplyDto.Request req){

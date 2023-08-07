@@ -137,4 +137,19 @@ public class GroupServiceImpl implements GroupService {
 
         return req.getMemberId();
     }
+
+    /** 선생님 - 학생 관리 */
+    @Override
+    public List<?> studentManagement(int groupId) throws NotFoundException {
+        if(groupRepository.findByGroupId(groupId).isEmpty())
+            throw new NotFoundException("그룹 정보가 없습니다.");
+
+        // 사용자 인증) 방장(선생님) 제외하고 출력하기 - 미완성
+        List<?> ret = groupJoinMemberRepository.findByGroup_GroupId(groupId);
+        if(ret.isEmpty())
+            throw new NotFoundException("등록된 학생이 없습니다.");
+
+        return ret;
+    }
+
 }

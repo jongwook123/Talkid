@@ -2,10 +2,9 @@ package com.talkids.backend.group.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.group.dto.GroupDto;
-import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
-import com.talkids.backend.group.entity.MemberApply;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -28,5 +27,8 @@ public interface GroupService {
 
     /** 학생 - 그룹 신청 */
     int joinGroup(MemberApplyDto.Request req) throws NotFoundException;
+
+    /** 선생님 - 학생 관리 */
+    List<?> studentManagement(@PathVariable int groupId) throws NotFoundException;
 
 }
