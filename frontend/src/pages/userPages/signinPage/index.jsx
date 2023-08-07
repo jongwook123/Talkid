@@ -1,19 +1,30 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 import * as S from './style';
 
-import { TrySignin } from "apis/SigninPageAPIs";
+import { TrySignin } from "apis/UserAPIs";
+import { signinUser } from "redux/slice/userSlice";
 
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
 
 export default function SigninPage() {
+    // redux 관련
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // 사용자 입력 관련
+
+    // 사용자 입력 값 저장
     const [inputs, setInputs] = useState({
         id: "",
         password: "",
     });
 
+    // 사용자 입력 시
     const onChangeHandler = (e) => {
         setInputs({
             ...inputs,
@@ -21,7 +32,8 @@ export default function SigninPage() {
         });
     }
 
-    const buttonClickHandler = (e) => {
+    // 로그인 시도 시
+    const buttonClickHandler = async (e) => {
         e.preventDefault();
 
         if (!inputs.id) {
@@ -36,7 +48,20 @@ export default function SigninPage() {
             return;
         }
 
-        TrySignin(inputs.id, inputs.password);
+        const result = await TrySignin(inputs.id, inputs.password);
+
+        console.log(result);
+
+        if (result.accessToken) {
+            dispatch(signinUser({
+                accessToken: result.accessToken,
+                refreshToken: result.refreshToken,
+            }));
+
+            navigate('/');
+        } else {
+            alert('이메일 혹은 비밀번호가 일치하지 않습니다!');
+        }
     }
 
     return (
@@ -51,7 +76,7 @@ export default function SigninPage() {
                         <img src={TALKIDS} alt="" />
                     </S.SigninSectionHeader>
                     <S.SigninForm action="">
-                        <LongInput1 props={{ id: "id", desc: "Insert your id", color: "orange", placeholder: "Your ID", type: "text", value: inputs.id, callback: onChangeHandler}} />
+                        <LongInput1 props={{ id: "id", desc: "Insert your e-mail", color: "orange", placeholder: "Your E-mail", type: "text", value: inputs.id, callback: onChangeHandler}} />
                         <LongInput1 props={{ id: "password", desc: "Insert your password", color: "blue", placeholder: "Your Password", type: "password", value: inputs.password, callback: onChangeHandler}} />
                         <S.ButtonWrapper>
                             <LongButton1 props={{ color: "green", text: "Sign in", callback: buttonClickHandler }} />

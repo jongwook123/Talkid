@@ -1,22 +1,42 @@
-import React from 'react';
+import { useEffect, useRef, useState } from "react";
+import io from 'socket.io-client';
+
 import * as S from './style';
-import Sidebar from 'components/chattings/sidebar';
-import Chat1 from 'components/chattings/chat';
-import Listbar from 'components/chattings/listbar';
 
+import ChatList from "./chatlist";
 
+export default function ChattingPage() {
+    const socketRef = useRef();
+    const [socketUpdated, setSocketUpdated] = useState(false);
 
-function ChattingPage() {
-  return (
+    useEffect(() => {
+        socketRef.current = io.connect(process.env.REACT_APP_CHATTING_SERVER);
 
-    <S.Head1>
-      <Listbar/>
-      <Sidebar/>
-      <Chat1/>
-    </S.Head1>
+        socketRef.current.emit('connectUser', {
+            userEmail: "test",
+        });
 
-    
-  );
+        const cleanup = () => {
+            socketRef.current.emit("disconnectUser", {
+                userEmail: "test",
+            });
+
+            socketRef.current.disconnect();
+        }
+
+        window.addEventListener('beforeunload', cleanup);
+
+        setSocketUpdated(true);
+
+        return () => {
+            cleanup();
+            window.removeEventListener('beforeunload', cleanup);
+        }
+    }, []);
+
+    return (
+        <S.Main>
+            <ChatList props={{ socketUpdated, socket: socketRef.current }}/>
+        </S.Main>
+    )
 }
-
-export default ChattingPage;
