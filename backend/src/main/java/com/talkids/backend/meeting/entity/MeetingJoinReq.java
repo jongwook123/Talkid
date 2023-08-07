@@ -1,6 +1,7 @@
 package com.talkids.backend.meeting.entity;
 
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,5 +29,4 @@ public class MeetingJoinReq {
     @ManyToOne
     @JoinColumn(name = "groupId")
     private Group group;
-
 }

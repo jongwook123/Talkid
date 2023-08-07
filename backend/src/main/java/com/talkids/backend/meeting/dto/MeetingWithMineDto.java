@@ -7,8 +7,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Builder
-@Getter @RequiredArgsConstructor @AllArgsConstructor
-public class MeetingDto {
+@Getter
+public class MeetingWithMineDto {
     private int meetingId;
     private LocalDateTime meetingStart;
     private LocalDateTime meetingEnd;
@@ -17,14 +17,18 @@ public class MeetingDto {
     private GroupDto groupRes;
     private LocalDateTime createdAt;
 
-    public static MeetingDto fromEntity(Meeting meeting){
-        return MeetingDto.builder()
+    private Boolean isMine;
+
+    public static MeetingWithMineDto fromEntity(Meeting meeting, boolean isMine){
+        return MeetingWithMineDto.builder()
             .meetingId(meeting.getMeetingId())
             .meetingStart(meeting.getMeetingStart())
             .meetingEnd(meeting.getMeetingEnd())
             .groupReq(GroupDto.fromEntity(meeting.getGroupReq()))
             .groupRes(GroupDto.fromEntity(meeting.getGroupRes()))
             .createdAt(meeting.getCreatedAt())
+            .isMine(isMine)
             .build();
     }
+
 }
