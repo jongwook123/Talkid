@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -92,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
     /** 로그인 */
     @Transactional
     @Override
-    public String signIn(SignInDto.Request req) {
+    public Map<String, String> signIn(SignInDto.Request req) {
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
@@ -114,7 +112,12 @@ public class MemberServiceImpl implements MemberService {
         member.setRefreshToken(jwtToken.getRefreshToken());
 
         System.out.println("jwtToken:" + jwtToken);
-        return accessToken;
+
+        Map<String, String> ret = new HashMap<>();
+        ret.put("accessToken", jwtToken.getAccessToken());
+        ret.put("refreshToken", jwtToken.getRefreshToken());
+
+        return ret;
     }
 
     /** 회원 정보 수정 */

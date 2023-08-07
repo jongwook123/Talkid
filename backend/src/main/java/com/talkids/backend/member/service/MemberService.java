@@ -6,6 +6,7 @@ import com.talkids.backend.member.dto.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 public interface MemberService {
 
@@ -19,7 +20,7 @@ public interface MemberService {
     List<?> getSignUpInfo(String info) throws NotFoundException;
 
     /** 로그인 */
-    String signIn(SignInDto.Request req) throws NotFoundException;
+    Map<String, String> signIn(SignInDto.Request req) throws NotFoundException;
 
     /** 회원 정보 수정 */
     String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) throws NotFoundException;

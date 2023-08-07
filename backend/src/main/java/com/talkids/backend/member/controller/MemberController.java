@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import static com.talkids.backend.common.utils.ApiUtils.success;
 
@@ -61,7 +62,7 @@ public class MemberController {
     @PostMapping("/signin")
     public ApiResult<?> signIn(@Valid @RequestBody SignInDto.Request req) {
         try{
-            String result = memberService.signIn(req);
+            Map<String, String> result = memberService.signIn(req);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
