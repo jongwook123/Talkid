@@ -1,12 +1,15 @@
 package com.talkids.backend.group.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
+import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.group.entity.GroupJoinMember;
 import com.talkids.backend.group.entity.MemberApply;
 import com.talkids.backend.group.repository.MemberApplyRepository;
+import com.talkids.backend.member.entity.Exp;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.group.repository.GroupJoinMemberRepository;
 import com.talkids.backend.group.repository.GroupRepository;
@@ -15,7 +18,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -138,18 +146,76 @@ public class GroupServiceImpl implements GroupService {
         return req.getMemberId();
     }
 
+    //... (생략)
+
     /** 선생님 - 학생 관리 */
     @Override
     public List<?> studentManagement(int groupId) throws NotFoundException {
-        if(groupRepository.findByGroupId(groupId).isEmpty())
+        if (groupRepository.findByGroupId(groupId).isEmpty())
             throw new NotFoundException("그룹 정보가 없습니다.");
 
-        // 사용자 인증) 방장(선생님) 제외하고 출력하기 - 미완성
-        List<?> ret = groupJoinMemberRepository.findByGroup_GroupId(groupId);
-        if(ret.isEmpty())
+        LocalDate currentDate = LocalDate.now();
+        int year = currentDate.getYear();
+        int month = currentDate.getMonthValue();
+
+        Group group = groupRepository.findByGroupId(groupId).get();
+        List<GroupJoinMemberDto.Response> joinMember = new ArrayList<>();
+
+        for (GroupJoinMember gm : group.getGroupJoinMember()) {
+            Member member = gm.getMember();
+            int totalExp = 0;
+            int monthExp = 0;
+
+            // 멤버의 경험치 정보 가져오기
+            List<Exp> exps = member.getExp();
+            for (Exp exp : exps) {
+                LocalDate expDate = exp.getCreatedAt();
+                if (expDate.getYear() == year && expDate.getMonthValue() == month) {
+                    monthExp += exp.getExpPoint();
+                }
+                totalExp += exp.getExpPoint();
+            }
+
+            GroupJoinMemberDto.Response response = GroupJoinMemberDto.Response.groupJoinMemberDto(member, totalExp, monthExp);
+            joinMember.add(response);
+
+        }
+
+        if (joinMember.isEmpty())
             throw new NotFoundException("등록된 학생이 없습니다.");
 
-        return ret;
+        return joinMember;
     }
+
+//    /** 선생님 - 학생 관리 */
+//    @Override
+//    public List<?> studentManagement(int groupId) throws NotFoundException {
+//        if (groupRepository.findByGroupId(groupId).isEmpty())
+//            throw new NotFoundException("그룹 정보가 없습니다.");
+//
+//        LocalDate currentDate = LocalDate.now();
+//        int year = currentDate.getYear();
+//        int month = currentDate.getMonthValue();
+//
+//        String yearAndMonth = year + "-" + String.format("%02d", month);
+//
+//        List<Object[]> results = groupRepository.findMembersAndExpByMonth(groupId, yearAndMonth);
+//        List<GroupJoinMemberDto.Response> joinMember = new ArrayList<>();
+//
+//        for (Object[] result : results) {
+//            Member member = (Member) result[0];
+//            int totalExp = ((Long) result[1]).intValue();
+//            int monthExp = ((Long) result[2]).intValue();
+//
+//            GroupJoinMemberDto.Response response = GroupJoinMemberDto.Response.groupJoinMemberDto(member, totalExp, monthExp);
+//            joinMember.add(response);
+//        }
+//
+//        if (joinMember.isEmpty())
+//            throw new NotFoundException("등록된 학생이 없습니다.");
+//
+//        return joinMember;
+//    }
+
 
 }
