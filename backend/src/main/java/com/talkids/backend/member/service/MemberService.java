@@ -3,6 +3,7 @@ package com.talkids.backend.member.service;
 import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.dto.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -38,6 +39,6 @@ public interface MemberService {
     String getTmpPassword() throws NotFoundException;
 
     /** 사용자 찾기 및 필터링 */
-    List<?> findMember(FindMemberDto.Request req) throws NotFoundException;
+    List<?> findMember(String searchBy, String keyword) throws NotFoundException;
 
 }
