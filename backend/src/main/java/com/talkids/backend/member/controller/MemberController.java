@@ -114,7 +114,7 @@ public class MemberController {
 
     /** 사용자 찾기 및 필터링 */
     @GetMapping("/findmember")
-    public ApiResult<?> findMember(@RequestParam("searchBy") String searchBy, @RequestParam(required = false) String keyword) {
+    public ApiResult<?> findMember(@RequestParam("searchBy") String searchBy, @RequestParam("keyword") String keyword) {
         try{
             List<?> result = memberService.findMember(searchBy, keyword);
             return ApiUtils.success(result);

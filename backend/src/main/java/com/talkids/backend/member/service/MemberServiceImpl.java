@@ -218,11 +218,9 @@ public class MemberServiceImpl implements MemberService {
 
         // 내 정보 제외하고 출력하기 - 미완성
 
-        System.out.println(searchBy);
-
         if(searchBy.equals("all")){
             // 회원 이메일로 검색
-            if(keyword!=null){
+            if(keyword!=""){
                 if(memberRepository.findByMemberMail(keyword).isEmpty())
                     throw new NotFoundException("회원 정보가 없습니다.");
 
