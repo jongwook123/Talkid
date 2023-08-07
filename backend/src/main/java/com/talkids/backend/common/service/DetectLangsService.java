@@ -10,8 +10,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 @Service
 @Transactional
@@ -24,9 +26,7 @@ public class DetectLangsService {
     @Value("${papago.api.clientSecret}")
     private String CLIENT_SECRET;
 
-    public void DetectLangs(String messageContent){
-
-        System.out.println(CLIENT_ID + " " + CLIENT_SECRET);
+    public String DetectLangs(String messageContent){
 
         String query;
         try {
@@ -40,9 +40,7 @@ public class DetectLangsService {
         requestHeaders.put("X-Naver-Client-Id", CLIENT_ID);
         requestHeaders.put("X-Naver-Client-Secret", CLIENT_SECRET);
 
-        String responseBody = post(apiURL, requestHeaders, query);
-
-        System.out.println(responseBody);
+        return post(apiURL, requestHeaders, query);
     }
 
     private static String post(String apiUrl, Map<String, String> requestHeaders, String text){
@@ -61,6 +59,7 @@ public class DetectLangsService {
             }
 
             int responseCode = con.getResponseCode();
+
             if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 응답
                 return readBody(con.getInputStream());
             } else {  // 에러 응답
@@ -95,7 +94,13 @@ public class DetectLangsService {
                 responseBody.append(line);
             }
 
-            return responseBody.toString();
+            ArrayList<String> list = new ArrayList<>();
+            StringTokenizer st = new StringTokenizer(responseBody.toString(), "\"");
+            while(st.hasMoreTokens()){
+                list.add(st.nextToken());
+            }
+
+            return list.toArray()[3]+"";
         } catch (IOException e) {
             throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
         }
