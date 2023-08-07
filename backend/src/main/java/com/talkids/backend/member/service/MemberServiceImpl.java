@@ -213,39 +213,38 @@ public class MemberServiceImpl implements MemberService {
 
     /** 사용자 찾기 및 필터링 */
     @Override
-    public List<?> findMember(FindMemberDto.Request req) throws NotFoundException {
+    public List<?> findMember(String searchBy, String keyword) throws NotFoundException {
         List<?> ret = new ArrayList<>();
-
-        String info = req.getInfo();
-        int infoId = req.getInfoId();
 
         // 내 정보 제외하고 출력하기 - 미완성
 
-        if(info.equals("all")){
+        System.out.println(searchBy);
+
+        if(searchBy.equals("all")){
             // 회원 이메일로 검색
-            if(req.getMemberMail()!=null){
-                if(memberRepository.findByMemberMail(req.getMemberMail()).isEmpty())
+            if(keyword!=null){
+                if(memberRepository.findByMemberMail(keyword).isEmpty())
                     throw new NotFoundException("회원 정보가 없습니다.");
 
                 ret = Collections.singletonList(
-                        memberRepository.findByMemberMail(req.getMemberMail()));
+                        memberRepository.findByMemberMail(keyword));
             }
             // 모든 사용자 찾기
             else{
                 ret = memberRepository.findAll();
             }
-        } else if(info.equals("school")){
-            if(schoolRepository.findBySchoolId(infoId).isEmpty())
+        } else if(searchBy.equals("school")){
+            if(schoolRepository.findBySchoolId(Integer.parseInt(keyword)).isEmpty())
                 throw new NotFoundException("학교 정보가 없습니다.");
-            ret = memberRepository.findBySchool_SchoolId(infoId);
-        } else if(info.equals("language")){
-            if(languageRepository.findByLanguageId(infoId).isEmpty())
+            ret = memberRepository.findBySchool_SchoolId(Integer.parseInt(keyword));
+        } else if(searchBy.equals("language")){
+            if(languageRepository.findByLanguageId(Integer.parseInt(keyword)).isEmpty())
                 throw new NotFoundException("언어 정보가 없습니다.");
-            ret = memberRepository.findByLanguage_LanguageId(infoId);
-        } else if(info.equals("country")){
-            if(countryRepository.findByCountryId(infoId).isEmpty())
+            ret = memberRepository.findByLanguage_LanguageId(Integer.parseInt(keyword));
+        } else if(searchBy.equals("country")){
+            if(countryRepository.findByCountryId(Integer.parseInt(keyword)).isEmpty())
                 throw new NotFoundException("국가 정보가 없습니다.");
-            ret = memberRepository.findByCountry_CountryId(infoId);
+            ret = memberRepository.findByCountry_CountryId(Integer.parseInt(keyword));
         } else {
             throw new NotFoundException("정보를 정확하게 입력해 주세요.");
         }
