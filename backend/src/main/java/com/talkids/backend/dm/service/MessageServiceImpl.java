@@ -1,6 +1,7 @@
 package com.talkids.backend.dm.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
+import com.talkids.backend.common.service.DetectLangsService;
 import com.talkids.backend.dm.dto.MessageDto;
 import com.talkids.backend.dm.dto.UncheckMessageDto;
 import com.talkids.backend.dm.entity.BadWords;
@@ -29,6 +30,7 @@ public class MessageServiceImpl implements MessageService {
     private final DmRoomRepository dmRoomRepository;
     private final UncheckMessageRepository uncheckMessageRepository;
     private final BadWordsRepository badWordsRepository;
+    private final DetectLangsService detectLangsService;
 
     /** 메세지 저장 */
     @Transactional
@@ -55,6 +57,7 @@ public class MessageServiceImpl implements MessageService {
                 throw new Exception("비속어를 사용하였습니다.");
             }
         }
+        detectLangsService.DetectLangs(req.getMessageContent());
 
         // 메세지 저장
         Message message = messageRepository.save(
