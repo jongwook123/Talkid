@@ -1,5 +1,6 @@
 package com.talkids.backend.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -9,11 +10,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="Member")
-@Data
+@Setter @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -69,6 +73,14 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="countryId")
     private Country country;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    @JsonManagedReference
+    private List<Exp> exp;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    @JsonManagedReference
+    private List<BookMark> bookMark;
 
     /* ---------------------------------- */
 

@@ -415,7 +415,7 @@ INSERT INTO `s09p12d106`.`school` (`country_id`, `school_lat`, `school_lng`, `ti
 (112, 35.686626, 139.725081, 4, "160-0004 Tokyo, Shinjuku City, Yotsuya, 2 Chome−６", '新宿区立四谷子ども園');
 
 
-insert into `s09p12d106`.`badwords`(words) values
+insert into `s09p12d106`.`bad_words`(words) values
 ("fuck"),
 ("shit"),
 ("肉便器"),

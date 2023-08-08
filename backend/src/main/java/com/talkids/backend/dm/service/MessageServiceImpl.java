@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
     /** 메세지 저장 */
     @Transactional
     @Override
-    public String saveMessage(MessageDto.Request req) throws Exception {
+    public MessageDto.Response saveMessage(MessageDto.Request req) throws Exception {
 
         String dmRoomId = req.getSender().compareTo(req.getReceiver()) > 0
                 ? req.getReceiver()+"_"+req.getSender()
@@ -69,20 +69,13 @@ public class MessageServiceImpl implements MessageService {
         if(detectLang!="unk" &&
                 sender.getLanguage().getLanguageCode() != detectLang){
 
-            Optional<Exp> exp = expRepository.findByMember_MemberId(sender.getMemberId());
-            if(exp.isPresent()){ // 현재 사용자의 경험치가 있으면 갱신
-                Exp senderExp = exp.get();
-                senderExp.setExpPoint(
-                        senderExp.getExpPoint() + req.getMessageContent().length()
-                );
-            } else { // 현재 사용자의 경험치가 없으면 DB insert
                 expRepository.save(
                     Exp.builder()
                         .expPoint(req.getMessageContent().length())
                         .member(sender)
                         .build()
                 );
-            }
+
         }
 
         // 메세지 저장
@@ -97,7 +90,13 @@ public class MessageServiceImpl implements MessageService {
             );
         }
 
-        return "Success";
+        MessageDto.Response response = MessageDto.Response.messageResponseDto(
+                message.getMember().getMemberName(),
+                message.getMessageContent(),
+                message.getCreatedAt()
+        );
+
+        return response;
     }
 
     /** 메세지 이전 기록 불러오기 */
@@ -110,7 +109,7 @@ public class MessageServiceImpl implements MessageService {
 
         for (Message m : messages) {
             MessageDto.Response response = MessageDto.Response.messageResponseDto(
-                    m.getMember().getMemberMail(),
+                    m.getMember().getMemberName(),
                     m.getMessageContent(),
                     m.getCreatedAt()
             );
