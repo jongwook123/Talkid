@@ -49,7 +49,7 @@ public class DmRoomController {
     @PostMapping("/message")
     public ApiResult<?> sendMessage(@Valid @RequestBody MessageDto.Request req) {
         try{
-            String result = messageService.saveMessage(req);
+            MessageDto.Response result = messageService.saveMessage(req);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);

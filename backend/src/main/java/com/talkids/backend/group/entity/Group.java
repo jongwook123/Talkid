@@ -33,7 +33,7 @@ public class Group {
 
     /* ---------------------------------- */
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<GroupJoinMember> groupJoinMember = new ArrayList<>();
 
