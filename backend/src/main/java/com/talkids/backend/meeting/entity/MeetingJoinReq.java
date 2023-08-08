@@ -1,6 +1,7 @@
 package com.talkids.backend.meeting.entity;
 
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,13 +21,12 @@ public class MeetingJoinReq {
 
     /* ---------------------------------- */
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "meetingScheduleId")
     private MeetingSchedule meetingSchedule;
 
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Group group;
-
 }
