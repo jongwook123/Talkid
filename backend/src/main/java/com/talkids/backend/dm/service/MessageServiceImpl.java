@@ -103,7 +103,7 @@ public class MessageServiceImpl implements MessageService {
 
         for (Message m : messages) {
             MessageDto.Response response = MessageDto.Response.messageResponseDto(
-                    m.getMember().getMemberMail(),
+                    m.getMember().getMemberName(),
                     m.getMessageContent(),
                     m.getCreatedAt()
             );
