@@ -40,7 +40,7 @@ public class GroupServiceImpl implements GroupService {
     /** 선생님 - 그룹 개설 */
     @Transactional
     @Override
-    public int createGroup(GroupDto.Request req) throws NotFoundException {
+    public int createGroup(Member member, GroupDto.Request req) throws NotFoundException {
 
         // groups 테이블에 저장
         Group group = groupRepository.save(req.saveGroupDto());
@@ -53,17 +53,29 @@ public class GroupServiceImpl implements GroupService {
             )
         );
 
+        member.setMemberActive(true);
+
         return group.getGroupId();
     }
 
     /** 선생님 - 그룹 삭제 */
     @Transactional
     @Override
-    public int deleteGroup(GroupDto.Request req) throws NotFoundException {
+    public String deleteGroup(Member member, int groupId) throws NotFoundException {
 
+        List<?> students = groupJoinMemberRepository.findByGroup_GroupId(groupId);
 
-        // member_active 0으로 바꾸기
-        return 0;
+        for(int i=0; i<students.size(); i++){
+            Member student = (Member) students.get(i);
+            if(student.getMemberId()!=member.getMemberId() &&
+                    groupJoinMemberRepository.findByMember_MemberId(student.getMemberId()).size() == 1){
+                student.setMemberActive(false);
+            }
+        }
+
+        groupRepository.deleteByGroupIdAndGroupJoinMember_Member_MemberId(groupId, member.getMemberId());
+
+        return "Success";
     }
 
     /** 학생 - 그룹 신청 */

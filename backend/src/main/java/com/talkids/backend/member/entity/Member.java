@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name="Member")
-@Data
+@Setter @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

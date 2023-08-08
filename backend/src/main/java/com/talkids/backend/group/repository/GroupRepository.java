@@ -13,5 +13,5 @@ public interface GroupRepository extends JpaRepository<Group, String> {
 
     List<Group> findByGroupJoinMember_Member_MemberIdOrderByCreatedAtDesc(int memberId);
 
-    int deleteByGroupId(int groupId);
+    int deleteByGroupIdAndGroupJoinMember_Member_MemberId(int groupId, int memberId);
 }

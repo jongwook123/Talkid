@@ -15,10 +15,10 @@ public interface GroupService {
     List<Group> getGroupList(int memberId) throws NotFoundException;
 
     /** 선생님 - 그룹 개설 */
-    int createGroup(GroupDto.Request req) throws NotFoundException;
+    int createGroup(Member member, GroupDto.Request req) throws NotFoundException;
 
     /** 선생님 - 그룹 삭제 */
-    int deleteGroup(GroupDto.Request req) throws NotFoundException;
+    String deleteGroup(Member member, int groupId) throws NotFoundException;
 
     /** 선생님 - 신청 내역 조회 */
     List<?> getApplyList(int groupId) throws NotFoundException;

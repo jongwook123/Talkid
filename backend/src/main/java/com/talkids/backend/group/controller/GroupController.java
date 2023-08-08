@@ -42,7 +42,7 @@ public class GroupController {
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 그룹을 만들 수 있습니다", HttpStatus.BAD_REQUEST);
 
         try{
-            int result = groupService.createGroup(req);
+            int result = groupService.createGroup(member, req);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -51,13 +51,13 @@ public class GroupController {
 
 
     /** 선생님 - 그룹 삭제 */
-    @PostMapping
-    public ApiResult<?> deleteGroup(@LoginUser Member member, @Valid @RequestBody GroupDto.Request req) {
+    @DeleteMapping("/{groupId}")
+    public ApiResult<?> deleteGroup(@LoginUser Member member, @PathVariable int groupId) {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 그룹을 삭제할 수 있습니다", HttpStatus.BAD_REQUEST);
 
         try{
-            int result = groupService.deleteGroup(req);
+            String result = groupService.deleteGroup(member, groupId);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
