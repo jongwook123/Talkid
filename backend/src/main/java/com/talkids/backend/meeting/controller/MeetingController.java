@@ -164,6 +164,8 @@ public class MeetingController {
         }
     }
 
+    /* -----------------------------------------*/
+
     // 소그룹 리스트 조회
     @GetMapping("/group/{meetingId}")
     public ApiResult<?> getSmallGroupList(@LoginUser Member member, @PathVariable int meetingId) {
@@ -221,7 +223,17 @@ public class MeetingController {
         }
     }
 
-
     // 소그룹 퇴장
+    @PostMapping("/group/exit")
+    public ApiResult<?> exitSmallGroup(@LoginUser Member member) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            String result = smallGroupService.exitSmallGroup(member);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

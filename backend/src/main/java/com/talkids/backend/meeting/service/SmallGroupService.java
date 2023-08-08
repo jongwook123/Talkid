@@ -21,5 +21,7 @@ public interface SmallGroupService {
     /** 소그룹 입장 */
     SmallGroupDto.Response enterSmallGroup(Member member, int smallGroupId) throws NotFoundException;
 
+    /** 소그룹 퇴장 */
+    String exitSmallGroup(Member member) throws NotFoundException;
 
 }

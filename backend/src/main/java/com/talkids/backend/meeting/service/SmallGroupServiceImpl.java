@@ -91,4 +91,16 @@ public class SmallGroupServiceImpl implements SmallGroupService {
 
     }
 
+    /** 소그룹 퇴장 */
+    @Transactional
+    @Override
+    public String exitSmallGroup(Member member) throws NotFoundException {
+        smallGroupMemberRepository.findByMember_MemberId(member.getMemberId())
+                .orElseThrow(()-> new NotFoundException("소그룹에 등록된 회원이 아닙니다."));
+
+        smallGroupMemberRepository.deleteByMember_MemberId(member.getMemberId());
+
+        return "Success";
+    }
+
 }

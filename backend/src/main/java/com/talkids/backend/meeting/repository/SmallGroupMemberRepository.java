@@ -9,4 +9,6 @@ public interface SmallGroupMemberRepository extends JpaRepository<SmallGroupMemb
 
     Optional<SmallGroupMember> findByMember_MemberId(int memberId);
 
+    int deleteByMember_MemberId(int memberId);
+
 }
