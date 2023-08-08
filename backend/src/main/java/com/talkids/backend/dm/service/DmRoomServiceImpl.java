@@ -32,18 +32,27 @@ public class DmRoomServiceImpl implements DmRoomService {
     /** 회원별 채팅방 리스트 조회 */
     @Override
     public List<DmRoomDto.Response> getDmRoomList(int memberId) throws NotFoundException {
-        if(memberRepository.findByMemberId(memberId).isEmpty())
-            throw new NotFoundException("회원 정보가 없습니다.");
+        Member member =  memberRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
 
         List<Object[]> results = dmRoomRepository.getChatRoomsAndUncheckCounts(memberId);
         List<DmRoomDto.Response> chatRooms = new ArrayList<>();
+        String[] emailArr;
+        String receiverName;
 
         for (Object[] result : results) {
             String dmRoomId = result[0].toString();
+
+            emailArr = dmRoomId.split("_");
+
+            if(emailArr[0].equals(member.getMemberMail())){
+                receiverName = memberRepository.findByMemberMail(emailArr[1]).get().getMemberName();
+            } else receiverName = memberRepository.findByMemberMail(emailArr[0]).get().getMemberName();
+
             int uncheckMessage = ((Long) result[1]).intValue();
             String lastMessage = (String) result[2];
 
-            DmRoomDto.Response response = DmRoomDto.Response.messageResponseDto(dmRoomId, uncheckMessage, lastMessage);
+            DmRoomDto.Response response = DmRoomDto.Response.messageResponseDto(dmRoomId, receiverName, uncheckMessage, lastMessage);
             chatRooms.add(response);
         }
 

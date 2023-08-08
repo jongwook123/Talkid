@@ -5,8 +5,10 @@ import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.group.entity.GroupJoinMember;
 import com.talkids.backend.group.entity.MemberApply;
 import com.talkids.backend.group.repository.MemberApplyRepository;
+import com.talkids.backend.member.entity.Exp;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.group.repository.GroupJoinMemberRepository;
 import com.talkids.backend.group.repository.GroupRepository;
@@ -15,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,9 +34,6 @@ public class GroupServiceImpl implements GroupService {
     /** 선생님 - 그룹 리스트 조회 */
     @Override
     public List<Group> getGroupList(int memberId) throws NotFoundException{
-        if(memberRepository.findByMemberId(memberId).isEmpty())
-            throw new NotFoundException("회원 정보가 없습니다.");
-
         return groupRepository.findByGroupJoinMember_Member_MemberIdOrderByCreatedAtDesc(memberId);
     }
 
@@ -40,11 +41,6 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public int createGroup(GroupDto.Request req) throws NotFoundException {
-        Member member = memberRepository.findByMemberId(req.getMemberId())
-                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
-
-        if(member.getMemberType().getMemberTypeId() == 2)
-            throw new NotFoundException("학생은 그룹을 만들 수 없습니다.");
 
         // groups 테이블에 저장
         Group group = groupRepository.save(req.saveGroupDto());
@@ -53,7 +49,7 @@ public class GroupServiceImpl implements GroupService {
         groupJoinMemberRepository.save(
             GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
                 groupRepository.findByGroupId(group.getGroupId()).get(),
-                member
+                    memberRepository.findByMemberId(req.getMemberId()).get()
             )
         );
 
@@ -63,16 +59,12 @@ public class GroupServiceImpl implements GroupService {
     /** 학생 - 그룹 신청 */
     @Transactional
     @Override
-    public int joinGroup(MemberApplyDto.Request req) throws NotFoundException {
+    public int joinGroup(Member member, MemberApplyDto.Request req) throws NotFoundException {
         
-        Member member = memberRepository.findByMemberId(req.getMemberId())
-                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
         Group group = groupRepository.findByGroupId(req.getGroupId())
                 .orElseThrow(()-> new NotFoundException("그룹 정보가 없습니다."));
 
-        if(member.getMemberType().getMemberTypeId() == 1) {
-            throw new NotFoundException("선생님은 다른 그룹에 가입할 수 없습니다.");
-        } else if(memberApplyRepository
+        if(memberApplyRepository
                 .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId())
                 .isPresent()) {
             throw new NotFoundException("승인 대기 중인 학생입니다.");
@@ -136,5 +128,43 @@ public class GroupServiceImpl implements GroupService {
         memberApplyRepository.deleteByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId());
 
         return req.getMemberId();
+    }
+
+    /** 선생님 - 학생 관리 */
+    @Override
+    public List<?> studentManagement(Member member, int groupId) throws NotFoundException {
+        if (groupRepository.findByGroupId(groupId).isEmpty())
+            throw new NotFoundException("그룹 정보가 없습니다.");
+
+        LocalDate currentDate = LocalDate.now();
+        int year = currentDate.getYear();
+        int month = currentDate.getMonthValue();
+
+        Group group = groupRepository.findByGroupId(groupId).get();
+        List<GroupJoinMemberDto.Response> joinMember = new ArrayList<>();
+
+        // 학생 정보, 총 경험치, 월별 경험치 조회
+        for (GroupJoinMember gm : group.getGroupJoinMember()) {
+            Member student = gm.getMember();
+            if(member.getMemberId() == student.getMemberId()) continue; // 선생님 제외
+            
+            int totalExp = 0;
+            int monthExp = 0;
+
+            // 학생의 경험치 정보 가져오기
+            List<Exp> exps = student.getExp();
+            for (Exp exp : exps) {
+                LocalDate expDate = exp.getCreatedAt();
+                if (expDate.getYear() == year && expDate.getMonthValue() == month) {
+                    monthExp += exp.getExpPoint();
+                }
+                totalExp += exp.getExpPoint();
+            }
+
+            GroupJoinMemberDto.Response response = GroupJoinMemberDto.Response.groupJoinMemberDto(student, totalExp, monthExp);
+            joinMember.add(response);
+        }
+
+        return joinMember;
     }
 }

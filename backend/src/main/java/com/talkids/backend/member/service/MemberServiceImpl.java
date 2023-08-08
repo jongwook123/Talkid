@@ -18,8 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -40,28 +39,35 @@ public class MemberServiceImpl implements MemberService {
     private final MailService mailService;
 
     @Override
-    public Member getMember(String memberMail) {
-        return memberRepository.findByMemberMail(memberMail).get();
+    public Member getMember(String memberMail) throws NotFoundException {
+        Member member = memberRepository.findByMemberMail(memberMail)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+
+        return member;
     }
 
     /** 회원가입 */
     @Transactional
     @Override
-    public String signUp(SignUpDto.Request req) {
+    public Member signUp(SignUpDto.Request req) throws NotFoundException {
         if (memberRepository.findByMemberMail(req.getMemberMail()).isPresent()){
-            throw new IllegalArgumentException("다시 시도해 주세요");
+            throw new NotFoundException("중복된 E-mail 입니다.");
         }
 
-        Country country = countryRepository.findByCountryId(req.getCountryId());
-        School school = schoolRepository.findBySchoolId(req.getSchoolId());
-        Language language = languageRepository.findByLanguageId(req.getLanguageId());
-        MemberType memberType = memberTypeRepository.findByMemberTypeId(req.getMemberTypeId());
+        Country country = countryRepository.findByCountryId(req.getCountryId())
+                .orElseThrow(() -> new NotFoundException("국가 정보가 없습니다."));
+        School school = schoolRepository.findBySchoolId(req.getSchoolId())
+                .orElseThrow(() -> new NotFoundException("학교 정보가 없습니다."));
+        Language language = languageRepository.findByLanguageId(req.getLanguageId())
+                .orElseThrow(() -> new NotFoundException("언어 정보가 없습니다."));
+        MemberType memberType = memberTypeRepository.findByMemberTypeId(req.getMemberTypeId())
+                .orElseThrow(() -> new NotFoundException("회원 타입 정보가 없습니다."));
 
         String encodePassword = passwordEncoder.encode(req.getMemberPassword()); // 비밀번호 암호화
 
         Member member = memberRepository.save(req.saveMemberDto(encodePassword, school, language, country, memberType));
 
-        return member.getMemberMail();
+        return member;
     }
 
     /** 회원가입 - 국가, 학교, 언어 리스트 */
@@ -74,6 +80,8 @@ public class MemberServiceImpl implements MemberService {
             ret = languageRepository.findAll();
         } else if(info.equals("country")){
             ret = countryRepository.findAll();
+        } else {
+            throw new NotFoundException("정보를 정확하게 입력해 주세요.");
         }
 
         return ret;
@@ -82,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
     /** 로그인 */
     @Transactional
     @Override
-    public String signIn(SignInDto.Request req) {
+    public Map<String, String> signIn(SignInDto.Request req) {
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
@@ -104,7 +112,12 @@ public class MemberServiceImpl implements MemberService {
         member.setRefreshToken(jwtToken.getRefreshToken());
 
         System.out.println("jwtToken:" + jwtToken);
-        return accessToken;
+
+        Map<String, String> ret = new HashMap<>();
+        ret.put("accessToken", jwtToken.getAccessToken());
+        ret.put("refreshToken", jwtToken.getRefreshToken());
+
+        return ret;
     }
 
     /** 회원 정보 수정 */
@@ -112,13 +125,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) {
         Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
-
-//        member = getMember(principal.getName());
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
 
         member.setMemberPassword(passwordEncoder.encode(req.getMemberPassword()));
-        member.setCountry(countryRepository.findByCountryId(req.getCountryId()));
-        member.setLanguage(languageRepository.findByLanguageId(req.getLanguageId()));
+        member.setCountry(countryRepository.findByCountryId(req.getCountryId()).get());
+        member.setLanguage(languageRepository.findByLanguageId(req.getLanguageId()).get());
         member.setMemberIntroduce(req.getMemberIntroduce());
 
         return member.getMemberMail();
@@ -156,9 +167,9 @@ public class MemberServiceImpl implements MemberService {
     /** 회원 탈퇴 */
     @Transactional
     @Override
-    public String deleteInfoDto(int memberId, Principal principal) throws Exception {
+    public String deleteInfoDto(int memberId, Principal principal) throws NotFoundException {
         Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
 
         // 로그인 확인
         if(member.getRefreshToken()!=null){
@@ -173,7 +184,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String findPw(FindPwDto.Request req) throws Exception {
         Member member = memberRepository.findByMemberMail(req.getMemberMail())
-                .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
 
         // 임시 비밀번호를 생성하여 저장
         String tmpPassword = getTmpPassword();
@@ -186,7 +197,7 @@ public class MemberServiceImpl implements MemberService {
 
     /** 임시 비밀번호 생성 **/
     @Override
-    public String getTmpPassword() throws Exception {
+    public String getTmpPassword() throws NotFoundException {
         StringBuilder pwd = new StringBuilder();
 
         char[] charSet = new char[]{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -202,4 +213,44 @@ public class MemberServiceImpl implements MemberService {
 
         return pwd.toString();
     }
+
+    /** 사용자 찾기 및 필터링 */
+    @Override
+    public List<?> findMember(String searchBy, String keyword) throws NotFoundException {
+        List<?> ret = new ArrayList<>();
+
+        // 내 정보 제외하고 출력하기 - 미완성
+
+        if(searchBy.equals("all")){
+            // 회원 이메일로 검색
+            if(keyword!=""){
+                if(memberRepository.findByMemberMail(keyword).isEmpty())
+                    throw new NotFoundException("회원 정보가 없습니다.");
+
+                ret = Collections.singletonList(
+                        memberRepository.findByMemberMail(keyword));
+            }
+            // 모든 사용자 찾기
+            else{
+                ret = memberRepository.findAll();
+            }
+        } else if(searchBy.equals("school")){
+            if(schoolRepository.findBySchoolId(Integer.parseInt(keyword)).isEmpty())
+                throw new NotFoundException("학교 정보가 없습니다.");
+            ret = memberRepository.findBySchool_SchoolId(Integer.parseInt(keyword));
+        } else if(searchBy.equals("language")){
+            if(languageRepository.findByLanguageId(Integer.parseInt(keyword)).isEmpty())
+                throw new NotFoundException("언어 정보가 없습니다.");
+            ret = memberRepository.findByLanguage_LanguageId(Integer.parseInt(keyword));
+        } else if(searchBy.equals("country")){
+            if(countryRepository.findByCountryId(Integer.parseInt(keyword)).isEmpty())
+                throw new NotFoundException("국가 정보가 없습니다.");
+            ret = memberRepository.findByCountry_CountryId(Integer.parseInt(keyword));
+        } else {
+            throw new NotFoundException("정보를 정확하게 입력해 주세요.");
+        }
+
+        return ret;
+    }
+
 }
