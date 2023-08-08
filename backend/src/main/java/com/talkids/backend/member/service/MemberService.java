@@ -24,13 +24,13 @@ public interface MemberService {
     Map<String, String> signIn(SignInDto.Request req) throws NotFoundException;
 
     /** 회원 정보 수정 */
-    String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) throws NotFoundException;
+    String updateInfoDto(Member member, UpdateInfoDto.Request req) throws NotFoundException;
 
     /** 로그아웃 */
     String logout(LogoutDto.Request req) throws NotFoundException;
 
     /** 회원 탈퇴 */
-    String deleteInfoDto(int memberId, Principal principal) throws NotFoundException;
+    String deleteInfoDto(Member member) throws NotFoundException;
 
     /** 비밀번호 찾기 - 임시 비밀번호 발급 */
     String findPw(FindPwDto.Request req) throws Exception;

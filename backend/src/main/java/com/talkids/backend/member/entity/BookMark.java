@@ -9,29 +9,31 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="Exp")
+@Table(name="BookMark")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Exp {
+public class BookMark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="expId")
-    private int expId;
+    @Column(name="bookMarkId")
+    private int bookMarkId;
 
-    @Column(name="expPoint")
-    private int expPoint;
+    @Column(name="bookMarkOriContent", columnDefinition = "LONGTEXT")
+    private String bookMarkOriContent;
+
+    @Column(name="bookMarkTransContent", columnDefinition = "LONGTEXT")
+    private String bookMarkTransContent;
 
     @Column(name="createdAt")
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     /* ---------------------------------- */
 
@@ -39,4 +41,5 @@ public class Exp {
     @JoinColumn(name="memberId")
     @JsonBackReference
     private Member member;
+
 }
