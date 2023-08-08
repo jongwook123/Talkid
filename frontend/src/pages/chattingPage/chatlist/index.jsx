@@ -52,7 +52,7 @@ export default function ChatList({ props: { socketUpdated, socket, user } }) {
                     {
                         chatRooms.map((chatRoom, index) => {
                             return (
-                                <S.UserListItem key={"" + chatRoom.roomId + index}>
+                                <S.UserListItem key={"" + chatRoom.dmRoomId + index}>
                                     <S.UserButton onClick={onClickSelect}>
                                         <S.ButtonTextWrapper>
                                             <span>{chatRoom.memberName}</span>

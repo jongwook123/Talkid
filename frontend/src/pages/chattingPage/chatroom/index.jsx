@@ -2,11 +2,14 @@ import { useCallback, useEffect, useState, useRef } from "react";
 
 import * as S from './style';
 
+import Dictionary from "../dictionary";
+
 export default function ChatRoom({ props: { socket, room, setChatRooms, user } }) {
     const [arrivalChat, setArrivalChat] = useState({});
     const [chats, setChats] = useState([]);
     const [newChat, setNewChat] = useState("");
     const messageEndRef = useRef(null);
+    const [dictionaryClicked, setDictionaryClicked] = useState(true);
 
     const getTimeString = (createdAt) => {
         const isCreated = new Date(createdAt);
@@ -123,9 +126,9 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
         setNewChat(e.target.value);
     }
 
-    if (!room.dmRoomId) {
-        return;
-    }
+    // if (!room.dmRoomId) {
+    //     return;
+    // }
 
     const getDay = (isCreated) => {
         let day = '';
@@ -160,111 +163,118 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
     }
 
     return (
-        <S.SectionChat>
-            <S.HeaderChat>
-                <h2>{room.memberName}</h2>
-            </S.HeaderChat>
-            <S.ListChat>
-                {
-                    chats.map((chat, index) => {
-                        let displayTime = true;
-                        const timeValue = getTimeString(chat.createdAt);
-                        let displayDate = false;
-                        let today = '';
-                        let displayProfile = false;
+        <>
+            <S.SectionChat>
+                <S.HeaderChat>
+                    <h2>{room.memberName}</h2>
+                </S.HeaderChat>
+                <S.DictionaryWrapper>
+                    <S.ListChatWrapper>
+                        <S.ListChat>
+                            {
+                                chats.map((chat, index) => {
+                                    let displayTime = true;
+                                    const timeValue = getTimeString(chat.createdAt);
+                                    let displayDate = false;
+                                    let today = '';
+                                    let displayProfile = false;
 
-                        const isCreated = new Date(chat.createdAt);
-                        isCreated.setHours(isCreated.getHours());
+                                    const isCreated = new Date(chat.createdAt);
+                                    isCreated.setHours(isCreated.getHours());
 
-                        if (index !== chats.length - 1) {
-                            const nextSender = chats[index + 1].memberName;
+                                    if (index !== chats.length - 1) {
+                                        const nextSender = chats[index + 1].memberName;
 
-                            if (nextSender === chat.memberName) {
-                                const nextTimeValue = getTimeString(chats[index + 1].createdAt);
+                                        if (nextSender === chat.memberName) {
+                                            const nextTimeValue = getTimeString(chats[index + 1].createdAt);
 
-                                if (nextTimeValue === timeValue) {
-                                    displayTime = false;
-                                }
-                            }
-                        }
-
-                        if (index !== 0) {
-                            const prevCreated = new Date(chats[index - 1].createdAt);
-                            prevCreated.setHours(prevCreated.getHours());
-
-                            if (isCreated.getDate() !== prevCreated.getDate()) {
-                                displayDate = true;
-                                today = `${isCreated.getMonth() + 1}월 ${isCreated.getDate()}일 ${getDay(isCreated)}요일`;
-                            }
-                        }
-
-                        if (index === 0) {
-                            displayDate = true;
-                            today = `${isCreated.getMonth() + 1}월 ${isCreated.getDate()}일 ${getDay(isCreated)}요일`;
-                        }
-
-                        if (index !== 0) {
-                            const prevSender = chats[index - 1].memberName;
-                            const prevCreatedDate = new Date(chats[index - 1].createdAt);
-                            prevCreatedDate.setHours(prevCreatedDate.getHours())
-
-                            if (prevSender !== chat.memberName || prevCreatedDate.getDate() !== isCreated.getDate()) {
-                                displayProfile = true;
-                            }
-                        } else {
-                            displayProfile = true;
-                        }
-
-                        return (
-                            <S.ChatWrapper key={"" + chat.messageContent + index + chat.memberName}>
-                                {
-                                    <>
-                                        {
-                                            displayDate && <S.Datewrapper>{today}</S.Datewrapper>
+                                            if (nextTimeValue === timeValue) {
+                                                displayTime = false;
+                                            }
                                         }
-                                        {
-                                            chat.memberName === user.memberName
-                                                ? <S.MyChatWrapper>
-                                                    {
-                                                        (displayProfile) && <S.MyUserName>{chat.memberName}</S.MyUserName>
-                                                    }
-                                                    <S.TimeWrapper>
-                                                        {
-                                                            displayTime && <S.Time>{timeValue}</S.Time>
-                                                        }
-                                                        <S.MyChat>{chat.messageContent}</S.MyChat>
-                                                    </S.TimeWrapper>
-                                                </S.MyChatWrapper>
-                                                : <S.OppositeChatWrapper>
-                                                    {
-                                                        (displayProfile) && <S.OppositeUserName>{chat.memberName}</S.OppositeUserName>
-                                                    }
-                                                    <S.TimeWrapper>
-                                                        <S.OppositeChat>{chat.messageContent}</S.OppositeChat>
-                                                        {
-                                                            displayTime && <S.Time>{timeValue}</S.Time>
-                                                        }
-                                                    </S.TimeWrapper>
-                                                </S.OppositeChatWrapper>
-                                        }
-                                    </>
-                                }
-                            </S.ChatWrapper>
+                                    }
 
-                        )
-                    })
-                }
-                <li>
-                    <div ref={messageEndRef}></div>
-                </li>
-            </S.ListChat>
-            <S.FormWrapper>
-                <S.FormChat>
-                    <label htmlFor="newChat">대화 입력</label>
-                    <S.FormInput id="newChat" value={newChat} onChange={onChangeInput} placeholder="Send Message" />
-                    <S.FormButton onClick={sendMessage}>send</S.FormButton>
-                </S.FormChat>
-            </S.FormWrapper>
-        </S.SectionChat >
+                                    if (index !== 0) {
+                                        const prevCreated = new Date(chats[index - 1].createdAt);
+                                        prevCreated.setHours(prevCreated.getHours());
+
+                                        if (isCreated.getDate() !== prevCreated.getDate()) {
+                                            displayDate = true;
+                                            today = `${isCreated.getMonth() + 1}월 ${isCreated.getDate()}일 ${getDay(isCreated)}요일`;
+                                        }
+                                    }
+
+                                    if (index === 0) {
+                                        displayDate = true;
+                                        today = `${isCreated.getMonth() + 1}월 ${isCreated.getDate()}일 ${getDay(isCreated)}요일`;
+                                    }
+
+                                    if (index !== 0) {
+                                        const prevSender = chats[index - 1].memberName;
+                                        const prevCreatedDate = new Date(chats[index - 1].createdAt);
+                                        prevCreatedDate.setHours(prevCreatedDate.getHours())
+
+                                        if (prevSender !== chat.memberName || prevCreatedDate.getDate() !== isCreated.getDate()) {
+                                            displayProfile = true;
+                                        }
+                                    } else {
+                                        displayProfile = true;
+                                    }
+
+                                    return (
+                                        <S.ChatWrapper key={"" + chat.messageContent + index + chat.memberName}>
+                                            {
+                                                <>
+                                                    {
+                                                        displayDate && <S.Datewrapper>{today}</S.Datewrapper>
+                                                    }
+                                                    {
+                                                        chat.memberName === user.memberName
+                                                            ? <S.MyChatWrapper>
+                                                                {
+                                                                    (displayProfile) && <S.MyUserName>{chat.memberName}</S.MyUserName>
+                                                                }
+                                                                <S.TimeWrapper>
+                                                                    {
+                                                                        displayTime && <S.Time>{timeValue}</S.Time>
+                                                                    }
+                                                                    <S.MyChat>{chat.messageContent}</S.MyChat>
+                                                                </S.TimeWrapper>
+                                                            </S.MyChatWrapper>
+                                                            : <S.OppositeChatWrapper>
+                                                                {
+                                                                    (displayProfile) && <S.OppositeUserName>{chat.memberName}</S.OppositeUserName>
+                                                                }
+                                                                <S.TimeWrapper>
+                                                                    <S.OppositeChat>{chat.messageContent}</S.OppositeChat>
+                                                                    {
+                                                                        displayTime && <S.Time>{timeValue}</S.Time>
+                                                                    }
+                                                                </S.TimeWrapper>
+                                                            </S.OppositeChatWrapper>
+                                                    }
+                                                </>
+                                            }
+                                        </S.ChatWrapper>
+
+                                    )
+                                })
+                            }
+                            <li>
+                                <div ref={messageEndRef}></div>
+                            </li>
+                        </S.ListChat>
+                        <S.FormWrapper>
+                            <S.FormChat>
+                                <label htmlFor="newChat">대화 입력</label>
+                                <S.FormInput id="newChat" value={newChat} onChange={onChangeInput} placeholder="Send Message" />
+                                <S.FormButton onClick={sendMessage}>send</S.FormButton>
+                            </S.FormChat>
+                        </S.FormWrapper>
+                    </S.ListChatWrapper>
+                    <Dictionary props={{ dictionaryClicked }} />
+                </S.DictionaryWrapper>
+            </S.SectionChat >
+        </>
     )
 }

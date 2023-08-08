@@ -24,17 +24,28 @@ export const HeaderChat = styled.header`
     }
 `
 
+export const DictionaryWrapper = styled.div`
+    flex-grow: 1;
+    display: flex;
+`
+
+export const ListChatWrapper = styled.div`
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+`
+
 export const ListChat = styled.ul`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 30px 30px 30px;
+    padding: 0 30px;
     overflow-y: scroll;
     gap: 2px;
 
     &::-webkit-scrollbar {
         width: 8px;
-        background-color: ${props => props.theme.colors.theme.orange_light};
+        background-color: ${props => props.theme.colors.theme.blue_light};
     }
 
     &::-webkit-scrollbar-track {
@@ -42,7 +53,7 @@ export const ListChat = styled.ul`
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.colors.theme.green_light};
+        background-color: ${props => props.theme.colors.theme.blue};
         border-radius: 10px;
         background-clip: padding-box;
     }
@@ -137,14 +148,14 @@ export const Time = styled.time`
 `
 
 export const FormWrapper = styled.div`
-background-color: ${props => props.theme.colors.theme.green_light};
+    /* background-color: ${props => props.theme.colors.theme.blue_light}; */
 `
 
 export const FormChat = styled.form`
     display: flex;
-    margin: 30px;
+    margin: 15px 20px 20px 20px;
     padding: 10px 20px;
-    background-color: ${props => props.theme.colors.theme.orange};
+    background-color: ${props => props.theme.colors.theme.blue_light};
     border-radius: ${props => props.theme.border_radius.lv3};
 
     & > label {
@@ -171,7 +182,7 @@ export const FormInput = styled.input`
 export const FormButton = styled.button`
     border: none;
     padding: 6px 10px;
-    background-color: ${props => props.theme.colors.theme.orange_dark};
+    background-color: ${props => props.theme.colors.theme.blue_dark};
     border-radius: ${props => props.theme.border_radius.lv2};
     color: ${props => props.theme.colors.font.white};
 `
