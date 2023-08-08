@@ -14,5 +14,5 @@ public interface SmallGroupService {
     int createSmallGroup(SmallGroupDto.Request req) throws Exception;
 
     /** 소그룹 삭제 */
-    int deleteSmallGroup(int smallGroupId) throws Exception;
+    String deleteSmallGroup(int smallGroupId) throws Exception;
 }
