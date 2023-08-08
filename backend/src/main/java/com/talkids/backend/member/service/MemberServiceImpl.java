@@ -103,15 +103,12 @@ public class MemberServiceImpl implements MemberService {
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-        String accessToken = jwtToken.getAccessToken();
 
         // refreshToken DB에 저장
         Member member = memberRepository.findByMemberMail(req.getMemberMail())
                 .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
 
         member.setRefreshToken(jwtToken.getRefreshToken());
-
-        System.out.println("jwtToken:" + jwtToken);
 
         Map<String, String> ret = new HashMap<>();
         ret.put("accessToken", jwtToken.getAccessToken());
@@ -123,9 +120,7 @@ public class MemberServiceImpl implements MemberService {
     /** 회원 정보 수정 */
     @Transactional
     @Override
-    public String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+    public String updateInfoDto(Member member, UpdateInfoDto.Request req) {
 
         member.setMemberPassword(passwordEncoder.encode(req.getMemberPassword()));
         member.setCountry(countryRepository.findByCountryId(req.getCountryId()).get());
@@ -167,16 +162,11 @@ public class MemberServiceImpl implements MemberService {
     /** 회원 탈퇴 */
     @Transactional
     @Override
-    public String deleteInfoDto(int memberId, Principal principal) throws NotFoundException {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+    public String deleteInfoDto(Member member) throws NotFoundException {
 
-        // 로그인 확인
-        if(member.getRefreshToken()!=null){
-            member.setDeletedAt(true);
-        } else throw new NotFoundException("잘못된 접근입니다.");
+        member.setDeletedAt(true);
 
-        return member.getMemberMail();
+        return "Success";
     }
 
     /** 비밀번호 찾기 - 임시 비밀번호 발급 */

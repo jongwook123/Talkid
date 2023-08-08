@@ -1,8 +1,10 @@
 package com.talkids.backend.member.controller;
 
+import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.dm.dto.DmRoomDto;
+import com.talkids.backend.member.entity.BookMark;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.dto.*;
 import com.talkids.backend.member.service.MemberService;
@@ -26,11 +28,11 @@ public class MemberController {
 
     /** 로그인 조회 */
     @GetMapping
-    @ResponseBody
-    public ApiResult<?> getUser(Principal principal) {
+    public ApiResult<?> getUser(@LoginUser Member member) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
         try{
-            Member result = memberService.getMember(principal.getName());
-            return ApiUtils.success(result);
+            return ApiUtils.success(member);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -70,10 +72,12 @@ public class MemberController {
     }
 
     /** 회원 정보 수정 */
-    @PutMapping("/{memberId}")
-    public ApiResult<?> updateInfo(@PathVariable int memberId, @Valid @RequestBody UpdateInfoDto.Request req, Principal principal) {
+    @PutMapping("/edit")
+    public ApiResult<?> updateInfo(@LoginUser Member member, @Valid @RequestBody UpdateInfoDto.Request req) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
         try{
-            String result = memberService.updateInfoDto(memberId, req, principal);
+            String result = memberService.updateInfoDto(member, req);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -82,7 +86,9 @@ public class MemberController {
 
     /** 로그아웃 */
     @PostMapping("/logout")
-    public ApiResult<?> logout(@Valid @RequestBody LogoutDto.Request req) {
+    public ApiResult<?> logout(@LoginUser Member member, @Valid @RequestBody LogoutDto.Request req) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
         try{
             String result = memberService.logout(req);
             return ApiUtils.success(result);
@@ -92,10 +98,12 @@ public class MemberController {
     }
 
     /** 회원 탈퇴 */
-    @DeleteMapping("/{memberId}")
-    public ApiResult<?> deleteInfo(@PathVariable int memberId, Principal principal) {
+    @DeleteMapping
+    public ApiResult<?> deleteInfo(@LoginUser Member member) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
         try{
-            String result = memberService.deleteInfoDto(memberId, principal);
+            String result = memberService.deleteInfoDto(member);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -123,5 +131,23 @@ public class MemberController {
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    /** 북마크 조회 */
+//    @GetMapping("/bookmark/{memberId}")
+//    public ApiResult<?> getBookMark(@PathVariable int memberId) {
+//        try{
+//            List<BookMark> result = memberService.getBookMark(memberId);
+//            return ApiUtils.success(result);
+//        } catch(Exception e){
+//            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+
+    /** 북마크에 저장 */
+
+
+    /** 북마크 삭제 */
+
 
 }
