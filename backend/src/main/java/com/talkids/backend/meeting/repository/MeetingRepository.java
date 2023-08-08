@@ -1,12 +1,23 @@
 package com.talkids.backend.meeting.repository;
 
+import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.meeting.entity.Meeting;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
-public interface MeetingRepository extends JpaRepository<Meeting, String> {
+//성사된 미팅에 대해 관리
+public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
+        @Query("select m from Meeting m where m.groupReq in (:groups) " +
+            "and year(m.meetingStart) = :year and month(m.meetingStart) = :month")
+        List<Meeting> findByGroupReqInAndYearAndMonth(List<Group> groups, Integer year, Integer month);
 
-    Optional<Meeting> findByMeetingId(int meetingId);
+        @Query("select m from Meeting m where year(m.meetingStart) = :year and month(m.meetingStart) = :month")
+        List<Meeting> findByYearAndMonth(Integer year, Integer month);
 
+        Optional<Meeting> findOneByMeetingStartBetween(LocalDateTime start, LocalDateTime end);
+        Optional<Meeting> findOneByMeetingEndBetween(LocalDateTime start, LocalDateTime end);
 }
