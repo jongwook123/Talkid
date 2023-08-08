@@ -1,8 +1,8 @@
-INSERT INTO `s09p12d106`.`time_zone` (`hour`, `minute`, `time_zone_name`) VALUES
-(9, 0, "Korea"),
-(8, 0, "China"),
-(-4, 0, "United States"),
-(9, 0, "Japan");
+INSERT INTO `s09p12d106`.`time_zone` (`time_zone_id`, `hour`, `minute`, `time_zone_name`) VALUES
+(1, 9, 0, "Korea"),
+(2, 8, 0, "China"),
+(3, -4, 0, "United States"),
+(4, 9, 0, "Japan");
 
 INSERT INTO `s09p12d106`.`member_type` (`member_type_id`, `member_type_name`) VALUES
 (1, '선생님'),
