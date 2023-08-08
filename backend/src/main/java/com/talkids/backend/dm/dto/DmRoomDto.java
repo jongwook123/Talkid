@@ -36,7 +36,7 @@ public class DmRoomDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response {
-        private int memberId;
+
         private String dmRoomId;
         private String memberName;
         private int uncheckMessage;
