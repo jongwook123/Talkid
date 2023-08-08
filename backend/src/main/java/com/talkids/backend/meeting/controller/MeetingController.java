@@ -3,6 +3,7 @@ package com.talkids.backend.meeting.controller;
 import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
+import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
 import com.talkids.backend.meeting.dto.*;
@@ -206,5 +207,21 @@ public class MeetingController {
             return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    // 소그룹 입장
+    @PostMapping("/group/{smallGroupId}")
+    public ApiResult<?> enterSmallGroup(@LoginUser Member member, @PathVariable int smallGroupId) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            SmallGroupDto.Response result = smallGroupService.enterSmallGroup(member, smallGroupId);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    // 소그룹 퇴장
 
 }
