@@ -12,7 +12,6 @@ public class MeetingWithMineDto {
     private int meetingId;
     private LocalDateTime meetingStart;
     private LocalDateTime meetingEnd;
-    private Integer groupId;
     private GroupDto groupReq;
     private GroupDto groupRes;
     private LocalDateTime createdAt;

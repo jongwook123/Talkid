@@ -7,10 +7,10 @@ import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
 import com.talkids.backend.meeting.dto.*;
 import com.talkids.backend.meeting.entity.Meeting;
+import com.talkids.backend.meeting.entity.MeetingJoinReq;
 import com.talkids.backend.meeting.entity.MeetingSchedule;
 import com.talkids.backend.meeting.service.MeetingService;
 import com.talkids.backend.member.entity.Member;
-import com.talkids.backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,14 +26,13 @@ import java.util.Set;
 @RequestMapping("/meeting")
 public class MeetingController {
 
-    private final MemberService memberService;
     private final GroupService groupService;
     private final MeetingService meetingService;
 
 
     //등록한 미팅 일정 및 성사된 미팅일정을 년, 월별로 가져온다
     @GetMapping
-    public ApiResult getMyMeeting(@LoginUser Member member,
+    public ApiResult getMeetings(@LoginUser Member member,
                                   @RequestParam("year") Integer year,
                                   @RequestParam("month") Integer month) throws Exception{
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
@@ -54,8 +53,11 @@ public class MeetingController {
 
         boolean isMine = false;
         for(Meeting meeting: meetings){
-            isMine = myGroups.contains(meeting.getGroupReq().getGroupId());
-            meetingDtos.add(MeetingWithMineDto.fromEntity(meeting, isMine));
+            isMine = myGroups.contains(meeting.getGroupReq().getGroupId()) || myGroups.contains(meeting.getGroupRes().getGroupId());
+            if(isMine){
+                //성사된 일정에 대해서는 내꺼만 보여주자
+                meetingDtos.add(MeetingWithMineDto.fromEntity(meeting, isMine));
+            }
         }
 
         for(MeetingSchedule meetingSchedule: meetingSchedules){
@@ -74,7 +76,7 @@ public class MeetingController {
     //미팅(빈 일정)을 등록
     @PostMapping("")
     public ApiResult postEmptyMeeting(@LoginUser Member member,
-                                        @Valid @RequestBody PostMeetingDto.Request body) throws Exception{
+                                        @RequestBody @Valid  PostMeetingDto.Request body) throws Exception{
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
         try{
@@ -90,17 +92,71 @@ public class MeetingController {
     //상대방의 미팅(빈 일정)에 신청
     @PostMapping("/apply")
     public ApiResult applyMeetingSchedule(@LoginUser Member member,
-                                          @RequestBody @Valid ApplyMeetingScheduleDto.Request body){
+                                          @Valid @RequestBody ApplyMeetingScheduleDto.Request body){
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 미팅에 신청할 수 있습니다", HttpStatus.BAD_REQUEST);
 
         try{
             meetingService.applyMeetingSchedule(member, body.getMeetingScheduleId(), body.getGroupId());
+            return ApiUtils.success("성공");  //성공적으로 신청
+        }
+        catch(Exception e){
+            //중간에 에러가 난 경우
+            return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //미팅 신청 요청 받은 것 가져오기
+    @GetMapping("/receive")
+    public ApiResult getMyReceiveRequest(@LoginUser Member member){
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+        if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
+
+        List<MeetingJoinReq> reqs = meetingService.getReceivedRequest(member);
+
+        return ApiUtils.success(MyReceiveDto.Response.fromEntity(reqs));
+    }
+
+    //미팅 신청 한 것 가져오기
+    @GetMapping("/send")
+    public ApiResult getMySendRequest(@LoginUser Member member){
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+        if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
+
+        List<MeetingJoinReq> sends = meetingService.getSendRequest(member);
+
+        return ApiUtils.success(MyReceiveDto.Response.fromEntity(sends));
+    }
+
+    //미팅 신청 수락하기
+    @PostMapping("/accept")
+    public ApiResult acceptRequest(@LoginUser Member member,
+                                   @Valid @RequestBody AcceptMeetingDto.Request body){
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+        if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
+
+        try{
+            meetingService.acceptRequest(member, body.getMeetingJoinReqId());
+            return ApiUtils.success("성공");
         }
         catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
 
-        return null;
+    //미팅 신청 거부하기
+    @PostMapping("/reject")
+    public ApiResult rejectRequest(@LoginUser Member member,
+                                   @Valid @RequestBody AcceptMeetingDto.Request body){
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+        if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
+
+        try{
+            meetingService.rejectRequest(member, body.getMeetingJoinReqId());
+            return ApiUtils.success("성공");
+        }
+        catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

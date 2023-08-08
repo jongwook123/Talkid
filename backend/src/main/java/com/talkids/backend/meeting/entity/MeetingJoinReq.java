@@ -21,12 +21,12 @@ public class MeetingJoinReq {
 
     /* ---------------------------------- */
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "meetingScheduleId")
     private MeetingSchedule meetingSchedule;
 
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Group group;
 }
