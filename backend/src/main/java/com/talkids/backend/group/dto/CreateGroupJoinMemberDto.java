@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class GroupJoinMemberDto {
+public class CreateGroupJoinMemberDto {
 
     @Data
     @AllArgsConstructor

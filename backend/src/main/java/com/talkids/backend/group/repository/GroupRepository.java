@@ -10,8 +10,6 @@ public interface GroupRepository extends JpaRepository<Group, String> {
 
     List<Group> findAll();
     Optional<Group> findByGroupId(int groupId);
-
     List<Group> findByGroupJoinMember_Member_MemberIdOrderByCreatedAtDesc(int memberId);
 
-    int deleteByGroupIdAndGroupJoinMember_Member_MemberId(int groupId, int memberId);
 }

@@ -34,6 +34,6 @@ public class MeetingSchedule {
     @JoinColumn(name = "groupId")
     private Group group;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="meetingSchedule")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="meetingSchedule", orphanRemoval = true)
     private List<MeetingJoinReq> meetingJoinReqs;
 }
