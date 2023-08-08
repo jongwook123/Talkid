@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
     /** 메세지 저장 */
     @Transactional
     @Override
-    public String saveMessage(MessageDto.Request req) throws Exception {
+    public MessageDto.Response saveMessage(MessageDto.Request req) throws Exception {
 
         String dmRoomId = req.getSender().compareTo(req.getReceiver()) > 0
                 ? req.getReceiver()+"_"+req.getSender()
@@ -90,7 +90,13 @@ public class MessageServiceImpl implements MessageService {
             );
         }
 
-        return "Success";
+        MessageDto.Response response = MessageDto.Response.messageResponseDto(
+                message.getMember().getMemberName(),
+                message.getMessageContent(),
+                message.getCreatedAt()
+        );
+
+        return response;
     }
 
     /** 메세지 이전 기록 불러오기 */
