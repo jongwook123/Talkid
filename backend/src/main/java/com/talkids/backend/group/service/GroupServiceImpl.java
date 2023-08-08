@@ -56,6 +56,16 @@ public class GroupServiceImpl implements GroupService {
         return group.getGroupId();
     }
 
+    /** 선생님 - 그룹 삭제 */
+    @Transactional
+    @Override
+    public int deleteGroup(GroupDto.Request req) throws NotFoundException {
+
+
+        // member_active 0으로 바꾸기
+        return 0;
+    }
+
     /** 학생 - 그룹 신청 */
     @Transactional
     @Override
