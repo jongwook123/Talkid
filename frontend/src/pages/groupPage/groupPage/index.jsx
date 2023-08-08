@@ -2,54 +2,54 @@
 
 import * as S from './style';
 
+import { TryGetGroup } from 'apis/GroupPageAPIs';
 import Modal from 'components/modals';
 import Card from "components/cards/groupcards";
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function GroupPage() {
-    const dummyGroupList = [
-        {
-            "group_name": "groupName",
-            "students": 12,
-            "created_date": '2023-08-01',
-        },
-        {
-            "group_name": "groupName",
-            "students": 21,
-            "created_date": '2023-08-01',
-        },
-        {
-            "group_name": "groupName",
-            "students": 14,
-            "created_date": '2023-08-01',
-        },
-        {
-            "group_name": "groupName",
-            "students": 53,
-            "created_date": '2023-08-01',
-        },
-        {
-            "group_name": "groupName",
-            "students": 25,
-            "created_date": '2023-08-01',
-        },
-        {
-            "group_name": "groupName",
-            "students": 466,
-            "created_date": '2023-08-01',
-        },
-    ]
 
+    
+    const memberId = 2
+
+    const [groups, setGroups] = useState([]);
+
+
+    const handleFindGroups = async (memberId) => {
+        const result = await TryGetGroup(memberId);
+        setGroups([
+            ...result.response
+        ]);
+        
+
+    };
+ 
+    
+    
+    useEffect(() => {
+        handleFindGroups(memberId);
+    }, []);
+
+
+    const navigate = useNavigate();
+
+    const onClickHandler = (groupId) => {
+        navigate(`/groupdetail/${groupId}`);
+    }
+    
+    console.log(groups)
     return (
         <>
             <S.PageHeader>
                 <h1>TALKIDS</h1>
             </S.PageHeader>
             <main>
-
                 <S.CardList>
-                    {dummyGroupList.map((group, index) => (
-                        <S.CardItem key={index}>
-                            <Card props={{ groupName: group.group_name, students: group.students, created_date: group.created_date, }}></Card>
+                    {groups.map((group, index) => (
+                        <S.CardItem key={index} onClick={() => onClickHandler(group.groupId)}>
+                            <Card props={{ groupName: group.groupName, students: group.groupJoinMember.length, created_date: group.createdAt, }}></Card>
                         </S.CardItem>
                     ))}
                     <Modal />
@@ -58,4 +58,5 @@ export default function GroupPage() {
             <footer></footer>
         </>
     )
+
 }

@@ -2,8 +2,14 @@ import * as S from './style';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 import Card from "components/cards/studentcards";
+import { useParams } from 'react-router';
+
 
 export default function GroupDetailPage() {
+    const params = useParams(); 
+    const groupIdFromUrl = params.groupId; 
+    
+    console.log(groupIdFromUrl);
 
     const dummyStudentList = [
         {

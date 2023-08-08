@@ -24,7 +24,7 @@ export default function App() {
                     <Route path="/modifyuser" element={<UserEditPage />} />
                     <Route path="/findpassword" element={<FindPasswordPage />} />
                     <Route path="/group" element={<GroupPage />} />
-                    <Route path="/groupdetail" element={<GroupDetailPage />} />
+                    <Route path="/groupdetail/:groupId" element={<GroupDetailPage />} />
 
                 </Routes>
             </BrowserRouter>

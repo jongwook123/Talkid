@@ -5,6 +5,7 @@ import * as S from './style';
 import LongInput1 from 'components/inputs/longinput1';
 import LongButton1 from 'components/buttons/longbutton1';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { TryMakeGroup } from 'apis/GroupPageAPIs';
 
 function ImagePreview({ image, deleteFunc }) {
   return (
@@ -101,7 +102,10 @@ function Modal() {
     setPreviewImages(imageJSXs);
   }, [uploadedImages]);
 
+    
+        
 
+  
   const buttonClickHandler = (e) => {
     e.preventDefault();
 
@@ -109,10 +113,10 @@ function Modal() {
       alert("그룹이름을 입력하세요.");
 
       return;
-    }
-
+    } 
+    TryMakeGroup(2, inputs.groupName, inputs.groupImage);
   }
-
+  
   const openModalHandler = () => {
     setIsOpen(!isOpen)
   };
@@ -126,7 +130,7 @@ function Modal() {
         {isOpen ?
           <S.ModalBackdrop onClick={openModalHandler}>
             <S.ModalView onClick={(e) => e.stopPropagation()}>
-              <LongInput1 props={{ id: "groupname", desc: "Insert groupname", color: "orange", placeholder: "Group Name", type: "text", value: inputs.groupName, callback: onChangeHandler }} />
+              <LongInput1 props={{ id: "groupName", desc: "Insert groupname", color: "orange", placeholder: "Group Name", type: "text", value: inputs.groupName, callback: onChangeHandler }} />
               <S.StyledImageFieldset visible={true}>
                 <legend>이미지 입력 영역</legend>
                 <S.StyledImageUploadBox >
