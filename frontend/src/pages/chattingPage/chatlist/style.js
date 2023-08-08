@@ -107,22 +107,22 @@ export const UserButton = styled.button`
         background-color: ${props => props.theme.colors.theme.blue_light};
     }
 
-    & > span:nth-child(2) {
-        width: 22px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: ${props => props.theme.colors.theme.orange_dark};
-        border-radius: ${props => props.theme.border_radius.circle};
-        color: ${props => props.theme.colors.font.white};
-        display: ${props => props.left ? 'block' : 'none'};
-        font-size: ${props => props.theme.font_size.lv2};
-    }
-
     & > span:last-child {
         ${IROnly}
     }
+`
+
+export const UnreadCount = styled.span`
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: ${props => props.theme.colors.theme.orange_dark};
+    border-radius: ${props => props.theme.border_radius.circle};
+    color: ${props => props.theme.colors.font.white};
+    display: ${props => props.isLeft ? 'block' : 'none'};
+    font-size: ${props => props.theme.font_size.lv2};
 `
 
 export const ButtonTextWrapper = styled.div`
@@ -135,6 +135,10 @@ export const ButtonTextWrapper = styled.div`
     }
 
     & > span:nth-child(2) {
+        width: 60%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         color: ${props => props.theme.colors.font.light_black};
         font-size: ${props => props.theme.font_size.lv2};
     }

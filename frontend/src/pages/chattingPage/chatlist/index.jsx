@@ -4,8 +4,8 @@ import * as S from './style';
 
 import ChatRoom from '../chatroom';
 
-export default function ChatList({ props: { socketUpdated, socket } }) {
-    const [selectedRoom, setSelectedRoom] = useState("");
+export default function ChatList({ props: { socketUpdated, socket, user } }) {
+    const [selectedRoom, setSelectedRoom] = useState({});
     const [chatRooms, setChatRooms] = useState([]);
 
     const updateChatRooms = useCallback((data) => {
@@ -20,23 +20,23 @@ export default function ChatList({ props: { socketUpdated, socket } }) {
         socket.on('responseRooms', updateChatRooms);
 
         socket.emit("requestRooms", {
-            userEmail: "test",
+            userId: user.memberId,
+            userMail: user.memberMail,
         });
 
         return () => {
             socket.off('responseRooms', updateChatRooms);
         }
-    }, [socket, updateChatRooms]);
+    }, [socket, updateChatRooms, user]);
 
     if (!socketUpdated) {
         return;
     }
 
     const onClickSelect = (e) => {
-        setSelectedRoom(e.currentTarget.querySelector('span:nth-child(3)').innerText);
+        const selected = chatRooms.filter(chatRoom => chatRoom.dmRoomId === e.currentTarget.querySelector('span:nth-child(3)').innerText);
+        setSelectedRoom(selected[0]);
     }
-
-    console.log(chatRooms);
 
     return (
         <>
@@ -50,16 +50,16 @@ export default function ChatList({ props: { socketUpdated, socket } }) {
                 </S.UserHeader>
                 <S.UserList>
                     {
-                        chatRooms.map((chatRoom) => {
+                        chatRooms.map((chatRoom, index) => {
                             return (
-                                <S.UserListItem key={chatRoom.roomId}>
+                                <S.UserListItem key={"" + chatRoom.roomId + index}>
                                     <S.UserButton onClick={onClickSelect}>
                                         <S.ButtonTextWrapper>
-                                            <span>person</span>
+                                            <span>{chatRoom.memberName}</span>
                                             <span>{chatRoom.lastMessage}</span>
                                         </S.ButtonTextWrapper>
-                                        <span left={chatRoom.uncheckMessage === 0}>{chatRoom.uncheckMessage}</span>
-                                        <span>{chatRoom.roomId}</span>
+                                        <S.UnreadCount>{chatRoom.uncheckMessage}</S.UnreadCount>
+                                        <span>{chatRoom.dmRoomId}</span>
                                     </S.UserButton>
                                 </S.UserListItem>
                             )
@@ -68,7 +68,7 @@ export default function ChatList({ props: { socketUpdated, socket } }) {
 
                 </S.UserList>
             </S.SectionUser>
-            <ChatRoom props={{ socket, roomId: selectedRoom, setChatRooms }} />
+            <ChatRoom props={{ socket, room: selectedRoom, setChatRooms, user }} />
         </>
     )
 }
