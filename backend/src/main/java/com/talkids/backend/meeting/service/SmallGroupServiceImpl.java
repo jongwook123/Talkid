@@ -28,13 +28,13 @@ public class SmallGroupServiceImpl implements SmallGroupService {
     @Transactional
     @Override
     public int createSmallGroup(SmallGroupDto.Request req) throws Exception {
-        if(meetingRepository.findByMeetingId(req.getMeetingId()).isEmpty())
+        if(meetingRepository.findById(req.getMeetingId()).isEmpty())
             throw new Exception("미팅 정보가 없습니다.");
 
         // 소그룹 정보 DB에 저장
         smallGroupRepository.save(
                 req.saveSmallGroupDto(
-                        meetingRepository.findByMeetingId(req.getMeetingId()).get()
+                        meetingRepository.findById(req.getMeetingId()).get()
                 )
         );
 
