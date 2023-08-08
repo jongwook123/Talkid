@@ -133,10 +133,12 @@ public class MemberController {
     }
 
     /** 북마크 조회 */
-//    @GetMapping("/bookmark/{memberId}")
-//    public ApiResult<?> getBookMark(@PathVariable int memberId) {
+//    @GetMapping("/bookmark")
+//    public ApiResult<?> getBookMark(@LoginUser Member member ) {
+//        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+//
 //        try{
-//            List<BookMark> result = memberService.getBookMark(memberId);
+//            List<BookMark> result = memberService.getBookMark(member);
 //            return ApiUtils.success(result);
 //        } catch(Exception e){
 //            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
