@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+// 빈일정
 @Entity
 @Table(name="MeetingSchedule")
 @Builder
@@ -32,8 +34,6 @@ public class MeetingSchedule {
     @JoinColumn(name = "groupId")
     private Group group;
 
-    @ManyToOne
-    @JoinColumn(name = "meetingJoinReqId")
-    private MeetingJoinReq meetingJoinReq;
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="meetingSchedule", orphanRemoval = true)
+    private List<MeetingJoinReq> meetingJoinReqs;
 }

@@ -1,18 +1,20 @@
 package com.talkids.backend.dm.service;
 
+import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.dm.dto.DmJoinMemberDto;
-import com.talkids.backend.dm.entity.DmJoinMember;
 import com.talkids.backend.dm.entity.DmRoom;
+import com.talkids.backend.dm.entity.UncheckMessage;
 import com.talkids.backend.dm.repository.DmJoinMemberRepository;
 import com.talkids.backend.dm.repository.DmRoomRepository;
+import com.talkids.backend.dm.repository.UncheckMessageRepository;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,77 +25,92 @@ public class DmRoomServiceImpl implements DmRoomService {
     private final MemberRepository memberRepository;
     private final DmRoomRepository dmRoomRepository;
     private final DmJoinMemberRepository dmJoinMemberRepository;
+    private final UncheckMessageRepository uncheckMessageRepository;
 
-    private final SimpMessagingTemplate messagingTemplate;
+    private final MessageService messageService;
 
     /** 회원별 채팅방 리스트 조회 */
     @Override
-    public List<DmJoinMember> getDmRoomList(int memberId) {
-        return dmJoinMemberRepository.findByMember(memberId);
+    public List<DmRoomDto.Response> getDmRoomList(int memberId) throws NotFoundException {
+        Member member =  memberRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+
+        List<Object[]> results = dmRoomRepository.getChatRoomsAndUncheckCounts(memberId);
+        List<DmRoomDto.Response> chatRooms = new ArrayList<>();
+        String[] emailArr;
+        String receiverName;
+
+        for (Object[] result : results) {
+            String dmRoomId = result[0].toString();
+
+            emailArr = dmRoomId.split("_");
+
+            if(emailArr[0].equals(member.getMemberMail())){
+                receiverName = memberRepository.findByMemberMail(emailArr[1]).get().getMemberName();
+            } else receiverName = memberRepository.findByMemberMail(emailArr[0]).get().getMemberName();
+
+            int uncheckMessage = ((Long) result[1]).intValue();
+            String lastMessage = (String) result[2];
+
+            DmRoomDto.Response response = DmRoomDto.Response.messageResponseDto(dmRoomId, receiverName, uncheckMessage, lastMessage);
+            chatRooms.add(response);
+        }
+
+        return chatRooms;
     }
 
-    /** 채팅방 개설 */
+    /** 채팅방 입장/개설 */
     @Transactional
     @Override
-    public int createDmRoom(int memberId) throws Exception {
+    public List<?> getDmRoom(DmRoomDto.Request req) throws NotFoundException {
 
-        DmRoom dmRoom = DmRoomDto.Request.saveDmRoomDto();
-        dmRoomRepository.save(dmRoom);
+        Member sender = memberRepository.findByMemberMail(req.getSender()) // 발신자
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+        Member receiver = memberRepository.findByMemberMail(req.getReceiver()) // 수신자
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
 
-        // DmJoinMember 테이블 insert
-        dmJoinMemberRepository.save(
-                DmJoinMemberDto.Request.saveDmJoinMemberDto(
-                        dmRoom,
-                        memberRepository.findByMemberId(memberId).get()));
+        DmRoom dmRoom = DmRoomDto.Request.saveDmRoomDto(req.getSender(), req.getReceiver());
 
-        return dmRoom.getDmRoomId();
-    }
+        // 2.1 기존에 채팅방이 없는 경우 DM방 생성 및 DmJoinMember에 회원 정보 추가
+        if (dmRoomRepository.findByDmRoomId(dmRoom.getDmRoomId()).isEmpty()) {
 
-    /** 채팅방 입장 */
-    @Transactional
-    @Override
-    public int getDmRoom(DmJoinMemberDto.Request req) {
+            // dm 방 생성
+            dmRoomRepository.save(dmRoom);
 
-        DmRoom dmRoom = dmRoomRepository.findByDmRoomId(req.getDmRoomId());
-        Member member = memberRepository.findByMemberId(req.getMemberId()).get();
-
-        messagingTemplate.convertAndSend(
-            "/sub/dm/room/" + dmRoom.getDmRoomId(),
-            member.getMemberName() + "님이 채팅방에 참여하셨습니다."
-        );
-
-        // DB에 없으면 insert
-        if (dmJoinMemberRepository.findByDmJoinMemberId(req.getMemberId(), req.getDmRoomId()).isEmpty()) {
+            // DmJoinMember 테이블에 Sender 정보 insert
             dmJoinMemberRepository.save(
-                req.saveDmJoinMemberDto(dmRoom, member)
+                DmJoinMemberDto.Request.saveDmJoinMemberDto(dmRoom, sender)
+            );
+
+            // DmJoinMember 테이블에 Receiver 정보 insert
+            dmJoinMemberRepository.save(
+                DmJoinMemberDto.Request.saveDmJoinMemberDto(dmRoom, receiver)
             );
         }
-        return dmRoom.getDmRoomId();
+
+        // 안 읽은 메세지 -> 읽음 처리
+        uncheckMessageRepository.deleteByMember_MemberIdAndDmRoom_DmRoomId(sender.getMemberId(), dmRoom.getDmRoomId());
+
+        return messageService.getPreviousChatMessages(dmRoom.getDmRoomId());
     }
 
     /** 채팅방 퇴장/삭제 */
     @Transactional
     @Override
-    public int deleteDmRoom(DmJoinMemberDto.Request req) throws Exception {
-
-        DmRoom dmRoom = dmRoomRepository.findByDmRoomId(req.getDmRoomId());
-        Member member = memberRepository.findByMemberId(req.getMemberId()).get();
-
-        // 지워도 되는 부분 !
-        messagingTemplate.convertAndSend(
-            "/sub/dm/room/" + dmRoom.getDmRoomId(),
-            member.getMemberName() + "님이 채팅방에서 퇴장하셨습니다."
-        );
+    public String deleteDmRoom(DmJoinMemberDto.Request req) throws NotFoundException {
+        if(memberRepository.findByMemberMail(req.getMemberMail()).isEmpty())
+            throw new NotFoundException("회원 정보가 없습니다.");
+        if(dmRoomRepository.findByDmRoomId(req.getDmRoomId()).isEmpty())
+            throw new NotFoundException("존재하는 방이 없습니다.");
 
         // dmJoinMemberDto에서 사람 정보 지우기
-        dmJoinMemberRepository.deleteByDmJoinMemberId(member.getMemberId(), dmRoom.getDmRoomId());
+        dmJoinMemberRepository.deleteByMember_MemberMailAndDmRoom_DmRoomId(req.getMemberMail(), req.getDmRoomId());
 
-        // 채팅방에 남은 사람없으면 채팅방 지우기 => 메시지가 있을 때 문제 ?
-//        if (dmJoinMemberRepository.findByDmRoom(room).size()==0) {
-//            dmRoom.setDeletedAt(true);
-//        }
+        // 채팅방에 남은 사람없으면 채팅방 지우기
+        if (dmJoinMemberRepository.findByDmRoom_DmRoomId(req.getDmRoomId()).size()==0) {
+            dmRoomRepository.deleteByDmRoomId(req.getDmRoomId());
+        }
 
-        return dmRoom.getDmRoomId();
+        return req.getDmRoomId();
     }
-
 }
