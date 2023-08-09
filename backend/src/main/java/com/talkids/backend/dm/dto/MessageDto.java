@@ -3,10 +3,16 @@ package com.talkids.backend.dm.dto;
 import com.talkids.backend.dm.entity.DmRoom;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.dm.entity.Message;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+import java.time.LocalDateTime;
 
 public class MessageDto {
 
@@ -15,13 +21,21 @@ public class MessageDto {
     @NoArgsConstructor
     public static class Request {
 
-//        @NotNull(message = "유저 id는 필수 입니다.")
-        private int memberId; // 발신자
+        @Email
+        @Length(min = 1, max = 45)
+        @NotBlank(message = "이메일을 입력해주세요")
+        private String sender;
 
-        private int dmRoomId;
+        @Email
+        @Length(min = 1, max = 45)
+        @NotBlank(message = "이메일을 입력해주세요")
+        private String receiver;
 
-//        @NotNull(message = "메세지는 필수 입니다.")
+        @NotBlank(message = "메세지를 입력해주세요")
         private String messageContent;
+        
+        @NotNull(message = "읽음 여부를 입력해주세요")
+        private boolean readCheck;
 
         @Builder
         public Message saveMessageDto(DmRoom dmRoom, Member member){
@@ -36,14 +50,18 @@ public class MessageDto {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class Response {
+    public static class Response {
 
-        private int memberId;
+        private String memberName;
         private String messageContent;
+        private LocalDateTime createdAt;
 
-        public void messageResponseDto(Request req) {
-            this.memberId = req.getMemberId();
-            this.messageContent = req.getMessageContent();
+        public static Response messageResponseDto(String memberName, String messageContent, LocalDateTime createdAt) {
+            MessageDto.Response response = new MessageDto.Response();
+            response.setMemberName(memberName);
+            response.setMessageContent(messageContent);
+            response.setCreatedAt(createdAt);
+            return response;
         }
     }
 }

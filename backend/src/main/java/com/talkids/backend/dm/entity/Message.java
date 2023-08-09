@@ -1,5 +1,6 @@
 package com.talkids.backend.dm.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.talkids.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,6 +30,7 @@ public class Message {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="dmRoomId")
+    @JsonBackReference
     private DmRoom dmRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
