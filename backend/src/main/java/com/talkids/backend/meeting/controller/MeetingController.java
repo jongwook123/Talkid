@@ -3,13 +3,16 @@ package com.talkids.backend.meeting.controller;
 import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
+import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
 import com.talkids.backend.meeting.dto.*;
 import com.talkids.backend.meeting.entity.Meeting;
 import com.talkids.backend.meeting.entity.MeetingJoinReq;
 import com.talkids.backend.meeting.entity.MeetingSchedule;
+import com.talkids.backend.meeting.entity.SmallGroup;
 import com.talkids.backend.meeting.service.MeetingService;
+import com.talkids.backend.meeting.service.SmallGroupService;
 import com.talkids.backend.member.entity.Member;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class MeetingController {
 
     private final GroupService groupService;
     private final MeetingService meetingService;
+    private final SmallGroupService smallGroupService;
 
 
     //등록한 미팅 일정 및 성사된 미팅일정을 년, 월별로 가져온다
@@ -159,4 +163,77 @@ public class MeetingController {
             return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    /* -----------------------------------------*/
+
+    // 소그룹 리스트 조회
+    @GetMapping("/group/{meetingId}")
+    public ApiResult<?> getSmallGroupList(@LoginUser Member member, @PathVariable int meetingId) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            List<SmallGroup> result = smallGroupService.getSmallGroupList(meetingId);
+            return ApiUtils.success(result);
+        }
+        catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 소그룹 생성
+    @PostMapping("/group")
+    public ApiResult<?> createSmallGroup(@LoginUser Member member, @Valid @RequestBody SmallGroupDto.Request req) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+        if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
+
+        try{
+            Integer result = smallGroupService.createSmallGroup(req);
+            return ApiUtils.success(result);
+        }
+        catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 소그룹 삭제 
+    @DeleteMapping("/group/{smallGroupId}")
+    public ApiResult<?> deleteSmallGroup(@LoginUser Member member, @PathVariable int smallGroupId) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+        if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
+
+        try{
+            String result = smallGroupService.deleteSmallGroup(smallGroupId);
+            return ApiUtils.success(result);
+        }
+        catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 소그룹 입장
+    @PostMapping("/group/{smallGroupId}")
+    public ApiResult<?> enterSmallGroup(@LoginUser Member member, @PathVariable int smallGroupId) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            SmallGroupDto.Response result = smallGroupService.enterSmallGroup(member, smallGroupId);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // 소그룹 퇴장
+    @PostMapping("/group/exit")
+    public ApiResult<?> exitSmallGroup(@LoginUser Member member) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            String result = smallGroupService.exitSmallGroup(member);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

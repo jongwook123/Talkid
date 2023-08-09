@@ -1,5 +1,6 @@
 package com.talkids.backend.meeting.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.member.entity.Member;
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class SmallGroupMember {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="smallGroupId")
+    @JsonBackReference
     private SmallGroup smallGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
