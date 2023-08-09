@@ -1,6 +1,7 @@
 package com.talkids.backend.group.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
+import com.talkids.backend.group.dto.CreateGroupDto;
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.GroupJoinMemberDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
@@ -40,7 +41,7 @@ public class GroupServiceImpl implements GroupService {
     /** 선생님 - 그룹 개설 */
     @Transactional
     @Override
-    public int createGroup(Member member, GroupDto.Request req) throws NotFoundException {
+    public int createGroup(Member member, CreateGroupDto.Request req) throws NotFoundException {
 
         // groups 테이블에 저장
         Group group = groupRepository.save(req.saveGroupDto());
@@ -82,7 +83,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public int joinGroup(Member member, MemberApplyDto.Request req) throws NotFoundException {
-        
+
         Group group = groupRepository.findByGroupId(req.getGroupId())
                 .orElseThrow(()-> new NotFoundException("그룹 정보가 없습니다."));
 
@@ -94,7 +95,7 @@ public class GroupServiceImpl implements GroupService {
                 .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId())
                 .isPresent())
             throw new NotFoundException("이미 가입한 학생입니다.");
-        
+
         // memberApply 테이블에 저장
         memberApplyRepository.save(
             req.saveMemberApplyDto(group, member)
@@ -113,7 +114,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public int applyApproved(MemberApplyDto.Request req) throws NotFoundException {
-        
+
         if(groupJoinMemberRepository.findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId()).isPresent())
                 throw new NotFoundException("이미 가입한 학생입니다.");
 
@@ -169,7 +170,7 @@ public class GroupServiceImpl implements GroupService {
         for (GroupJoinMember gm : group.getGroupJoinMember()) {
             Member student = gm.getMember();
             if(member.getMemberId() == student.getMemberId()) continue; // 선생님 제외
-            
+
             int totalExp = 0;
             int monthExp = 0;
 
