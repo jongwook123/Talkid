@@ -30,7 +30,7 @@ public class GroupController {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
         try{
-            List<?> result = groupService.getGroupList(member).stream().map((group)->GroupDto.fromEntity(group)).toList();
+            List<?> result = groupService.getGroupList(member).stream().map((group)->GroupDto.fromEntity(group, group.getGroupJoinMember())).toList();
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
