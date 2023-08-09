@@ -3980,7 +3980,7 @@ insert into `s09p12d106`.`bad_words`(words) values
 ("豔乳"),
 ("豔婦淫女"),
 ("豔情小說"),
-("豔舞淫業")
+("豔舞淫業");
 
 INSERT INTO `member` VALUES (1,_binary '\0',1,_binary '',0,1,1,1,'2023-08-09 07:37:51.523147','2023-08-09 07:44:08.484678','yys@naver.com','유영서','$2a$10$PtrNph/TZPOl75ECj71QB.p00h4C0yi4HJ/DKsMFm4Il3ugK8HHUi','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTM0NDh9.8h3vyRAYv8HmdZk_S-55QkcFkOYWXl6AKff_M72NrtI',NULL,NULL),(1,_binary '\0',1,_binary '\0',0,2,2,1,'2023-08-09 07:39:09.241162','2023-08-09 07:39:18.564064','lwc@naver.com','이우철','$2a$10$1jLLJvvEUGlfi/MvjhwMaerF72homNo3ZKdB0.8FArr3DDEnTyPr6','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTMxNTh9.MPEEBxvzYzGhEck5klV9cgNpFNwC_IlYu0P85G_R9Is',NULL,NULL),(1,_binary '\0',1,_binary '\0',0,3,2,1,'2023-08-09 07:39:45.596137','2023-08-09 07:39:45.596137','pju@naver.com','박종욱','$2a$10$5pUP9XbxW0zx4FW7/BZWZeGKRgpodpYy0Jsr.aL1DtC79iTReiApm',NULL,NULL,NULL),(1,_binary '\0',1,_binary '',0,4,2,1,'2023-08-09 07:39:54.120969','2023-08-09 07:45:23.777600','ksy@naver.com','김선영','$2a$10$FJJrfrF.C4nwpCFPIVAiz.45bdvc4RT.jRrlX9SE3ls5RdAEGWtnC','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTMyMjh9.AjTrYqy1oytVlstAlNvjGaSsZewqNo6yTbHnoQmr7tc',NULL,NULL),(1,_binary '\0',1,_binary '\0',0,5,2,1,'2023-08-09 07:40:14.920299','2023-08-09 07:40:14.920299','sdh@naver.com','서동현','$2a$10$BGCxZBi1AkAZx6tD8BgJ5eDpaB6pHfSZPHyUxtvBy1KR74A93o2H.',NULL,NULL,NULL);
 
