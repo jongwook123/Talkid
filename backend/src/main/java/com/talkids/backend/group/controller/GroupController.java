@@ -6,6 +6,7 @@ import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.group.dto.CreateGroupDto;
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
+import com.talkids.backend.group.dto.MemberApproveDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
 import com.talkids.backend.member.entity.Member;
@@ -81,7 +82,7 @@ public class GroupController {
 
     /** 선생님 - 신청 승인 */
     @PostMapping("/approve")
-    public ApiResult<?> applyApproved(@LoginUser Member member, @Valid @RequestBody MemberApplyDto.Request req) {
+    public ApiResult<?> applyApproved(@LoginUser Member member, @Valid @RequestBody MemberApproveDto.Request req) {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 승인 할 수 있습니다", HttpStatus.BAD_REQUEST);
 
@@ -95,7 +96,7 @@ public class GroupController {
 
     /** 선생님 - 신청 거절 */
     @PostMapping("/reject")
-    public ApiResult<?> applyReject(@LoginUser Member member, @Valid @RequestBody MemberApplyDto.Request req){
+    public ApiResult<?> applyReject(@LoginUser Member member, @Valid @RequestBody MemberApproveDto.Request req){
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 거절 할 수 있습니다", HttpStatus.BAD_REQUEST);
 

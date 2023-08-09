@@ -4,6 +4,7 @@ import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.group.dto.CreateGroupDto;
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
+import com.talkids.backend.group.dto.MemberApproveDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.member.entity.Member;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,10 +26,10 @@ public interface GroupService {
     List<?> getApplyList(int groupId) throws NotFoundException;
 
     /** 선생님 - 신청 승인 */
-    int applyApproved(MemberApplyDto.Request req) throws NotFoundException;
+    int applyApproved(MemberApproveDto.Request req) throws NotFoundException;
 
     /** 선생님 - 신청 거절 */
-    int applyReject(MemberApplyDto.Request req) throws NotFoundException;
+    int applyReject(MemberApproveDto.Request req) throws NotFoundException;
 
     /** 학생 - 그룹 신청 */
     int joinGroup(Member member, MemberApplyDto.Request req) throws NotFoundException;

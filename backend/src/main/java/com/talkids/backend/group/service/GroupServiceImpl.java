@@ -1,10 +1,7 @@
 package com.talkids.backend.group.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
-import com.talkids.backend.group.dto.CreateGroupDto;
-import com.talkids.backend.group.dto.GroupDto;
-import com.talkids.backend.group.dto.GroupJoinMemberDto;
-import com.talkids.backend.group.dto.MemberApplyDto;
+import com.talkids.backend.group.dto.*;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.entity.GroupJoinMember;
 import com.talkids.backend.group.entity.MemberApply;
@@ -49,8 +46,7 @@ public class GroupServiceImpl implements GroupService {
         // group_member_join 테이블에 저장
         groupJoinMemberRepository.save(
             GroupJoinMemberDto.Request.saveGroupJoinMemberDto(
-                groupRepository.findByGroupId(group.getGroupId()).get(),
-                    memberRepository.findByMemberId(req.getMemberId()).get()
+                groupRepository.findByGroupId(group.getGroupId()).get(), member
             )
         );
 
@@ -88,11 +84,11 @@ public class GroupServiceImpl implements GroupService {
                 .orElseThrow(()-> new NotFoundException("그룹 정보가 없습니다."));
 
         if(memberApplyRepository
-                .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId())
+                .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), member.getMemberId())
                 .isPresent()) {
             throw new NotFoundException("승인 대기 중인 학생입니다.");
         } else if(groupJoinMemberRepository
-                .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId())
+                .findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), member.getMemberId())
                 .isPresent())
             throw new NotFoundException("이미 가입한 학생입니다.");
 
@@ -101,7 +97,7 @@ public class GroupServiceImpl implements GroupService {
             req.saveMemberApplyDto(group, member)
         );
 
-        return req.getMemberId();
+        return member.getMemberId();
     }
 
     /** 선생님 - 신청 내역 조회 */
@@ -113,7 +109,7 @@ public class GroupServiceImpl implements GroupService {
     /** 선생님 - 신청 승인 */
     @Transactional
     @Override
-    public int applyApproved(MemberApplyDto.Request req) throws NotFoundException {
+    public int applyApproved(MemberApproveDto.Request req) throws NotFoundException {
 
         if(groupJoinMemberRepository.findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId()).isPresent())
                 throw new NotFoundException("이미 가입한 학생입니다.");
@@ -142,7 +138,7 @@ public class GroupServiceImpl implements GroupService {
     /** 선생님 - 신청 거절 */
     @Transactional
     @Override
-    public int applyReject(MemberApplyDto.Request req) throws NotFoundException {
+    public int applyReject(MemberApproveDto.Request req) throws NotFoundException {
 
         if(memberApplyRepository.findByGroup_GroupIdAndMember_MemberId(req.getGroupId(), req.getMemberId()).isEmpty())
             throw new NotFoundException("신청 정보가 없습니다.");

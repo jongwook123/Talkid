@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class MemberApplyDto {
+public class MemberApproveDto {
 
     @Data
     @AllArgsConstructor
@@ -19,12 +19,8 @@ public class MemberApplyDto {
         @NotNull(message = "그룹 ID를 입력해주세요")
         private Integer groupId;
 
-        @Builder
-        public static MemberApply saveMemberApplyDto(Group groups, Member member){
-            return MemberApply.builder()
-                    .group(groups)
-                    .member(member)
-                    .build();
-        }
+        @NotNull(message = "학생 ID를 입력해주세요")
+        private Integer memberId;
+
     }
 }

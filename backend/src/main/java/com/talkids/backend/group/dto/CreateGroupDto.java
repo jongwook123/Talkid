@@ -16,9 +16,6 @@ public class CreateGroupDto {
     @NoArgsConstructor
     public static class Request{
 
-        @NotNull(message = "멤버 ID를 입력해주세요")
-        private Integer memberId;
-
         @Length(min = 1, max = 45)
         @NotBlank(message = "그룹 이름을 입력해주세요")
         private String groupName;
