@@ -1,15 +1,19 @@
 package com.talkids.backend.group.repository;
 
 import com.talkids.backend.group.entity.GroupJoinMember;
-import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GroupJoinMemberRepository  extends JpaRepository<GroupJoinMember, String> {
 
-    @Query("SELECT a FROM GroupJoinMember a WHERE a.group.groupId = :groupId and a.member.memberId = :memberId")
-    Optional<GroupJoinMember> findByMember(@Param("groupId") int groupId, @Param("memberId") int memberId);
+    Optional<GroupJoinMember> findByGroup_GroupIdAndMember_MemberId(int groupId, int memberId);
 
+    @Query("Select g.member From GroupJoinMember g Where g.group.groupId = :groupId")
+    List<?> findByGroup_GroupId(int groupId);
+
+    @Query("Select g.member From GroupJoinMember g Where g.member.memberId = :memberId")
+    List<?> findByMember_MemberId(int memberId);
 }

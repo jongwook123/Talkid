@@ -9,8 +9,11 @@ import SigninPage from "pages/userPages/signinPage"
 import SignupPage from "pages/userPages/signupPage"
 import UserEditPage from "pages/userPages/userEditPage"
 import FindPasswordPage from "pages/userPages/findpasswordPage"
+
 import GroupPage from "pages/groupPage/groupPage"
 import GroupDetailPage from "pages/groupPage/groupDetailPage"
+import TeacherMatchPage from "pages/matchPage/teacherMatchPage"
+
 
 export default function App() {
     return (
@@ -25,6 +28,7 @@ export default function App() {
                     <Route path="/findpassword" element={<FindPasswordPage />} />
                     <Route path="/group" element={<GroupPage />} />
                     <Route path="/groupdetail/:groupId" element={<GroupDetailPage />} />
+                    <Route path="/match/teachers" element={<TeacherMatchPage />} />
 
                 </Routes>
             </BrowserRouter>
