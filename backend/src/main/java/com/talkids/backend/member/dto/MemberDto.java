@@ -13,6 +13,7 @@ import java.util.List;
 public class MemberDto {
     private int memberId;
     private String memberMail;
+    private String memberName;
     private Boolean memberActive;
     private String memberIntroduce;
     private String memberImage;
@@ -28,6 +29,7 @@ public class MemberDto {
         return MemberDto.builder()
             .memberId(member.getMemberId())
             .memberMail(member.getMemberMail())
+            .memberName(member.getMemberName())
             .memberActive(member.getMemberActive())
             .memberIntroduce(member.getMemberIntroduce())
             .memberImage(member.getMemberImage())
