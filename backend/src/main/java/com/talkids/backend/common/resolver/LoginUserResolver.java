@@ -54,8 +54,11 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
             if(isValid){
                 //유효한 토큰이면 -> service로 요청하여 사용자 정보를 불러오자
                 Authentication auth = jwtProvider.getAuthentication(accessToken);
-                Member member = memberService.getMember(auth.getName());
-                return member;
+                try{
+                    return  memberService.getMember(auth.getName());
+                } catch (Exception e){
+                    return null;
+                }
             }
             else{
                 //유효한 토큰이 아니면
