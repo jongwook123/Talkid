@@ -1,6 +1,7 @@
 package com.talkids.backend.group.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
+import com.talkids.backend.group.dto.CreateGroupDto;
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
@@ -15,7 +16,7 @@ public interface GroupService {
     List<Group> getGroupList(Member member) throws NotFoundException;
 
     /** 선생님 - 그룹 개설 */
-    int createGroup(Member member, GroupDto.Request req) throws NotFoundException;
+    int createGroup(Member member, CreateGroupDto.Request req) throws NotFoundException;
 
     /** 선생님 - 그룹 삭제 */
     String deleteGroup(Member member, int groupId) throws NotFoundException;
