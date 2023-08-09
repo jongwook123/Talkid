@@ -30,6 +30,8 @@ io.on('connection', socket => {
             users[data.room] = [{ id: socket.id, email: data.email }];
         }
 
+        console.log(data);
+
         socketToRoom[socket.id] = data.room;
 
         socket.join(data.room);

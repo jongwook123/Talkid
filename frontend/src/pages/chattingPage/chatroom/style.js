@@ -13,23 +13,41 @@ export const HeaderChat = styled.header`
     width: 100%;
     height: 48px;
     display: flex;
-    background-color: ${props => props.theme.colors.background_color.white};
-    border-bottom: 1px solid ${props => props.theme.colors.theme.blue};
+    align-items: center;
+    padding: 0 20px 0 30px;
+    background-color: ${props => props.theme.colors.theme.blue_light3};
 
     & > h2 {
         display: block;
-        line-height: 48px;
-        padding-left: 20px;
+        margin-right: auto;
         font-size: ${props => props.theme.font_size.lv4};
     }
 `
 
+export const HeaderButton = styled.button`
+    border: 0;
+    padding: 0;
+    background-color: inherit;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    display: ${props => props.visible ? 'flex' : 'none'};
+`
+
+export const HeaderButtonNormal = styled(HeaderButton)`
+    color: ${props => props.theme.colors.theme.green_dark};
+`
+
+export const HeaderButtonVideo = styled(HeaderButton)`
+    color: ${props => props.theme.colors.theme.orange_dark};
+`
+
 export const DictionaryWrapper = styled.div`
-    flex-grow: 1;
+    height: calc(100vh - 48px);
     display: flex;
 `
 
-export const ListChatWrapper = styled.div`
+export const VideoWrapper = styled.div`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -39,13 +57,13 @@ export const ListChat = styled.ul`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 30px;
+    padding: 0 30px 25px 30px;
     overflow-y: scroll;
     gap: 2px;
 
     &::-webkit-scrollbar {
         width: 8px;
-        background-color: ${props => props.theme.colors.theme.blue_light};
+        background-color: ${props => props.theme.colors.theme.blue_light3};
     }
 
     &::-webkit-scrollbar-track {
@@ -153,7 +171,7 @@ export const FormWrapper = styled.div`
 
 export const FormChat = styled.form`
     display: flex;
-    margin: 15px 20px 20px 20px;
+    margin: 5px 20px 20px 20px;
     padding: 10px 20px;
     background-color: ${props => props.theme.colors.theme.blue_light};
     border-radius: ${props => props.theme.border_radius.lv3};

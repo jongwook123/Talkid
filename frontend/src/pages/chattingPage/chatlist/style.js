@@ -44,7 +44,7 @@ export const UserHeader = styled.header`
 
 export const UserList = styled.ul`
     width: 240px;
-    padding-right: 8px;
+    padding-right: 10px;
     margin-top: 20px;
     flex-grow: 1;
     display: flex;
@@ -59,7 +59,7 @@ export const UserList = styled.ul`
     }
 
     &:hover {
-        padding-right: 0;
+        padding-right: 2px;
     }
     
     &:hover::-webkit-scrollbar {
@@ -95,7 +95,7 @@ export const UserButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: ${props => props.theme.colors.theme.blue};
+    background-color: ${props => props.selected ? props.theme.colors.theme.blue_light : props.theme.colors.theme.blue};
     border-radius: ${props => props.theme.border_radius.lv2};
 
     &:hover {
@@ -121,7 +121,7 @@ export const UnreadCount = styled.span`
     background-color: ${props => props.theme.colors.theme.orange_dark};
     border-radius: ${props => props.theme.border_radius.circle};
     color: ${props => props.theme.colors.font.white};
-    display: ${props => props.isLeft ? 'block' : 'none'};
+    display: ${props => props.isLeft ? 'flex' : 'none'};
     font-size: ${props => props.theme.font_size.lv2};
 `
 

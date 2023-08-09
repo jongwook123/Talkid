@@ -9,6 +9,9 @@ export const theme = {
             green_dark: "#779E69",
             blue: "#8EA3BC",
             blue_light: "#AABECF",
+            blue_light2: "#C3D3DE",
+            blue_light3: "#DAE4EB",
+            blue_light4: "#EBF1F4",
             blue_dark: "#7D8FAE",
         },
         background_color: {
@@ -35,6 +38,7 @@ export const theme = {
         lv1: "5px",
         lv2: "7px",
         lv3: "10px",
+        lv4: "14px",
         circle: "50%",
     },
     font_size: {

@@ -2,14 +2,18 @@ import { useCallback, useEffect, useState, useRef } from "react";
 
 import * as S from './style';
 
-import Dictionary from "../dictionary";
+import Video from "./video";
+import AddIcCallIcon from '@mui/icons-material/AddIcCall';
+import Dictionary from "./dictionary";
+import BookIcon from '@mui/icons-material/Book';
 
 export default function ChatRoom({ props: { socket, room, setChatRooms, user } }) {
     const [arrivalChat, setArrivalChat] = useState({});
     const [chats, setChats] = useState([]);
     const [newChat, setNewChat] = useState("");
     const messageEndRef = useRef(null);
-    const [dictionaryClicked, setDictionaryClicked] = useState(true);
+    const [videoClicked, setVideoClicked] = useState(false);
+    const [dictionaryClicked, setDictionaryClicked] = useState(false);
 
     const getTimeString = (createdAt) => {
         const isCreated = new Date(createdAt);
@@ -31,23 +35,30 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
 
             if (targetRoom.dmRoomId) {
                 restRooms = chatRooms.filter(chatRoom => chatRoom.dmRoomId !== data.roomId);
+
+                if (targetRoom.dmRoomId === roomId) {
+                    restRooms.unshift({
+                        dmRoomId: targetRoom.dmRoomId,
+                        memberName: targetRoom.memberName,
+                        lastMessage: data.messageContent,
+                        uncheckMessage: 0,
+                    });
+                } else {
+                    restRooms.unshift({
+                        dmRoomId: targetRoom.dmRoomId,
+                        memberName: targetRoom.memberName,
+                        lastMessage: data.messageContent,
+                        uncheckMessage: targetRoom.uncheckMessage + 1,
+                    });
+                }
             } else {
                 restRooms = [...chatRooms];
-            }
 
-            if (targetRoom.dmRoomId === roomId) {
                 restRooms.unshift({
-                    dmRoomId: targetRoom.dmRoomId,
-                    memberName: targetRoom.memberName,
+                    dmRoomId: data.roomId,
+                    memberName: data.receiver,
                     lastMessage: data.messageContent,
-                    uncheckMessage: 0,
-                });
-            } else {
-                restRooms.unshift({
-                    dmRoomId: targetRoom.dmRoomId,
-                    memberName: targetRoom.memberName,
-                    lastMessage: data.messageContent,
-                    uncheckMessage: targetRoom.uncheckMessage + 1,
+                    uncheckMessage: 1,
                 });
             }
 
@@ -73,9 +84,11 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
         socket.on('responseChatting', responseChat);
         socket.on('responseMessage', responseMessage);
 
-
         if (!room.dmRoomId) {
-            return;
+            return () => {
+                socket.off('responseChatting', responseChat);
+                socket.off('responseMessage', responseMessage);
+            };
         }
 
         socket.emit("joinRoom", {
@@ -105,6 +118,25 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
         messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }, [chats]);
 
+    useEffect(() => {
+        setChatRooms(chatRooms => {
+            return chatRooms.map(chatRoom => {
+                if (chatRoom.dmRoomId === room.dmRoomId) {
+                    return {
+                        ...chatRoom,
+                        uncheckMessage: 0,
+                    }
+                } else {
+                    return chatRoom;
+                }
+            });
+        })
+    }, [room, setChatRooms]);
+
+    if (!room.dmRoomId) {
+        return;
+    }
+
     const sendMessage = async (e) => {
         e.preventDefault();
 
@@ -126,9 +158,13 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
         setNewChat(e.target.value);
     }
 
-    // if (!room.dmRoomId) {
-    //     return;
-    // }
+    const onClickVideoOn = () => {
+        setVideoClicked(true);
+    }
+
+    const onClickDictionary = () => {
+        setDictionaryClicked(clicked => !clicked);
+    }
 
     const getDay = (isCreated) => {
         let day = '';
@@ -167,9 +203,16 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
             <S.SectionChat>
                 <S.HeaderChat>
                     <h2>{room.memberName}</h2>
+                    <S.HeaderButtonNormal onClick={onClickVideoOn} visible={!videoClicked}>
+                        <AddIcCallIcon />
+                    </S.HeaderButtonNormal>
+                    <S.HeaderButtonNormal onClick={onClickDictionary} visible={true}>
+                        <BookIcon />
+                    </S.HeaderButtonNormal>
                 </S.HeaderChat>
                 <S.DictionaryWrapper>
-                    <S.ListChatWrapper>
+                    <S.VideoWrapper>
+                        <Video props={{ videoClicked, setVideoClicked, room, user }} />
                         <S.ListChat>
                             {
                                 chats.map((chat, index) => {
@@ -271,7 +314,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
                                 <S.FormButton onClick={sendMessage}>send</S.FormButton>
                             </S.FormChat>
                         </S.FormWrapper>
-                    </S.ListChatWrapper>
+                    </S.VideoWrapper>
                     <Dictionary props={{ dictionaryClicked }} />
                 </S.DictionaryWrapper>
             </S.SectionChat >

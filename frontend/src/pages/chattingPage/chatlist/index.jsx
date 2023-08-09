@@ -53,12 +53,12 @@ export default function ChatList({ props: { socketUpdated, socket, user } }) {
                         chatRooms.map((chatRoom, index) => {
                             return (
                                 <S.UserListItem key={"" + chatRoom.dmRoomId + index}>
-                                    <S.UserButton onClick={onClickSelect}>
+                                    <S.UserButton onClick={onClickSelect} selected={selectedRoom.dmRoomId === chatRoom.dmRoomId}>
                                         <S.ButtonTextWrapper>
                                             <span>{chatRoom.memberName}</span>
                                             <span>{chatRoom.lastMessage}</span>
                                         </S.ButtonTextWrapper>
-                                        <S.UnreadCount>{chatRoom.uncheckMessage}</S.UnreadCount>
+                                        <S.UnreadCount isLeft={chatRoom.uncheckMessage !== 0}>{chatRoom.uncheckMessage}</S.UnreadCount>
                                         <span>{chatRoom.dmRoomId}</span>
                                     </S.UserButton>
                                 </S.UserListItem>

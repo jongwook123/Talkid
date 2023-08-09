@@ -93,8 +93,6 @@ io.on('connection', socket => {
             });
             const result = await response.json();
 
-            console.log(result);
-
             io.sockets.to(socket.id).emit('responseChatting', { chats: result.response });
         } catch (e) {
             console.log(e);
@@ -123,7 +121,9 @@ io.on('connection', socket => {
                     ConnectedUserSocket[data.receiver].join(data.roomId);
                 }
 
-                io.sockets.to(data.roomId).emit('responseMessage', { roomId: data.roomId, ...result.response });
+                console.log('response');
+
+                io.sockets.to(data.roomId).emit('responseMessage', { roomId: data.roomId, ...result.response, receiver: data.receiver });
             }
         } catch (e) {
             console.log(e);
