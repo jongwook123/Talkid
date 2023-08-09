@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,10 @@ public class Member {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     @JsonManagedReference
     private List<Exp> exp;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    @JsonManagedReference
+    private List<BookMark> bookMark;
 
     /* ---------------------------------- */
 

@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class GroupJoinMemberDto {
+public class CreateGroupJoinMemberDto {
 
     @Data
     @AllArgsConstructor
@@ -40,8 +40,8 @@ public class GroupJoinMemberDto {
         private int totalExp;
         private int monthExp;
 
-        public static GroupJoinMemberDto.Response groupJoinMemberDto(Member member, int totalExp, int monthExp) {
-            GroupJoinMemberDto.Response response = new GroupJoinMemberDto.Response();
+        public static Response groupJoinMemberDto(Member member, int totalExp, int monthExp) {
+            Response response = new CreateGroupJoinMemberDto.Response();
             response.setMember(member);
             response.setTotalExp(totalExp);
             response.setMonthExp(monthExp);
