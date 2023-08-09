@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { theme } from "styles/Theme"
 import { GlobalStyle } from "styles/GlobalStyle"
 
-import MainPage from "pages/mainPage"
+import MainPage from "pages/mainPage/main"
 import SigninPage from "pages/userPages/signinPage"
 import SignupPage from "pages/userPages/signupPage"
 import UserEditPage from "pages/userPages/userEditPage"
@@ -14,6 +14,12 @@ import GroupPage from "pages/groupPage/groupPage"
 import GroupDetailPage from "pages/groupPage/groupDetailPage"
 import StudentMatchPage from "pages/matchPage/studentMatchPage"
 import TeacherMatchPage from "pages/matchPage/teacherMatchPage"
+
+
+
+
+
+
 
 
 export default function App() {
