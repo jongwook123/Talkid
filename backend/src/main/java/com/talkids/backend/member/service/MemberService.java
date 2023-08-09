@@ -1,11 +1,10 @@
 package com.talkids.backend.member.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
+import com.talkids.backend.member.entity.BookMark;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.dto.*;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +37,19 @@ public interface MemberService {
     /** 임시 비밀번호 생성 **/
     String getTmpPassword() throws NotFoundException;
 
+    /* ------------------------------------------------------*/
+
     /** 사용자 찾기 및 필터링 */
     List<?> findMember(String searchBy, String keyword) throws NotFoundException;
 
+    /* ------------------------------------------------------*/
+
+    /** 북마크 조회 */
+    List<BookMark> getBookMark(Member member) throws NotFoundException;
+
+    /** 북마크 등록 */
+    AddBookMarkDto.Response addBookMark(Member member, AddBookMarkDto.Request req) throws NotFoundException;
+
+    /** 북마크 삭제 */
+    String deleteBookMark(Member member, int bookMarkId) throws NotFoundException;
 }
