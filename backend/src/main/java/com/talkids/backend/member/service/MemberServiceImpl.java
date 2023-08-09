@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
     private final CountryRepository countryRepository;
     private final LanguageRepository languageRepository;
     private final SchoolRepository schoolRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -204,6 +204,8 @@ public class MemberServiceImpl implements MemberService {
         return pwd.toString();
     }
 
+    /* ------------------------------------------------------*/
+
     /** 사용자 찾기 및 필터링 */
     @Override
     public List<?> findMember(String searchBy, String keyword) throws NotFoundException {
@@ -241,6 +243,41 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return ret;
+    }
+
+    /* ------------------------------------------------------*/
+
+    /** 북마크 조회 */
+    @Override
+    public List<BookMark> getBookMark(Member member) throws NotFoundException {
+        return bookMarkRepository.findByMember_MemberId(member.getMemberId());
+    }
+
+    /** 북마크 등록 */
+    @Transactional
+    @Override
+    public AddBookMarkDto.Response addBookMark(Member member, AddBookMarkDto.Request req) throws NotFoundException {
+        BookMark bookMark = bookMarkRepository.save(
+                req.saveBookMarkDto(member)
+        );
+
+        return AddBookMarkDto.Response.BookMarkResponseDto(
+                req.getBookMarkOriContent(),
+                req.getBookMarkTransContent(),
+                bookMark.getCreatedAt()
+        );
+    }
+
+    /** 북마크 삭제 */
+    @Transactional
+    @Override
+    public String deleteBookMark(Member member, int bookMarkId) throws NotFoundException {
+        bookMarkRepository.findByBookMarkId(bookMarkId)
+                        .orElseThrow(()-> new NotFoundException("등록된 북마크가 없습니다."));
+
+        bookMarkRepository.deleteByBookMarkIdAndMember_MemberId(bookMarkId, member.getMemberId());
+
+        return "Success";
     }
 
 }
