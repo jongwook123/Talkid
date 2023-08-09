@@ -30,8 +30,8 @@ public class GroupServiceImpl implements GroupService {
 
     /** 선생님 - 그룹 리스트 조회 */
     @Override
-    public List<Group> getGroupList(int memberId) {
-        return groupRepository.findByGroupJoinMember_Member_MemberIdOrderByCreatedAtDesc(memberId);
+    public List<Group> getGroupList(Member member) throws NotFoundException{
+        return groupRepository.findByGroupJoinMember_Member_MemberIdOrderByCreatedAtDesc(member.getMemberId());
     }
 
     /** 선생님 - 그룹 개설 */
