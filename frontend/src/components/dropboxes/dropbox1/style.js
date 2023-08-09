@@ -47,7 +47,7 @@ export const Button = styled.button`
 export const List = styled.ul`
     width: 100%;
     max-height: 200px;
-    background-color: aqua;
+    overflow-y: scroll;
     position: absolute;
     top: 37px;
     padding: 4px 0;

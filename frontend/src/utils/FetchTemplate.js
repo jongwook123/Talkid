@@ -1,9 +1,9 @@
-const FetchTemplate = ({ path, method, body }) => {
-    const headers = {}
+const FetchTemplate = ({ path, method, body, headers}) => {
+    if (!headers) {
+       headers = {}
+    } 
 
-    if (method !== "GET") {
-        headers["Content-Type"] = "application/json";
-    }
+    headers["Content-Type"] = "application/json";
 
     return fetch(path, {
         method,
