@@ -52,13 +52,13 @@ public class MessageDto {
     @NoArgsConstructor
     public static class Response {
 
-        private String memberMail;
+        private String memberName;
         private String messageContent;
         private LocalDateTime createdAt;
 
-        public static Response messageResponseDto(String memberMail, String messageContent, LocalDateTime createdAt) {
+        public static Response messageResponseDto(String memberName, String messageContent, LocalDateTime createdAt) {
             MessageDto.Response response = new MessageDto.Response();
-            response.setMemberMail(memberMail);
+            response.setMemberName(memberName);
             response.setMessageContent(messageContent);
             response.setCreatedAt(createdAt);
             return response;

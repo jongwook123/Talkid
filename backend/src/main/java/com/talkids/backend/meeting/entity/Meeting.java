@@ -3,6 +3,7 @@ package com.talkids.backend.meeting.entity;
 import com.talkids.backend.group.entity.Group;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -34,5 +35,9 @@ public class Meeting {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="groupRes")
     private Group groupRes;
+
+    @Column(name="createdAt", updatable=false)
+    @CreatedDate
+    private LocalDateTime createdAt;
 
 }

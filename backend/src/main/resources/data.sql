@@ -1,8 +1,8 @@
-INSERT INTO `s09p12d106`.`time_zone` (`hour`, `minute`, `time_zone_name`) VALUES
-(9, 0, "Korea"),
-(8, 0, "China"),
-(-4, 0, "United States"),
-(9, 0, "Japan");
+INSERT INTO `s09p12d106`.`time_zone` (`time_zone_id`, `hour`, `minute`, `time_zone_name`) VALUES
+(1, 9, 0, "Korea"),
+(2, 8, 0, "China"),
+(3, -4, 0, "United States"),
+(4, 9, 0, "Japan");
 
 INSERT INTO `s09p12d106`.`member_type` (`member_type_id`, `member_type_name`) VALUES
 (1, '선생님'),
@@ -408,14 +408,14 @@ INSERT INTO `s09p12d106`.`country` (`country_id`, `country_name`, `country_code`
 (252, 'Zimbabwe', 'ZWE');
 
 
-INSERT INTO `s09p12d106`.`school` (`country_id`, `school_lat`, `school_lng`, `time_zone_id`, `school_address`, `school_name`) VALUES
-(119, 36.027484, 129.343395, 1, "경상북도 포항시 남구 포스코대로 147-10", '이동초등학교'),
-(46, 39.91436584712231, 116.49522427478453, 2, "Beijing, Chaoyang, Balizhuang Rd, 八里庄西里78 邮政编码: 100123", '八里庄西里'),
-(239, 38.88321859907826, -76.98998347524216, 3, "420 12th St SE, Washington, DC 20003", 'Catharine Watkins Elementary School'),
-(112, 35.686626, 139.725081, 4, "160-0004 Tokyo, Shinjuku City, Yotsuya, 2 Chome−６", '新宿区立四谷子ども園');
+INSERT INTO `s09p12d106`.`school` (`school_id`, `country_id`, `school_lat`, `school_lng`, `time_zone_id`, `school_address`, `school_name`) VALUES
+(1, 119, 36.027484, 129.343395, 1, "경상북도 포항시 남구 포스코대로 147-10", '이동초등학교'),
+(2, 46, 39.91436584712231, 116.49522427478453, 2, "Beijing, Chaoyang, Balizhuang Rd, 八里庄西里78 邮政编码: 100123", '八里庄西里'),
+(3, 239, 38.88321859907826, -76.98998347524216, 3, "420 12th St SE, Washington, DC 20003", 'Catharine Watkins Elementary School'),
+(4, 112, 35.686626, 139.725081, 4, "160-0004 Tokyo, Shinjuku City, Yotsuya, 2 Chome−６", '新宿区立四谷子ども園');
 
 
-insert into `s09p12d106`.`badwords`(words) values
+insert into `s09p12d106`.`bad_words`(words) values
 ("fuck"),
 ("shit"),
 ("肉便器"),
