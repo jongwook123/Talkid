@@ -1,6 +1,6 @@
 import FetchTemplate from "utils/FetchTemplate";
 
-export const TryFindPassword = async (email, password) => {
+export const TryFindPassword = async (email) => {
     try {
         const response = await FetchTemplate({
             path: process.env.REACT_APP_BASE_SERVER + '/member/findpw',
