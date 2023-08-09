@@ -23,12 +23,12 @@ public class GroupController {
     private final GroupService groupService;
 
     /** 선생님 - 회원별 그룹 리스트 조회 */
-    @GetMapping("/{memberId}")
-    public ApiResult<?> getGroupList(@LoginUser Member member, @PathVariable int memberId) {
+    @GetMapping
+    public ApiResult<?> getGroupList(@LoginUser Member member) {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
         try{
-            List<Group> result = groupService.getGroupList(memberId);
+            List<Group> result = groupService.getGroupList(member);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);

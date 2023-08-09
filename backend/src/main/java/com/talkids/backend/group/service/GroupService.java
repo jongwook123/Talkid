@@ -12,7 +12,7 @@ import java.util.List;
 public interface GroupService {
 
     /** 선생님 - 그룹 리스트 조회 */
-    List<Group> getGroupList(int memberId) throws NotFoundException;
+    List<Group> getGroupList(Member member) throws NotFoundException;
 
     /** 선생님 - 그룹 개설 */
     int createGroup(Member member, GroupDto.Request req) throws NotFoundException;
