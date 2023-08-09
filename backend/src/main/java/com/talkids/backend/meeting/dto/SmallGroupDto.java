@@ -1,5 +1,6 @@
 package com.talkids.backend.meeting.dto;
 
+import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.meeting.entity.Meeting;
 import com.talkids.backend.meeting.entity.SmallGroup;
@@ -34,4 +35,23 @@ public class SmallGroupDto {
         }
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Response {
+
+        private Integer meetingId;
+        private Integer smallGroupId;
+        private String smallGroupName;
+        private String memberName;
+
+        public static Response smallGroupResponseDto(int meetingId, int smallGroupId, String smallGroupName, String memberName) {
+            Response response = new SmallGroupDto.Response();
+            response.setMeetingId(meetingId);
+            response.setSmallGroupId(smallGroupId);
+            response.setSmallGroupName(smallGroupName);
+            response.setMemberName(memberName);
+            return response;
+        }
+    }
 }

@@ -17,4 +17,8 @@ export const GlobalStyle = createGlobalStyle`
     input {
         padding: 0;
     }
+
+    ul, li, ol {
+        list-style: none;
+    }
 `

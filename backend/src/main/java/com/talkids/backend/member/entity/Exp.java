@@ -1,5 +1,6 @@
 package com.talkids.backend.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,11 +31,12 @@ public class Exp {
 
     @Column(name="createdAt")
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     /* ---------------------------------- */
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberId")
+    @JsonBackReference
     private Member member;
 }

@@ -36,14 +36,16 @@ public class DmRoomDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response {
-        private int memberId;
+
         private String dmRoomId;
+        private String memberName;
         private int uncheckMessage;
         private String lastMessage;
 
-        public static Response messageResponseDto(String dmRoomId, int uncheckMessage, String lastMessage) {
+        public static Response messageResponseDto(String dmRoomId, String memberName, int uncheckMessage, String lastMessage) {
             Response response = new Response();
             response.setDmRoomId(dmRoomId);
+            response.setMemberName(memberName);
             response.setUncheckMessage(uncheckMessage);
             response.setLastMessage(lastMessage);
             return response;
