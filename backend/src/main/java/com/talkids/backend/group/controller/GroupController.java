@@ -3,6 +3,7 @@ package com.talkids.backend.group.controller;
 import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
+import com.talkids.backend.group.dto.CreateGroupDto;
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.entity.Group;
@@ -37,7 +38,7 @@ public class GroupController {
 
     /** 선생님 - 그룹 개설 */
     @PostMapping
-    public ApiResult<?> createGroup(@LoginUser Member member, @Valid @RequestBody GroupDto.Request req) {
+    public ApiResult<?> createGroup(@LoginUser Member member, @Valid @RequestBody CreateGroupDto.Request req) {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 그룹을 만들 수 있습니다", HttpStatus.BAD_REQUEST);
 

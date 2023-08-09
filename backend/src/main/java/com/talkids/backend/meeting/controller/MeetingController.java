@@ -44,7 +44,7 @@ public class MeetingController {
         List<MeetingSchedule> meetingSchedules = meetingService.getMeetingSchedulesByYearAndMonth(year, month);
         
         //내가 속한 그룹을 가져오고
-        List<Group> groups = groupService.getGroupList(member.getMemberId());
+        List<Group> groups = groupService.getGroupList(member);
         Set<Integer> myGroups = new HashSet<>();
         for(Group group: groups) myGroups.add(group.getGroupId());
 
