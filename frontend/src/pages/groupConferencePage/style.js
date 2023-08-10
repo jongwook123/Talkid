@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import IROnly from "styles/IROnly";
 
+export const Main = styled.main`
+
+`
+
 export const SectionChat = styled.section`
     height: 100vh;
     flex-grow: 1;
@@ -40,61 +44,6 @@ export const HeaderButtonNormal = styled(HeaderButton)`
 
 export const HeaderButtonVideo = styled(HeaderButton)`
     color: ${props => props.theme.colors.theme.orange_dark};
-`
-
-export const VideoModalWrapper = styled.div`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    display: ${props => props.visible ? "block" : "none"};
-    background-color: ${props => props.theme.colors.background_color.modal_wrapper};
-`
-
-export const VideoModal = styled.section`
-    width: 400px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 30px;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    border-radius: ${props => props.theme.border_radius.lv3};
-`
-
-export const VideoModalHeader = styled.header`
-    & > h3 {
-        font-size: ${props => props.theme.font_size.lv3_1};
-    }
-
-    & > span {
-        ${IROnly}
-    }
-`
-
-export const VideoButtonWrapper = styled.div`
-    display: flex;
-    gap: 10px;
-`
-
-export const VideoButton = styled.button`
-    width: 100%;
-    border: 0;
-    padding: 8px;
-    margin-top: 30px;
-    font-size: ${props => props.theme.font_size.lv3_1};
-    color: ${props => props.theme.colors.font.white};
-    border-radius: ${props => props.theme.border_radius.lv2};
-`
-
-export const VideoConfirmButton = styled(VideoButton)`
-    background-color: ${props => props.theme.colors.theme.green_dark};
-`
-
-export const VideoRejectButton = styled(VideoButton)`
-    background-color: ${props => props.theme.colors.theme.orange_dark};
 `
 
 export const DictionaryWrapper = styled.div`

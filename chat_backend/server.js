@@ -12,7 +12,7 @@ const ConnectedUsers = [];
 const ConnectedUserRooms = {};
 const ConnectedUserSocket = {};
 
-const backendServer = 'http://192.168.100.122:8080';
+const backendServer = 'http://i9d106.p.ssafy.io:8080';
 
 app.use(cors());
 
@@ -66,7 +66,7 @@ io.on('connection', socket => {
                 }
             });
 
-            console.log(data.userMail + " get chat rooms");
+            console.log(data.userMail + " get chat rooms : " + [...userRooms]);
 
             io.sockets.to(socket.id).emit('responseRooms', { rooms: userRooms });
         } catch (e) {
@@ -121,13 +121,69 @@ io.on('connection', socket => {
                     ConnectedUserSocket[data.receiver].join(data.roomId);
                 }
 
-                console.log('response');
-
                 io.sockets.to(data.roomId).emit('responseMessage', { roomId: data.roomId, ...result.response, receiver: data.receiver });
             }
         } catch (e) {
             console.log(e);
         }
+    });
+
+    // 비디오 관련
+    socket.on('requestVideo', async data => {
+        console.log(data);
+
+        if (!ConnectedUsers.includes(data.receiver)) {
+            io.sockets.to(socket.id).emit('receiverNotExist');
+        } else {
+            io.sockets.to(ConnectedUserSocket[data.receiver].id).emit('responseVideo', data = {...data});
+        }
+    });
+
+    socket.on('requestVideoReject', async data => {
+        if (!ConnectedUsers.includes(data.receiver)) {
+            io.sockets.to(socket.id).emit('receiverNotExist');
+        } else {
+            io.sockets.to(ConnectedUserSocket[data.receiver].id).emit('responseVideoReject');
+        }
+    });
+
+    socket.on('requestVideoAccept', async data => {
+        if (!ConnectedUsers.includes(data.receiver)) {
+            io.sockets.to(socket.id).emit('receiverNotExist');
+        } else {
+            io.sockets.to(ConnectedUserSocket[data.receiver].id).emit('responseVideoAccept', data = {...data});
+        }
+    });
+
+    // 그룹 채팅
+    socket.on('joinGroupConference', data => {
+        console.log('join group', data);
+
+        // if (ConnectedUsers.includes(data.userMail)) {
+        //     console.log("user " + data.userMail + " is already connected");
+
+        //     return;
+        // }
+
+        // ConnectedUsers.push(data.userMail);
+        // ConnectedUserSocket[data.userMail] = socket;
+
+        // console.log('User ' + data.userMail + ' connected');
+    });
+
+    socket.on('exitGroupConference', data => {
+        console.log('exit group', data);
+
+        // if (!ConnectedUsers.includes(data.userMail)) {
+        //     console.log("user " + data.userMail + " is already disconnected");
+
+        //     return;
+        // }
+
+        // ConnectedUsers.splice(ConnectedUsers.indexOf(data.userMail), 1);
+        // delete ConnectedUserRooms[data.userMail];
+
+        // console.log('User ' + data.userMail + ' disconnected');
     });
 });
 

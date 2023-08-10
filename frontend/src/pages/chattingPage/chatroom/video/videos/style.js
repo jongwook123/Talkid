@@ -5,6 +5,7 @@ export const VideoList = styled.ul`
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 50px;
 `
 
 export const VideoListItem = styled.li`
@@ -15,4 +16,8 @@ export const VideoListItem = styled.li`
     & > video {
         width: 100%;
     }
+`
+
+export const Translated = styled.p`
+    position: absolute;
 `

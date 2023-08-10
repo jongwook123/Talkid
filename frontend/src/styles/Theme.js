@@ -17,7 +17,8 @@ export const theme = {
         background_color: {
             white: "#FFFFFF",
             light_gray: "#7C7C7C",
-            gray: "#A6A6A6"
+            gray: "#A6A6A6",
+            modal_wrapper: "rgba(200, 200, 200, 0.6)",
         },
         border: {
             light_gray: "#DDDDDD",

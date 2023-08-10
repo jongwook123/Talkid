@@ -12,7 +12,7 @@ import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import TranslateIcon from '@mui/icons-material/Translate';
 import PhoneDisabledIcon from '@mui/icons-material/PhoneDisabled';
 
-export default function Video({ props: { videoClicked, setVideoClicked, room, user } }) {
+export default function Video({ props: { videoStart, setVideoStart, room, user } }) {
     const [headsetOn, setHeadsetOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
     const [translateOn, setTranslateOn] = useState(false);
@@ -31,11 +31,11 @@ export default function Video({ props: { videoClicked, setVideoClicked, room, us
     }
 
     const onClickVideoOff = () => {
-        setVideoClicked(false);
+        setVideoStart(false);
     }
-
+    
     return (
-        <S.Section videoClicked={videoClicked}>
+        <S.Section videoStart={videoStart}>
             <S.SectionHeader>
                 <h3>화상 회의 영역</h3>
                 <S.HeaderList>
@@ -72,10 +72,10 @@ export default function Video({ props: { videoClicked, setVideoClicked, room, us
                 </S.HeaderList>
             </S.SectionHeader>
             {
-                videoClicked &&
+                videoStart &&
                 <>
-                    <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn }} />
-                    <Texts props={{ setPropagate }} />
+                    {/* <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn, translateOn }} />
+                    <Texts props={{ setPropagate }} /> */}
                 </>
             }
         </S.Section>

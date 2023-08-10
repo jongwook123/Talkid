@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-const TRANSLATION_SERVER_URL = 'http://192.168.100.159:8091';
-
 function usePrevious(value) {
     const ref = useRef();
 
@@ -63,7 +61,7 @@ export default function Texts({ props: { setPropagate } }) {
             prev.setPrevText("");
         } else {
             const translate = async () => {
-                const response = await fetch(TRANSLATION_SERVER_URL + '/ko/en/' + transcript);
+                const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + '/ko/en/' + transcript);
                 const result = await response.json();
 
                 setTranslate(result.translated);

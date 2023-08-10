@@ -2,15 +2,27 @@ import { useCallback, useEffect, useState } from 'react'
 
 import * as S from './style';
 
+import ChatPageSearch from 'components/searchInput/chatpagesearch';
 import ChatRoom from '../chatroom';
 
 export default function ChatList({ props: { socketUpdated, socket, user } }) {
+    const [input, setInput] = useState("");
     const [selectedRoom, setSelectedRoom] = useState({});
     const [chatRooms, setChatRooms] = useState([]);
 
     const updateChatRooms = useCallback((data) => {
+        // 나중에 지우기
+        if (data.rooms.length === 0 && user.memberMail === "lwc@naver.com") {
+            socket.emit("joinRoom", {
+                sender: user.memberMail,
+                receiver: "sdh@naver.com",
+            });
+
+            return;
+        }
+
         setChatRooms(data.rooms);
-    }, [setChatRooms]);
+    }, [setChatRooms, user, socket]);
 
     useEffect(() => {
         if (!socket) {
@@ -38,13 +50,14 @@ export default function ChatList({ props: { socketUpdated, socket, user } }) {
         setSelectedRoom(selected[0]);
     }
 
+    const onChangeInput = (e) => {
+        setInput(e.target.value);
+    }
+
     return (
         <>
             <S.SectionUser>
-                <S.UserForm>
-                    <label htmlFor="userInput">대화 검색</label>
-                    <S.UserInput id='userInput' placeholder='대화 찾기' />
-                </S.UserForm>
+                <ChatPageSearch props={{ id: 'userInput', placeholder: '대화 찾기', onChangeInput, input }} />
                 <S.UserHeader>
                     <h2>Direct Message</h2>
                 </S.UserHeader>
@@ -68,7 +81,7 @@ export default function ChatList({ props: { socketUpdated, socket, user } }) {
 
                 </S.UserList>
             </S.SectionUser>
-            <ChatRoom props={{ socket, room: selectedRoom, setChatRooms, user }} />
+            <ChatRoom props={{ socket, room: selectedRoom, setChatRooms, user, chatRooms, setSelectedRoom }} />
         </>
     )
 }

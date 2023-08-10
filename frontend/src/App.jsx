@@ -16,6 +16,8 @@ import FindPasswordPage from "pages/userPages/findpasswordPage"
 // chatting pages
 import ChattingPage from "pages/chattingPage"
 
+// video reference pates
+import GroupConferencePage from "pages/groupConferencePage"
 
 export default function App() {
     return (
@@ -32,7 +34,8 @@ export default function App() {
 
                     {/* 채팅, 화상 관련 */}
                     {/* <Route path="/chattingtest" element={<ChattingPages />} /> */}
-                    <Route path="/chatting" element={<ChattingPage />} />
+                    <Route path="/chatting" element={<ChattingPage />} /> 
+                    <Route path="/conference" element={<GroupConferencePage />} /> 
                     
                     
                 </Routes>

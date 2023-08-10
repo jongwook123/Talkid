@@ -5,8 +5,6 @@ import * as S from './style';
 
 import ChatVideo from 'components/videos/chatvideo';
 
-const SOCKET_SERVER_URL = 'http://192.168.100.159:8090';
-
 const pc_config = {
 	iceServers: [
 		{
@@ -15,7 +13,7 @@ const pc_config = {
 	],
 };
 
-export default function Videos({ props: { propagate, room, nowUser, videoOn, headsetOn } }) {
+export default function Videos({ props: { propagate, room, nowUser, videoOn, headsetOn, translateOn } }) {
 	const socketRef = useRef();
 	const pcsRef = useRef({});
 	const localVideoRef = useRef(null);
@@ -118,7 +116,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 	}, []);
 
 	useEffect(() => {
-		socketRef.current = io.connect(SOCKET_SERVER_URL);
+		socketRef.current = io.connect(process.env.REACT_APP_VIDEO_SERVER);
 
 		getLocalStream();
 
@@ -306,7 +304,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 				/>
 			</S.VideoListItem>
 			{users.map((user, index) => (
-				<ChatVideo key={index} email={user.email} stream={user.stream} translated={translated[user.email]} />
+				<ChatVideo key={index} email={user.email} stream={user.stream} translated={translated[user.email]} translateOn />
 			))}
 		</S.VideoList>
 	);

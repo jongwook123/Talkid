@@ -7,13 +7,15 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import Dictionary from "./dictionary";
 import BookIcon from '@mui/icons-material/Book';
 
-export default function ChatRoom({ props: { socket, room, setChatRooms, user } }) {
+export default function ChatRoom({ props: { socket, room, setChatRooms, user, chatRooms, setSelectedRoom } }) {
     const [arrivalChat, setArrivalChat] = useState({});
     const [chats, setChats] = useState([]);
     const [newChat, setNewChat] = useState("");
     const messageEndRef = useRef(null);
     const [videoClicked, setVideoClicked] = useState(false);
+    const [videoStart, setVideoStart] = useState(false);
     const [dictionaryClicked, setDictionaryClicked] = useState(false);
+    const videoTextRef = useRef(null);
 
     const getTimeString = (createdAt) => {
         const isCreated = new Date(createdAt);
@@ -67,7 +69,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
     }, [setChatRooms]);
 
     const responseChat = useCallback((data) => {
-        setChats([...data.chats].reverse());
+        setChats([...data.chats].reverse().map(chat => { return { ...chat, translate: "" } }));
     }, [setChats]);
 
     const responseMessage = useCallback((data) => {
@@ -77,17 +79,62 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
             return;
         }
 
-        setArrivalChat({ memberName: data.memberName, messageContent: data.messageContent, createdAt: data.createdAt });
+        setArrivalChat({ memberName: data.memberName, messageContent: data.messageContent, createdAt: data.createdAt, translate: "" });
     }, [room, updateChatList, setArrivalChat]);
+
+    const receiverNotExist = useCallback((data) => {
+        if (!videoTextRef.current) {
+            return;
+        }
+
+        setVideoClicked(false);
+        setVideoStart(false)
+        videoTextRef.current.innerText = "영상 통화 모달";
+    }, [videoTextRef, setVideoClicked, setVideoStart]);
+
+    const responseVideo = useCallback((data) => {
+        if (!videoTextRef.current) {
+            return;
+        }
+
+        setSelectedRoom(chatRooms.filter(chatRoom => chatRoom.dmRoomId === data.roomId)[0]);
+        videoTextRef.current.innerText = data.sender_name + "(으)로 부터 온 전화";
+
+        setVideoClicked(true);
+    }, [videoTextRef, setVideoClicked, setSelectedRoom, chatRooms]);
+
+    const responseVideoAccept = useCallback((data) => {
+        setVideoClicked(false);
+        setVideoStart(true);
+    }, [setVideoClicked, setVideoStart]);
+
+    const responseVideoReject = useCallback(() => {
+        if (!videoTextRef.current) {
+            return;
+        }
+
+        videoTextRef.current.innerText = "영상 통화 모달";
+
+        setVideoClicked(false);
+        setVideoStart(false)
+    }, [videoTextRef, setVideoClicked, setVideoStart]);
 
     useEffect(() => {
         socket.on('responseChatting', responseChat);
         socket.on('responseMessage', responseMessage);
+        socket.on('responseVideo', responseVideo);
+        socket.on('receiverNotExist', receiverNotExist);
+        socket.on('responseVideoAccept', responseVideoAccept);
+        socket.on('responseVideoReject', responseVideoReject);
 
         if (!room.dmRoomId) {
             return () => {
                 socket.off('responseChatting', responseChat);
                 socket.off('responseMessage', responseMessage);
+                socket.off('responseVideo', responseVideo);
+                socket.off('receiverNotExist', receiverNotExist);
+                socket.off('responseVideoAccept', responseVideoAccept);
+                socket.off('responseVideoReject', responseVideoReject);
             };
         }
 
@@ -99,8 +146,12 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
         return () => {
             socket.off('responseChatting', responseChat);
             socket.off('responseMessage', responseMessage);
+            socket.off('responseVideo', responseVideo);
+            socket.off('receiverNotExist', receiverNotExist);
+            socket.off('responseVideoAccept', responseVideoAccept);
+            socket.off('responseVideoReject', responseVideoReject);
         }
-    }, [room, socket, responseChat, responseMessage, user]);
+    }, [room, socket, responseChat, responseMessage, user, responseVideo, receiverNotExist, responseVideoAccept, responseVideoReject]);
 
     useEffect(() => {
         if (!arrivalChat.memberName) {
@@ -133,9 +184,10 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
         })
     }, [room, setChatRooms]);
 
-    if (!room.dmRoomId) {
-        return;
-    }
+    useEffect(() => {
+        setVideoClicked(false);
+        setVideoStart(false)
+    }, [room]);
 
     const sendMessage = async (e) => {
         e.preventDefault();
@@ -154,17 +206,54 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
         setNewChat('');
     }
 
-    const onChangeInput = (e) => {
+    const onChangeInput = useCallback((e) => {
         setNewChat(e.target.value);
-    }
+    }, [setNewChat]);
 
-    const onClickVideoOn = () => {
+    const onClickVideoRequest = useCallback(() => {
+        socket.emit('requestMessage', {
+            "roomId": room.dmRoomId,
+            "sender": user.memberMail,
+            "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
+            "messageContent": user.memberName + '으로 부터의 영상 통화',
+            "readCheck": false,
+        });
+
+        socket.emit('requestVideo', {
+            "roomId": room.dmRoomId,
+            "sender": user.memberMail,
+            "sender_name": user.memberName,
+            "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
+        });
+
+        videoTextRef.current.innerText = room.memberName + "에게 전화 거는 중";
+
         setVideoClicked(true);
-    }
+    }, [setVideoClicked, socket, room, user, videoTextRef]);
 
-    const onClickDictionary = () => {
+    const onClickVideoConfirm = useCallback(() => {
+        socket.emit('requestVideoAccept', {
+            "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
+        });
+
+        setVideoClicked(false);
+        setVideoStart(true);
+    }, [socket, room, user, setVideoClicked, setVideoStart]);
+
+    const onClickVideoRejcet = useCallback(() => {
+        socket.emit('requestVideoReject', {
+            "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
+        });
+
+        videoTextRef.current.innerText = "영상 통화 모달";
+
+        setVideoClicked(false);
+        setVideoStart(false);
+    }, [socket, videoTextRef, setVideoClicked, setVideoStart, user, room]);
+
+    const onClickDictionary = useCallback(() => {
         setDictionaryClicked(clicked => !clicked);
-    }
+    }, [setDictionaryClicked]);
 
     const getDay = (isCreated) => {
         let day = '';
@@ -203,118 +292,165 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user } }
             <S.SectionChat>
                 <S.HeaderChat>
                     <h2>{room.memberName}</h2>
-                    <S.HeaderButtonNormal onClick={onClickVideoOn} visible={!videoClicked}>
+                    <S.HeaderButtonNormal onClick={onClickVideoRequest} visible={!videoStart && room.dmRoomId}>
                         <AddIcCallIcon />
                     </S.HeaderButtonNormal>
                     <S.HeaderButtonNormal onClick={onClickDictionary} visible={true}>
                         <BookIcon />
                     </S.HeaderButtonNormal>
                 </S.HeaderChat>
-                <S.DictionaryWrapper>
-                    <S.VideoWrapper>
-                        <Video props={{ videoClicked, setVideoClicked, room, user }} />
-                        <S.ListChat>
+                <S.VideoModalWrapper visible={videoClicked}>
+                    <S.VideoModal>
+                        <S.VideoModalHeader>
+                            <h3 ref={videoTextRef}>영상 통화 모달</h3>
+                        </S.VideoModalHeader>
+                        <S.VideoButtonWrapper>
                             {
-                                chats.map((chat, index) => {
-                                    let displayTime = true;
-                                    const timeValue = getTimeString(chat.createdAt);
-                                    let displayDate = false;
-                                    let today = '';
-                                    let displayProfile = false;
+                                videoTextRef && videoTextRef.current && !videoTextRef.current.innerText.includes("에게") && <S.VideoConfirmButton onClick={onClickVideoConfirm}>confirm</S.VideoConfirmButton>
+                            }
+                            <S.VideoRejectButton onClick={onClickVideoRejcet}>reject</S.VideoRejectButton>
+                        </S.VideoButtonWrapper>
+                    </S.VideoModal>
+                </S.VideoModalWrapper>
+                <S.DictionaryWrapper>
+                    {
+                        room.dmRoomId && <S.VideoWrapper>
+                            <Video props={{ videoStart, setVideoStart, room, user, socket }} />
+                            <S.ListChat>
+                                {
+                                    chats.map((chat, index) => {
+                                        let displayTime = true;
+                                        const timeValue = getTimeString(chat.createdAt);
+                                        let displayDate = false;
+                                        let today = '';
+                                        let displayProfile = false;
 
-                                    const isCreated = new Date(chat.createdAt);
-                                    isCreated.setHours(isCreated.getHours());
+                                        const isCreated = new Date(chat.createdAt);
+                                        isCreated.setHours(isCreated.getHours());
 
-                                    if (index !== chats.length - 1) {
-                                        const nextSender = chats[index + 1].memberName;
+                                        if (index !== chats.length - 1) {
+                                            const nextSender = chats[index + 1].memberName;
 
-                                        if (nextSender === chat.memberName) {
-                                            const nextTimeValue = getTimeString(chats[index + 1].createdAt);
+                                            if (nextSender === chat.memberName) {
+                                                const nextTimeValue = getTimeString(chats[index + 1].createdAt);
 
-                                            if (nextTimeValue === timeValue) {
-                                                displayTime = false;
+                                                if (nextTimeValue === timeValue) {
+                                                    displayTime = false;
+                                                }
                                             }
                                         }
-                                    }
 
-                                    if (index !== 0) {
-                                        const prevCreated = new Date(chats[index - 1].createdAt);
-                                        prevCreated.setHours(prevCreated.getHours());
+                                        if (index !== 0) {
+                                            const prevCreated = new Date(chats[index - 1].createdAt);
+                                            prevCreated.setHours(prevCreated.getHours());
 
-                                        if (isCreated.getDate() !== prevCreated.getDate()) {
+                                            if (isCreated.getDate() !== prevCreated.getDate()) {
+                                                displayDate = true;
+                                                today = `${isCreated.getMonth() + 1}월 ${isCreated.getDate()}일 ${getDay(isCreated)}요일`;
+                                            }
+                                        }
+
+                                        if (index === 0) {
                                             displayDate = true;
                                             today = `${isCreated.getMonth() + 1}월 ${isCreated.getDate()}일 ${getDay(isCreated)}요일`;
                                         }
-                                    }
 
-                                    if (index === 0) {
-                                        displayDate = true;
-                                        today = `${isCreated.getMonth() + 1}월 ${isCreated.getDate()}일 ${getDay(isCreated)}요일`;
-                                    }
+                                        if (index !== 0) {
+                                            const prevSender = chats[index - 1].memberName;
+                                            const prevCreatedDate = new Date(chats[index - 1].createdAt);
+                                            prevCreatedDate.setHours(prevCreatedDate.getHours())
 
-                                    if (index !== 0) {
-                                        const prevSender = chats[index - 1].memberName;
-                                        const prevCreatedDate = new Date(chats[index - 1].createdAt);
-                                        prevCreatedDate.setHours(prevCreatedDate.getHours())
-
-                                        if (prevSender !== chat.memberName || prevCreatedDate.getDate() !== isCreated.getDate()) {
+                                            if (prevSender !== chat.memberName || prevCreatedDate.getDate() !== isCreated.getDate()) {
+                                                displayProfile = true;
+                                            }
+                                        } else {
                                             displayProfile = true;
                                         }
-                                    } else {
-                                        displayProfile = true;
-                                    }
 
-                                    return (
-                                        <S.ChatWrapper key={"" + chat.messageContent + index + chat.memberName}>
-                                            {
-                                                <>
-                                                    {
-                                                        displayDate && <S.Datewrapper>{today}</S.Datewrapper>
-                                                    }
-                                                    {
-                                                        chat.memberName === user.memberName
-                                                            ? <S.MyChatWrapper>
-                                                                {
-                                                                    (displayProfile) && <S.MyUserName>{chat.memberName}</S.MyUserName>
-                                                                }
-                                                                <S.TimeWrapper>
-                                                                    {
-                                                                        displayTime && <S.Time>{timeValue}</S.Time>
-                                                                    }
-                                                                    <S.MyChat>{chat.messageContent}</S.MyChat>
-                                                                </S.TimeWrapper>
-                                                            </S.MyChatWrapper>
-                                                            : <S.OppositeChatWrapper>
-                                                                {
-                                                                    (displayProfile) && <S.OppositeUserName>{chat.memberName}</S.OppositeUserName>
-                                                                }
-                                                                <S.TimeWrapper>
-                                                                    <S.OppositeChat>{chat.messageContent}</S.OppositeChat>
-                                                                    {
-                                                                        displayTime && <S.Time>{timeValue}</S.Time>
-                                                                    }
-                                                                </S.TimeWrapper>
-                                                            </S.OppositeChatWrapper>
-                                                    }
-                                                </>
-                                            }
-                                        </S.ChatWrapper>
+                                        const Translate = async () => {
+                                            const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + '/ko/en/' + chat.messageContent);
+                                            const result = await response.json();
 
-                                    )
-                                })
-                            }
-                            <li>
-                                <div ref={messageEndRef}></div>
-                            </li>
-                        </S.ListChat>
-                        <S.FormWrapper>
-                            <S.FormChat>
-                                <label htmlFor="newChat">대화 입력</label>
-                                <S.FormInput id="newChat" value={newChat} onChange={onChangeInput} placeholder="Send Message" />
-                                <S.FormButton onClick={sendMessage}>send</S.FormButton>
-                            </S.FormChat>
-                        </S.FormWrapper>
-                    </S.VideoWrapper>
+                                            setChats(chats => chats.map(c => {
+                                                if (c.memberName === chat.memberName && c.messageContent === chat.messageContent && c.createdAt === chat.createdAt) {
+                                                    return {
+                                                        ...c,
+                                                        translate: result.translated,
+                                                    }
+                                                } else {
+                                                    return c;
+                                                }
+                                            }))
+                                        }
+
+                                        return (
+                                            <S.ChatWrapper key={"" + chat.messageContent + index + chat.memberName}>
+                                                {
+                                                    <>
+                                                        {
+                                                            displayDate && <S.Datewrapper>{today}</S.Datewrapper>
+                                                        }
+                                                        {
+                                                            chat.memberName === user.memberName
+                                                                ? <S.MyChatWrapper>
+                                                                    {
+                                                                        (displayProfile) && <S.MyUserName>{chat.memberName}</S.MyUserName>
+                                                                    }
+                                                                    <S.TimeWrapper>
+                                                                        {
+                                                                            <S.TranslateWrapper>
+                                                                                {
+                                                                                    !chat.translate && <S.TranslateButton onClick={Translate}>번역</S.TranslateButton>
+                                                                                }
+                                                                                {displayTime && <S.Time>{timeValue}</S.Time>}
+                                                                            </S.TranslateWrapper>
+                                                                        }
+                                                                        <S.MyChat>{chat.messageContent}</S.MyChat>
+                                                                    </S.TimeWrapper>
+                                                                    {
+                                                                        chat.translate && <S.TranslateTextMy>{chat.translate}</S.TranslateTextMy>
+                                                                    }
+                                                                </S.MyChatWrapper>
+                                                                : <S.OppositeChatWrapper>
+                                                                    {
+                                                                        (displayProfile) && <S.OppositeUserName>{chat.memberName}</S.OppositeUserName>
+                                                                    }
+                                                                    <S.TimeWrapper>
+                                                                        <S.OppositeChat>{chat.messageContent}</S.OppositeChat>
+                                                                        {
+                                                                            <S.TranslateWrapper>
+                                                                                {
+                                                                                    !chat.translate && <S.TranslateButton onClick={Translate}>번역</S.TranslateButton>
+                                                                                }
+                                                                                {displayTime && <S.Time>{timeValue}</S.Time>}
+                                                                            </S.TranslateWrapper>
+                                                                        }
+                                                                    </S.TimeWrapper>
+                                                                    {
+                                                                        chat.translate && <S.TranslateTextOpposite>{chat.translate}</S.TranslateTextOpposite>
+                                                                    }
+                                                                </S.OppositeChatWrapper>
+                                                        }
+                                                    </>
+                                                }
+                                            </S.ChatWrapper>
+
+                                        )
+                                    })
+                                }
+                                <li>
+                                    <div ref={messageEndRef}></div>
+                                </li>
+                            </S.ListChat>
+                            <S.FormWrapper>
+                                <S.FormChat>
+                                    <label htmlFor="newChat">대화 입력</label>
+                                    <S.FormInput id="newChat" value={newChat} onChange={onChangeInput} placeholder="Send Message" />
+                                    <S.FormButton onClick={sendMessage}>send</S.FormButton>
+                                </S.FormChat>
+                            </S.FormWrapper>
+                        </S.VideoWrapper>
+                    }
                     <Dictionary props={{ dictionaryClicked }} />
                 </S.DictionaryWrapper>
             </S.SectionChat >

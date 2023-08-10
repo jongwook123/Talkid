@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as S from './style';
 
-const ChatVideo = ({ stream, muted }) => {
+const ChatVideo = ({ stream, muted, translated, translateOn }) => {
     const ref = useRef(null);
     const [isMuted, setIsMuted] = useState(false);
 
@@ -16,9 +16,12 @@ const ChatVideo = ({ stream, muted }) => {
     }, [stream, muted]);
 
     return (
-        <>
-            <S.VideoContainer ref={ref} muted={isMuted} autoPlay />
-        </>
+        <S.VideoWrapper>
+            <video ref={ref} muted={isMuted} autoPlay />
+            {
+                translateOn && <S.Translated>{translated}</S.Translated>
+            }
+        </S.VideoWrapper>
     );
 };
 
