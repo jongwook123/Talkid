@@ -36,5 +36,7 @@ public interface GroupService {
 
     /** 선생님 - 학생 관리 */
     List<?> studentManagement(Member member, int groupId) throws NotFoundException;
-
+    
+    /** 그룹 - 그룹의 선생님 찾기 */
+    Member getGroupTeacher(Group group);
 }
