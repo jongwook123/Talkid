@@ -1,5 +1,6 @@
 package com.talkids.backend.config;
 
+import com.talkids.backend.common.handler.SocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;

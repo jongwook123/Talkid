@@ -3980,4 +3980,19 @@ insert into `s09p12d106`.`bad_words`(words) values
 ("豔乳"),
 ("豔婦淫女"),
 ("豔情小說"),
-("豔舞淫業")
+("豔舞淫業");
+
+INSERT INTO `s09p12d106`.`member`(member_id, member_active, member_filter_count, member_image, member_introduce, member_mail, member_name, member_password, refresh_token, country_id, language_id, member_type_id, school_id, created_at) VALUES
+(1, 1, 0, "", "yys입니다", 'yys@naver.com','유영서','$2a$10$PtrNph/TZPOl75ECj71QB.p00h4C0yi4HJ/DKsMFm4Il3ugK8HHUi','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTM0NDh9.8h3vyRAYv8HmdZk_S-55QkcFkOYWXl6AKff_M72NrtI', 1, 1, 1, 1, '2023-08-07 07:38:50.486373'),
+(2, 1, 0, "", "lwc입니다", 'lwc@naver.com','이우철','$2a$10$1jLLJvvEUGlfi/MvjhwMaerF72homNo3ZKdB0.8FArr3DDEnTyPr6','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTMxNTh9.MPEEBxvzYzGhEck5klV9cgNpFNwC_IlYu0P85G_R9Is', 1, 1, 2, 1, '2023-08-08 07:38:50.486373'),
+(3, 1, 0, "", "pju입니다", 'pju@naver.com','박종욱','$2a$10$5pUP9XbxW0zx4FW7/BZWZeGKRgpodpYy0Jsr.aL1DtC79iTReiApm', null, 1, 1, 2, 1, '2023-08-09 07:38:50.486373'),
+(4, 1, 0, "", "ksy입니다", 'ksy@naver.com','김선영','$2a$10$FJJrfrF.C4nwpCFPIVAiz.45bdvc4RT.jRrlX9SE3ls5RdAEGWtnC','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTMyMjh9.AjTrYqy1oytVlstAlNvjGaSsZewqNo6yTbHnoQmr7tc', 1, 1, 2, 1, '2023-08-09 07:38:50.486373'),
+(5, 1, 0, "", "sdh입니다", 'sdh@naver.com','서동현','$2a$10$BGCxZBi1AkAZx6tD8BgJ5eDpaB6pHfSZPHyUxtvBy1KR74A93o2H.', null, 1, 1, 2, 1, '2023-08-09 07:38:50.486373');
+
+
+INSERT INTO `s09p12d106`.`class` VALUES
+(1,'2023-08-09 07:38:50.486373','yys\'s group1','1');
+
+INSERT INTO `s09p12d106`.`group_join_member`(group_join_member_id, group_id, member_id, created_at) VALUES
+(1, 1, 1, '2023-08-08 07:38:50.486373'),
+(2, 1, 2, '2023-08-09 07:38:50.486373');

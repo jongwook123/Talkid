@@ -186,4 +186,17 @@ public class GroupServiceImpl implements GroupService {
 
         return joinMember;
     }
+    
+    /** 그룹 - 그룹의 선생님 찾기 */
+    @Override
+    public Member getGroupTeacher(Group group) {
+        List<GroupJoinMember> groupJoinMembers = group.getGroupJoinMember();
+        for(GroupJoinMember groupJoinMember : groupJoinMembers){
+            if(groupJoinMember.getMember().getMemberType().getMemberTypeId() == 1){
+                //선생님을 찾을 경우
+                return groupJoinMember.getMember();
+            }
+        }
+        return null;    //없을 경우 null을 반환, 할 경우는 없다
+    }
 }
