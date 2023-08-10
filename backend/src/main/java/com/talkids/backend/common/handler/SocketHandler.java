@@ -45,7 +45,6 @@ public class SocketHandler extends TextWebSocketHandler {
                 Member member = memberService.getMember(auth.getName());
                 
                 socketService.addMemberSession(member, session);    //해당 멤버가 해당 세션으로 연결되어있다고 표시
-                socketService.sendInitNotify(member);                //읽지 않은 알람 등 초기에 보내줘야할거를 보내주자
             }
         }
     }

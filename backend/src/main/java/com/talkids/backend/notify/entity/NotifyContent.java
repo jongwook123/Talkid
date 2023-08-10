@@ -4,6 +4,7 @@ import com.talkids.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class NotifyContent {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

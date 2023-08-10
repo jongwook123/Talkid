@@ -63,7 +63,7 @@ public class SocketService {
         memberIdToSessionId.put(memberId, sessionId);   //역방향도 넣어주자
     }
     //멤버로 소켓 보내기 요청 (해당 멤버가 소켓 연결이 되어있다고 확실할 때 사용)
-    public void memberSend(Member member, Map<String, String> content){
+    public void memberSend(Member member, Map<String, String> content, Success success){
         Integer memberId = member.getMemberId();
         WebSocketSession session = members.get(memberId);
         //연결이 되어 있으면
@@ -72,6 +72,7 @@ public class SocketService {
             String jsonString = mapper.writeValueAsString(content);
             TextMessage message = new TextMessage(jsonString);
             session.sendMessage(message); //보내주자
+            success.execute(member);
         } catch(Exception e){}
     }
 
@@ -104,10 +105,6 @@ public class SocketService {
             Member member = groupJoinMember.getMember();
             memberSend(member, content, success, fail); //알림을 보내자
         }
-    }
-    
-    //접속 시 초기 알람 등 읽지 않은 거에 대해서 보내주자
-    public void sendInitNotify(Member member) {
     }
     
     public interface Success{

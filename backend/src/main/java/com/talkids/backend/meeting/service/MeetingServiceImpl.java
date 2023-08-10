@@ -204,11 +204,11 @@ public class MeetingServiceImpl implements MeetingService{
         meetingScheduleRepository.delete(meetingSchedule);
         
         StringBuilder headBuilder = new StringBuilder("");
-        headBuilder.append(meetingStart.getMonth()).append(".").append(meetingStart.getDayOfMonth())
-            .append(" ").append(meetingStart.getMonthValue()).append(":").append(meetingStart.getMinute())
+        headBuilder.append(meetingStart.getMonthValue()).append(".").append(meetingStart.getDayOfMonth())
+            .append(" ").append(meetingStart.getHour()).append(":").append(meetingStart.getMinute())
             .append(" ~ ")
-            .append(meetingEnd.getMonth()).append(".").append(meetingEnd.getDayOfMonth())
-            .append(" ").append(meetingEnd.getMonthValue()).append(":").append(meetingEnd.getMinute())
+            .append(meetingEnd.getMonthValue()).append(".").append(meetingEnd.getDayOfMonth())
+            .append(" ").append(meetingEnd.getHour()).append(":").append(meetingEnd.getMinute())
             .append("미팅이 있습니다");
         
         CreateNotifyDto.Request body = CreateNotifyDto.Request.builder()
