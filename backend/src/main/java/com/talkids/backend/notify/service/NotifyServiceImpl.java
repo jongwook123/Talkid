@@ -54,7 +54,7 @@ public class NotifyServiceImpl implements NotifyService{
       NotifyReceiver notifyReceiver = NotifyReceiver.builder()
                                       .notifyContent(savedNotifyContent)  //알림의 내용
                                       .member(m)                          //수신자
-                                      .notifyReceiverChecked(true)         //읽은 내용이라고 넣기
+                                      .notifyReceiverChecked(false)         //읽은 내용이라고 넣기
                                           .build();
       notifyReceiverRepository.save(notifyReceiver);  //내용은 저장
     },
