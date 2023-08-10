@@ -10,7 +10,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +73,8 @@ public class Member {
     @JoinColumn(name="countryId")
     private Country country;
 
+    /* ---------------------------------- */
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     @JsonManagedReference
     private List<Exp> exp;
@@ -81,6 +82,9 @@ public class Member {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     @JsonManagedReference
     private List<BookMark> bookMark;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private List<Follower> followers = new ArrayList<>();
 
     /* ---------------------------------- */
 

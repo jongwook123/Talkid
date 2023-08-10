@@ -17,8 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
     private final LanguageRepository languageRepository;
     private final SchoolRepository schoolRepository;
     private final BookMarkRepository bookMarkRepository;
+    private final FollowerRepository followerRepository;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -278,6 +281,82 @@ public class MemberServiceImpl implements MemberService {
         bookMarkRepository.deleteByBookMarkIdAndMember_MemberId(bookMarkId, member.getMemberId());
 
         return "Success";
+    }
+
+    /* ------------------------------------------------------*/
+
+    /** 팔로우, 언팔로우 */
+    @Transactional
+    @Override
+    public FollowerDto.Response addFollower(Member member, int memberId) throws NotFoundException {
+        Member newMember = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+
+        if(member.getMemberId() == memberId)
+            throw new NotFoundException("본인에게 팔로우 신청을 할 수 없습니다");
+
+        Optional<Follower> follower = followerRepository.findByMemberAndFollowerMember(member, newMember);
+
+        if(follower.isEmpty()){
+            followerRepository.save(
+                Follower.builder()
+                        .member(member)
+                        .followerMember(newMember)
+                        .build()
+            );
+
+        } else {
+            followerRepository.delete(follower.get());
+        }
+
+        Map<String, ?> countMember = cntFollower(member.getMemberId(), "cnt");
+
+        return FollowerDto.Response.FollowerResponseDto(
+                member.getMemberMail(),
+                countMember,
+                newMember.getMemberMail(),
+                LocalDateTime.now()
+        );
+    }
+
+    @Override
+    public Map<String, ?> cntFollower(int memberId, String info) throws NotFoundException {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+        if(!info.equals("list") && !info.equals("cnt"))
+            throw new NotFoundException("정보를 정확하게 입력해 주세요.");
+
+        List<FollowerDto.InfoResponse> followingList = followerRepository.findByMember(member).stream()
+                .map(follower -> FollowerDto.InfoResponse.InfoResponseDto(
+                        follower.getFollowerMember().getMemberId(),
+                        follower.getFollowerMember().getMemberMail(),
+                        follower.getFollowerMember().getMemberName()
+                ))
+                .collect(Collectors.toList());
+
+        List<FollowerDto.InfoResponse> followersList = followerRepository.findByFollowerMember(member).stream()
+                .map(follower -> FollowerDto.InfoResponse.InfoResponseDto(
+                        follower.getMember().getMemberId(),
+                        follower.getMember().getMemberMail(),
+                        follower.getMember().getMemberName()
+                ))
+                .collect(Collectors.toList());
+
+        if(info.equals("cnt")){
+            Map<String, Integer> ret = new HashMap<>();
+
+            ret.put("Following", followingList.size());
+            ret.put("Follower", followersList.size());
+
+            return ret;
+        } else{
+            Map<String, List<FollowerDto.InfoResponse>> ret = new HashMap<>();
+
+            ret.put("Following", followingList);
+            ret.put("Follower", followersList);
+
+            return ret;
+        }
     }
 
 }
