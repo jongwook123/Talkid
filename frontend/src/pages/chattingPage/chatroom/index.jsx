@@ -69,6 +69,10 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
     }, [setChatRooms]);
 
     const responseChat = useCallback((data) => {
+        if (!data.chats) {
+            return;
+        }
+
         setChats([...data.chats].reverse().map(chat => { return { ...chat, translate: "" } }));
     }, [setChats]);
 
@@ -184,10 +188,14 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         })
     }, [room, setChatRooms]);
 
-    useEffect(() => {
-        setVideoClicked(false);
-        setVideoStart(false)
-    }, [room]);
+    // useEffect(() => {
+    //     if (!room.dmRoomId) {
+    //         return;
+    //     }
+
+    //     setVideoClicked(false);
+    //     setVideoStart(false)
+    // }, [room]);
 
     const sendMessage = async (e) => {
         e.preventDefault();
