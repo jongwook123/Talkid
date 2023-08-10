@@ -52,4 +52,10 @@ public interface MemberService {
 
     /** 북마크 삭제 */
     String deleteBookMark(Member member, int bookMarkId) throws NotFoundException;
+
+    /** 팔로우, 언팔로우 */
+    FollowerDto.Response addFollower(Member member, int  memberId) throws NotFoundException;
+
+    Map<String, ?> cntFollower(int memberId, String info) throws NotFoundException;
+
 }

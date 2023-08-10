@@ -167,4 +167,27 @@ public class MemberController {
         }
     }
 
+    /** 팔로우, 언팔로우 */
+    @PostMapping("/follow/{memberId}")
+    public ApiResult<?> addFollower(@LoginUser Member member, @PathVariable int  memberId) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            FollowerDto.Response result = memberService.addFollower(member, memberId);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /** 팔로우 수 */
+    @GetMapping("/follow/{memberId}")
+    public ApiResult<?> cntFollower(@PathVariable int  memberId) {
+        try{
+            Map<String, ?> result = memberService.cntFollower(memberId, "list");
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }
