@@ -7,6 +7,7 @@ import com.talkids.backend.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class GroupDto {
     private int groupId;
     private String groupName;
     private String groupImage;
+    private LocalDateTime createdAt;
     private List<MemberDto> members = new ArrayList<>();
 
     public static GroupDto fromEntity(Group group){
@@ -24,6 +26,7 @@ public class GroupDto {
             .groupId(group.getGroupId())
             .groupName(group.getGroupName())
             .groupImage(group.getGroupImage())
+            .createdAt(group.getCreatedAt())
             .build();
     }
 
@@ -38,6 +41,7 @@ public class GroupDto {
             .groupId(group.getGroupId())
             .groupName(group.getGroupName())
             .groupImage(group.getGroupImage())
+            .createdAt(group.getCreatedAt())
             .members(memberDtos)
             .build();
     }

@@ -3,7 +3,6 @@ package com.talkids.backend.member.controller;
 import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
-import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.member.entity.BookMark;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.member.dto.*;
@@ -13,11 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-
-import static com.talkids.backend.common.utils.ApiUtils.success;
 
 @RestController
 @RequiredArgsConstructor
@@ -133,23 +129,42 @@ public class MemberController {
     }
 
     /** 북마크 조회 */
-//    @GetMapping("/bookmark")
-//    public ApiResult<?> getBookMark(@LoginUser Member member ) {
-//        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
-//
-//        try{
-//            List<BookMark> result = memberService.getBookMark(member);
-//            return ApiUtils.success(result);
-//        } catch(Exception e){
-//            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @GetMapping("/bookmark")
+    public ApiResult<?> getBookMark(@LoginUser Member member ) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
+        try{
+            List<BookMark> result = memberService.getBookMark(member);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
     /** 북마크에 저장 */
+    @PostMapping("/bookmark")
+    public ApiResult<?> addBookMark(@LoginUser Member member, @Valid @RequestBody AddBookMarkDto.Request req) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
+        try{
+            AddBookMarkDto.Response result = memberService.addBookMark(member, req);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
     /** 북마크 삭제 */
+    @DeleteMapping("/bookmark/{bookMarkId}")
+    public ApiResult<?> deleteBookMark(@LoginUser Member member, @PathVariable int bookMarkId) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
+        try{
+            String result = memberService.deleteBookMark(member, bookMarkId);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
