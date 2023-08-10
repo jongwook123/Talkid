@@ -14,6 +14,8 @@ import com.talkids.backend.meeting.repository.MeetingJoinReqRepository;
 import com.talkids.backend.meeting.repository.MeetingRepository;
 import com.talkids.backend.meeting.repository.MeetingScheduleRepository;
 import com.talkids.backend.member.entity.Member;
+import com.talkids.backend.notify.dto.CreateNotifyDto;
+import com.talkids.backend.notify.service.NotifyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +28,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MeetingServiceImpl implements MeetingService{
 
+    private final GroupService groupService;
     private final GroupRepository groupRepository;
     private final GroupJoinMemberRepository groupJoinMemberRepository;
 
     private final MeetingRepository meetingRepository;
     private final MeetingScheduleRepository meetingScheduleRepository;
     private final MeetingJoinReqRepository meetingJoinReqRepository;
+    
+    private final NotifyService notifyService;
 
 
     @Override
@@ -77,6 +82,22 @@ public class MeetingServiceImpl implements MeetingService{
             .build();
 
         meetingScheduleRepository.save(meetingSchedule);
+        
+        
+        StringBuilder headBuilder = new StringBuilder("");
+        headBuilder.append(start.getMonthValue()).append(".").append(start.getDayOfMonth())
+            .append(" ").append(start.getHour()).append(":").append(start.getMinute())
+            .append(" ~ ")
+            .append(end.getMonthValue()).append(".").append(end.getDayOfMonth())
+            .append(" ").append(end.getHour()).append(":").append(end.getMinute())
+            .append("빈 미팅을 등록하였습니다");
+        
+        CreateNotifyDto.Request notifyBody = CreateNotifyDto.Request.builder()
+            .notifyHeader(headBuilder.toString())
+            .notifyBody("무엇인가 보낼 본문")
+            .build();
+        
+        notifyService.notifyMember(member, member, notifyBody);
     }
 
     // 빈 일정에 신청
@@ -181,6 +202,21 @@ public class MeetingServiceImpl implements MeetingService{
         
         //빈 일정 목록에 있던 것은 지워주자
         meetingScheduleRepository.delete(meetingSchedule);
+        
+        StringBuilder headBuilder = new StringBuilder("");
+        headBuilder.append(meetingStart.getMonthValue()).append(".").append(meetingStart.getDayOfMonth())
+            .append(" ").append(meetingStart.getHour()).append(":").append(meetingStart.getMinute())
+            .append(" ~ ")
+            .append(meetingEnd.getMonthValue()).append(".").append(meetingEnd.getDayOfMonth())
+            .append(" ").append(meetingEnd.getHour()).append(":").append(meetingEnd.getMinute())
+            .append("미팅이 있습니다");
+        
+        CreateNotifyDto.Request body = CreateNotifyDto.Request.builder()
+                                        .notifyHeader(headBuilder.toString())
+                                        .notifyBody("무엇인가 보낼 본문")
+                                        .build();
+        notifyService.notifyGroup(groupRes, body);
+        notifyService.notifyGroup(groupReq, body);
         
     }
 
