@@ -9,12 +9,16 @@ export const theme = {
             green_dark: "#779E69",
             blue: "#8EA3BC",
             blue_light: "#AABECF",
+            blue_light2: "#C3D3DE",
+            blue_light3: "#DAE4EB",
+            blue_light4: "#EBF1F4",
             blue_dark: "#7D8FAE",
         },
         background_color: {
             white: "#FFFFFF",
             light_gray: "#7C7C7C",
-            gray: "#A6A6A6"
+            gray: "#A6A6A6",
+            modal_wrapper: "rgba(200, 200, 200, 0.6)",
         },
         border: {
             light_gray: "#DDDDDD",
@@ -35,6 +39,7 @@ export const theme = {
         lv1: "5px",
         lv2: "7px",
         lv3: "10px",
+        lv4: "14px",
         circle: "50%",
     },
     font_size: {
