@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { loginUser } from "redux/slice/userSlice";
 
 import * as S from './style';
 
@@ -11,7 +10,6 @@ import { signinUser } from "redux/slice/userSlice";
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
-import { useNavigate } from "react-router";
 
 
 export default function SigninPage() {
@@ -20,7 +18,6 @@ export default function SigninPage() {
     const navigate = useNavigate();
 
     // 사용자 입력 관련
-
     // 사용자 입력 값 저장
     const [inputs, setInputs] = useState({
         id: "",
@@ -35,10 +32,10 @@ export default function SigninPage() {
         });
     }
 
-    const handleLogin = (response) => {
-        const accessToken = response.response.accessToken;
-        dispatch(loginUser({ token: accessToken }));
-    };
+    // const handleLogin = (response) => {
+    //     const accessToken = response.response.accessToken;
+    //     // dispatch(loginUser({ token: accessToken }));
+    // };
 
     const buttonClickHandler = async (e) => {
         e.preventDefault();
