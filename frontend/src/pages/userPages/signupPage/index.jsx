@@ -3,14 +3,12 @@ import { useNavigate } from "react-router";
 
 import * as S from './style'
 
-import { TrySignup } from "apis/UserAPIs";
-import { GetList } from "apis/GetListAPIs";
+import { TrySignup, GetList } from "apis/UserAPIs";
 
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
 import DropBox1 from "components/dropboxes/dropbox1";
-
 
 function ImagePreview({ image, deleteFunc }) {
     return (
@@ -198,6 +196,14 @@ export default function SignupPage({ max = 3 }) {
 
             return;
         }
+
+        const regex = new RegExp(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/);
+
+        if (!regex.test(inputs.id)) {
+            alert("이메일 형식이 유효하지 않습니다.");
+
+            return;
+        }
         
         const schoolid = Math.floor(Math.random() * 4 + 1)
 
@@ -225,8 +231,7 @@ export default function SignupPage({ max = 3 }) {
             if (!result.success) {
                 alert(result.error.message);
             } else {
-                alert("회원가입 성공");
-                navigate("/");
+                navigate("/signin");
             }
         } catch (e) {
             console.log(e);
