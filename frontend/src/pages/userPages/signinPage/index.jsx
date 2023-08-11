@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { loginUser } from "redux/slice/userSlice";
 
 import * as S from './style';
 
@@ -10,6 +11,8 @@ import { signinUser } from "redux/slice/userSlice";
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
+import { useNavigate } from "react-router";
+
 
 export default function SigninPage() {
     // redux 관련
@@ -32,7 +35,11 @@ export default function SigninPage() {
         });
     }
 
-    // 로그인 시도 시
+    const handleLogin = (response) => {
+        const accessToken = response.response.accessToken;
+        dispatch(loginUser({ token: accessToken }));
+    };
+
     const buttonClickHandler = async (e) => {
         e.preventDefault();
 
@@ -41,28 +48,40 @@ export default function SigninPage() {
 
             return;
         }
-        
+
         if (!inputs.password) {
             alert("Password를 입력하세요.");
-            
+
             return;
         }
 
-        const result = await TrySignin(inputs.id, inputs.password);
+        // const result = await TrySignin(inputs.id, inputs.password);
 
-        console.log(result);
+        // console.log(result);
 
-        if (result.accessToken) {
-            dispatch(signinUser({
-                accessToken: result.accessToken,
-                refreshToken: result.refreshToken,
-            }));
+        // if (result.accessToken) {
+        //     dispatch(signinUser({
+        //         accessToken: result.accessToken,
+        //         refreshToken: result.refreshToken,
+        //     }));
 
-            navigate('/');
-        } else {
-            alert('이메일 혹은 비밀번호가 일치하지 않습니다!');
+        //     navigate('/');
+        // } else {
+        //     alert('이메일 혹은 비밀번호가 일치하지 않습니다!');
+        // }
+        
+        try {
+            const result = await TrySignin(inputs.id, inputs.password);
+            handleLogin(result);
+            navigate('/match/teachers');
+
+        } catch (error) {
+            console.log(error)
         }
     }
+
+
+
 
     return (
         <>

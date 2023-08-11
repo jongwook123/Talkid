@@ -19,9 +19,6 @@ public class MemberApplyDto {
         @NotNull(message = "그룹 ID를 입력해주세요")
         private Integer groupId;
 
-        @NotNull(message = "멤버 ID를 입력해주세요")
-        private Integer memberId;
-
         @Builder
         public static MemberApply saveMemberApplyDto(Group groups, Member member){
             return MemberApply.builder()

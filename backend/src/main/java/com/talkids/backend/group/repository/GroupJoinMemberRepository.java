@@ -13,4 +13,7 @@ public interface GroupJoinMemberRepository  extends JpaRepository<GroupJoinMembe
 
     @Query("Select g.member From GroupJoinMember g Where g.group.groupId = :groupId")
     List<?> findByGroup_GroupId(int groupId);
+
+    @Query("Select g.member From GroupJoinMember g Where g.member.memberId = :memberId")
+    List<?> findByMember_MemberId(int memberId);
 }

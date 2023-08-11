@@ -3,6 +3,7 @@ import { useState } from "react"
 import * as S from './style'
 
 import { TrySignup } from "apis/SignupPageAPIs";
+import { GetList } from "apis/GetListAPIs";
 
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
@@ -11,31 +12,6 @@ import DropBox1 from "components/dropboxes/dropbox1";
 import { useRef } from "react";
 import { useEffect } from "react";
 
-const dummyCountryList = [
-    {
-        "country_id": 119,
-        "country_name": 'Korea, Republic of',
-        "country_code": 'KOR',
-    },
-    {
-        "country_id": 239,
-        "country_name": 'United States',
-        "country_code": 'USA',
-    }]
-
-const dummyLanguageList = [
-    {
-        "language_id": 1,
-        "language_code": 'af',
-        "language_eng": 'Afrikaans',
-        "language_ori": '',
-    },
-    {
-        "language_id": 2,
-        "language_code": 'sq',
-        "language_eng": 'Albanian',
-        "language_ori": 'shqip',
-    }];
 
 function ImagePreview({ image, deleteFunc }) {
     return (
@@ -134,27 +110,42 @@ export default function SignupPage({ max = 10 }) {
     }, [uploadedImages]);
 
     // 나라 관련
-    const [counrtyList, setCountryList] = useState([]);
+    const [countryInfo, setCountryInfo] = useState([]);
+    const [countryList, setCountryList] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState("");
 
     useEffect(() => {
-        setCountryList(dummyCountryList.map(country => country['country_name']));
+        const fetchCountryList = async () => {
+            const response = await GetList('country');
+            setCountryInfo(response.response);
+            setCountryList(response.response.map(country => country['countryName']));
+        };
+
+        fetchCountryList();
     }, []);
 
+
     useEffect(() => {
-        if (counrtyList.length === 0) {
+        if (countryList.length === 0) {
             return;
         }
 
         setSelectedCountry("Select your country!");
-    }, [counrtyList]);
+    }, [countryList]);
 
     // 언어 관련
+    const [languageInfo, setLanguageInfo] = useState([]);
     const [languageList, setLanguageList] = useState([]);
     const [selectedLanguage, setSelectedLanguage] = useState("");
 
     useEffect(() => {
-        setLanguageList(dummyLanguageList.map(language => language['language_eng']));
+        const fetchLanguageList = async () => {
+            const result = await GetList('language');
+            setLanguageInfo(result.response);
+            setLanguageList(result.response.map(language => language['languageEng']));
+        };
+
+        fetchLanguageList();
     }, []);
 
     useEffect(() => {
@@ -166,29 +157,30 @@ export default function SignupPage({ max = 10 }) {
     }, [languageList]);
 
 
+
     // 확인 버튼 클릭
     const buttonClickHandler = (e) => {
         e.preventDefault();
         
         const schoolid = Math.floor(Math.random() * 4 + 1)
-        
-        const membertypeid = inputs.type === 'student' ? 1 : 2
 
-        const selectedCountryId = dummyCountryList.filter((country) => {
-            if (country["country_name"] === selectedCountry) {
+        const membertypeid = inputs.type === 'student' ? 2 : 1
+
+        const selectedCountryId = countryInfo.filter((country) => {
+            if (country["countryName"] === selectedCountry) {
                 return true;
             } else {
                 return false;
             }
-        })[0].country_id
+        })[0].countryId
 
-        const selectedLanguageId = dummyLanguageList.filter((language) => {
-            if (language["language_eng"] === selectedLanguage) {
+        const selectedLanguageId = languageInfo.filter((language) => {
+            if (language["languageEng"] === selectedLanguage) {
                 return true;
             } else {
                 return false;
             }
-        })[0].language_id
+        })[0].languageId
 
         TrySignup(inputs.id, inputs.password, inputs.name, schoolid, selectedCountryId, selectedLanguageId, membertypeid);
     }
@@ -233,7 +225,7 @@ export default function SignupPage({ max = 10 }) {
                             </S.StyledImageFieldset>
                             <S.DropboxFieldset>
                                 <p>Country</p>
-                                <DropBox1 props={{ list: counrtyList, target: selectedCountry, callback: setSelectedCountry }} />
+                                <DropBox1 props={{ list: countryList, target: selectedCountry, callback: setSelectedCountry }} />
                             </S.DropboxFieldset>
                             <S.DropboxFieldset>
                                 <p>Language</p>

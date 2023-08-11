@@ -1,8 +1,10 @@
 package com.talkids.backend.meeting.entity;
 
 import com.talkids.backend.group.entity.Group;
+import com.talkids.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name="MeetingJoinReq")
@@ -11,6 +13,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class MeetingJoinReq {
 
     @Id
@@ -20,13 +23,12 @@ public class MeetingJoinReq {
 
     /* ---------------------------------- */
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "meetingScheduleId")
     private MeetingSchedule meetingSchedule;
 
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Group group;
-
 }

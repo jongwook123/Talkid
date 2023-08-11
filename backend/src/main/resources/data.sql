@@ -1,8 +1,8 @@
-INSERT INTO `s09p12d106`.`time_zone` (`hour`, `minute`, `time_zone_name`) VALUES
-(9, 0, "Korea"),
-(8, 0, "China"),
-(-4, 0, "United States"),
-(9, 0, "Japan");
+INSERT INTO `s09p12d106`.`time_zone` (`time_zone_id`, `hour`, `minute`, `time_zone_name`) VALUES
+(1, 9, 0, "Korea"),
+(2, 8, 0, "China"),
+(3, -4, 0, "United States"),
+(4, 9, 0, "Japan");
 
 INSERT INTO `s09p12d106`.`member_type` (`member_type_id`, `member_type_name`) VALUES
 (1, '선생님'),
@@ -408,14 +408,14 @@ INSERT INTO `s09p12d106`.`country` (`country_id`, `country_name`, `country_code`
 (252, 'Zimbabwe', 'ZWE');
 
 
-INSERT INTO `s09p12d106`.`school` (`country_id`, `school_lat`, `school_lng`, `time_zone_id`, `school_address`, `school_name`) VALUES
-(119, 36.027484, 129.343395, 1, "경상북도 포항시 남구 포스코대로 147-10", '이동초등학교'),
-(46, 39.91436584712231, 116.49522427478453, 2, "Beijing, Chaoyang, Balizhuang Rd, 八里庄西里78 邮政编码: 100123", '八里庄西里'),
-(239, 38.88321859907826, -76.98998347524216, 3, "420 12th St SE, Washington, DC 20003", 'Catharine Watkins Elementary School'),
-(112, 35.686626, 139.725081, 4, "160-0004 Tokyo, Shinjuku City, Yotsuya, 2 Chome−６", '新宿区立四谷子ども園');
+INSERT INTO `s09p12d106`.`school` (`school_id`, `country_id`, `school_lat`, `school_lng`, `time_zone_id`, `school_address`, `school_name`) VALUES
+(1, 119, 36.027484, 129.343395, 1, "경상북도 포항시 남구 포스코대로 147-10", '이동초등학교'),
+(2, 46, 39.91436584712231, 116.49522427478453, 2, "Beijing, Chaoyang, Balizhuang Rd, 八里庄西里78 邮政编码: 100123", '八里庄西里'),
+(3, 239, 38.88321859907826, -76.98998347524216, 3, "420 12th St SE, Washington, DC 20003", 'Catharine Watkins Elementary School'),
+(4, 112, 35.686626, 139.725081, 4, "160-0004 Tokyo, Shinjuku City, Yotsuya, 2 Chome−６", '新宿区立四谷子ども園');
 
 
-insert into `s09p12d106`.`badwords`(words) values
+insert into `s09p12d106`.`bad_words`(words) values
 ("fuck"),
 ("shit"),
 ("肉便器"),
@@ -3980,4 +3980,38 @@ insert into `s09p12d106`.`badwords`(words) values
 ("豔乳"),
 ("豔婦淫女"),
 ("豔情小說"),
-("豔舞淫業")
+("豔舞淫業");
+
+INSERT INTO `s09p12d106`.`member`(member_id, member_active, member_filter_count, member_image, member_introduce, member_mail, member_name, member_password, refresh_token, country_id, language_id, member_type_id, school_id, created_at) VALUES
+(1, 1, 0, "", "yys입니다", 'yys@naver.com','유영서','$2a$10$PtrNph/TZPOl75ECj71QB.p00h4C0yi4HJ/DKsMFm4Il3ugK8HHUi','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTM0NDh9.8h3vyRAYv8HmdZk_S-55QkcFkOYWXl6AKff_M72NrtI', 1, 1, 1, 1, '2023-08-07 07:38:50.486373'),
+(2, 1, 0, "", "lwc입니다", 'lwc@naver.com','이우철','$2a$10$1jLLJvvEUGlfi/MvjhwMaerF72homNo3ZKdB0.8FArr3DDEnTyPr6','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTMxNTh9.MPEEBxvzYzGhEck5klV9cgNpFNwC_IlYu0P85G_R9Is', 1, 1, 2, 1, '2023-08-08 07:38:50.486373'),
+(3, 1, 0, "", "pju입니다", 'pju@naver.com','박종욱','$2a$10$5pUP9XbxW0zx4FW7/BZWZeGKRgpodpYy0Jsr.aL1DtC79iTReiApm', null, 1, 1, 1, 1, '2023-08-09 07:38:50.486373'),
+(4, 1, 0, "", "ksy입니다", 'ksy@naver.com','김선영','$2a$10$FJJrfrF.C4nwpCFPIVAiz.45bdvc4RT.jRrlX9SE3ls5RdAEGWtnC','eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTE2NTMyMjh9.AjTrYqy1oytVlstAlNvjGaSsZewqNo6yTbHnoQmr7tc', 1, 1, 2, 1, '2023-08-09 07:38:50.486373'),
+(5, 1, 0, "", "sdh입니다", 'sdh@naver.com','서동현','$2a$10$BGCxZBi1AkAZx6tD8BgJ5eDpaB6pHfSZPHyUxtvBy1KR74A93o2H.', null, 1, 1, 2, 1, '2023-08-09 07:38:50.486373');
+
+
+INSERT INTO `s09p12d106`.`class`(group_id, group_name, group_image, created_at) VALUES
+(1, 'yys\'s group1', '1', '2023-08-09 08:30:30.000000'),
+(2, 'pju\'s group1', '1', '2023-08-10 10:25:50.000000');
+
+INSERT INTO `s09p12d106`.`group_join_member`(group_join_member_id, group_id, member_id, created_at) VALUES
+(1, 1, 1, '2023-08-08 07:38:50.486373'),
+(2, 1, 2, '2023-08-09 07:38:50.486373'),
+(3, 2, 3, '2023-08-09 07:38:50.486373'),
+(4, 2, 4, '2023-08-10 07:38:50.486373'),
+(5, 2, 5, '2023-08-10 07:38:50.486373');
+
+INSERT INTO `s09p12d106`.`meeting_schedule`(meeting_schedule_id, meeting_schedule_start, meeting_schedule_end, group_id) VALUES
+(1, '2023-08-08 07:00:00.000000', '2023-08-08 08:00:00.000000', 1),
+(2, '2023-08-08 09:00:00.000000', '2023-08-08 10:00:00.000000', 1),
+(3, '2023-08-09 09:00:00.000000', '2023-08-09 10:00:00.000000', 1),
+(4, '2023-08-09 11:30:00.000000', '2023-08-09 12:30:00.000000', 2);
+
+INSERT INTO `s09p12d106`.`meeting_join_req`(meeting_join_req_id, meeting_schedule_id, group_id) VALUES
+(1, 1, 2),
+(2, 2, 2);
+
+INSERT INTO `s09p12d106`.`meeting`(meeting_id, meeting_start, meeting_end, group_req, group_res, created_at) VALUES
+(1, '2023-08-11 07:00:00.000000', '2023-08-11 08:00:00.000000', 1, 2, '2023-08-09 08:00:00.000000'),
+(2, '2023-08-12 07:00:00.000000', '2023-08-12 08:00:00.000000', 2, 1, '2023-08-09 08:00:00.000000'),
+(3, '2023-08-12 10:00:00.000000', '2023-08-12 11:00:00.000000', 1, 2, '2023-08-09 09:00:00.000000');

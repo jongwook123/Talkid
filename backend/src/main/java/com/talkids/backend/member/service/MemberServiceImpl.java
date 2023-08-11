@@ -17,9 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,8 @@ public class MemberServiceImpl implements MemberService {
     private final CountryRepository countryRepository;
     private final LanguageRepository languageRepository;
     private final SchoolRepository schoolRepository;
+    private final BookMarkRepository bookMarkRepository;
+    private final FollowerRepository followerRepository;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -103,15 +106,12 @@ public class MemberServiceImpl implements MemberService {
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-        String accessToken = jwtToken.getAccessToken();
 
         // refreshToken DB에 저장
         Member member = memberRepository.findByMemberMail(req.getMemberMail())
                 .orElseThrow(()->new IllegalArgumentException("다시 시도해 주세요"));
 
         member.setRefreshToken(jwtToken.getRefreshToken());
-
-        System.out.println("jwtToken:" + jwtToken);
 
         Map<String, String> ret = new HashMap<>();
         ret.put("accessToken", jwtToken.getAccessToken());
@@ -123,9 +123,7 @@ public class MemberServiceImpl implements MemberService {
     /** 회원 정보 수정 */
     @Transactional
     @Override
-    public String updateInfoDto(int memberId, UpdateInfoDto.Request req, Principal principal) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+    public String updateInfoDto(Member member, UpdateInfoDto.Request req) {
 
         member.setMemberPassword(passwordEncoder.encode(req.getMemberPassword()));
         member.setCountry(countryRepository.findByCountryId(req.getCountryId()).get());
@@ -167,16 +165,11 @@ public class MemberServiceImpl implements MemberService {
     /** 회원 탈퇴 */
     @Transactional
     @Override
-    public String deleteInfoDto(int memberId, Principal principal) throws NotFoundException {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+    public String deleteInfoDto(Member member) throws NotFoundException {
 
-        // 로그인 확인
-        if(member.getRefreshToken()!=null){
-            member.setDeletedAt(true);
-        } else throw new NotFoundException("잘못된 접근입니다.");
+        member.setDeletedAt(true);
 
-        return member.getMemberMail();
+        return "Success";
     }
 
     /** 비밀번호 찾기 - 임시 비밀번호 발급 */
@@ -213,6 +206,8 @@ public class MemberServiceImpl implements MemberService {
 
         return pwd.toString();
     }
+
+    /* ------------------------------------------------------*/
 
     /** 사용자 찾기 및 필터링 */
     @Override
@@ -251,6 +246,117 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return ret;
+    }
+
+    /* ------------------------------------------------------*/
+
+    /** 북마크 조회 */
+    @Override
+    public List<BookMark> getBookMark(Member member) throws NotFoundException {
+        return bookMarkRepository.findByMember_MemberId(member.getMemberId());
+    }
+
+    /** 북마크 등록 */
+    @Transactional
+    @Override
+    public AddBookMarkDto.Response addBookMark(Member member, AddBookMarkDto.Request req) throws NotFoundException {
+        BookMark bookMark = bookMarkRepository.save(
+                req.saveBookMarkDto(member)
+        );
+
+        return AddBookMarkDto.Response.BookMarkResponseDto(
+                req.getBookMarkOriContent(),
+                req.getBookMarkTransContent(),
+                bookMark.getCreatedAt()
+        );
+    }
+
+    /** 북마크 삭제 */
+    @Transactional
+    @Override
+    public String deleteBookMark(Member member, int bookMarkId) throws NotFoundException {
+        bookMarkRepository.findByBookMarkId(bookMarkId)
+                        .orElseThrow(()-> new NotFoundException("등록된 북마크가 없습니다."));
+
+        bookMarkRepository.deleteByBookMarkIdAndMember_MemberId(bookMarkId, member.getMemberId());
+
+        return "Success";
+    }
+
+    /* ------------------------------------------------------*/
+
+    /** 팔로우, 언팔로우 */
+    @Transactional
+    @Override
+    public FollowerDto.Response addFollower(Member member, int memberId) throws NotFoundException {
+        Member newMember = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+
+        if(member.getMemberId() == memberId)
+            throw new NotFoundException("본인에게 팔로우 신청을 할 수 없습니다");
+
+        Optional<Follower> follower = followerRepository.findByMemberAndFollowerMember(member, newMember);
+
+        if(follower.isEmpty()){
+            followerRepository.save(
+                Follower.builder()
+                        .member(member)
+                        .followerMember(newMember)
+                        .build()
+            );
+
+        } else {
+            followerRepository.delete(follower.get());
+        }
+
+        Map<String, ?> countMember = cntFollower(member.getMemberId(), "cnt");
+
+        return FollowerDto.Response.FollowerResponseDto(
+                member.getMemberMail(),
+                countMember,
+                newMember.getMemberMail(),
+                LocalDateTime.now()
+        );
+    }
+
+    @Override
+    public Map<String, ?> cntFollower(int memberId, String info) throws NotFoundException {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+        if(!info.equals("list") && !info.equals("cnt"))
+            throw new NotFoundException("정보를 정확하게 입력해 주세요.");
+
+        List<FollowerDto.InfoResponse> followingList = followerRepository.findByMember(member).stream()
+                .map(follower -> FollowerDto.InfoResponse.InfoResponseDto(
+                        follower.getFollowerMember().getMemberId(),
+                        follower.getFollowerMember().getMemberMail(),
+                        follower.getFollowerMember().getMemberName()
+                ))
+                .collect(Collectors.toList());
+
+        List<FollowerDto.InfoResponse> followersList = followerRepository.findByFollowerMember(member).stream()
+                .map(follower -> FollowerDto.InfoResponse.InfoResponseDto(
+                        follower.getMember().getMemberId(),
+                        follower.getMember().getMemberMail(),
+                        follower.getMember().getMemberName()
+                ))
+                .collect(Collectors.toList());
+
+        if(info.equals("cnt")){
+            Map<String, Integer> ret = new HashMap<>();
+
+            ret.put("Following", followingList.size());
+            ret.put("Follower", followersList.size());
+
+            return ret;
+        } else{
+            Map<String, List<FollowerDto.InfoResponse>> ret = new HashMap<>();
+
+            ret.put("Following", followingList);
+            ret.put("Follower", followersList);
+
+            return ret;
+        }
     }
 
 }

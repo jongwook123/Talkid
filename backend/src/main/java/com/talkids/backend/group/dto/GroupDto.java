@@ -1,37 +1,48 @@
 package com.talkids.backend.group.dto;
 
 import com.talkids.backend.group.entity.Group;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
+import com.talkids.backend.group.entity.GroupJoinMember;
+import com.talkids.backend.member.dto.MemberDto;
+import com.talkids.backend.member.entity.Member;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
+import lombok.Getter;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+@Builder
+@Getter
 public class GroupDto {
+    private int groupId;
+    private String groupName;
+    private String groupImage;
+    private LocalDateTime createdAt;
+    private List<MemberDto> members = new ArrayList<>();
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Request{
-
-        @NotNull(message = "멤버 ID를 입력해주세요")
-        private Integer memberId;
-
-        @Length(min = 1, max = 45)
-        @NotBlank(message = "그룹 이름을 입력해주세요")
-        private String groupName;
-        
-        private String groupImage;
-
-        @Builder
-        public Group saveGroupDto(){
-            return Group.builder()
-                    .groupName(groupName)
-                    .groupImage(groupImage)
-                    .build();
-        }
+    public static GroupDto fromEntity(Group group){
+        return GroupDto.builder()
+            .groupId(group.getGroupId())
+            .groupName(group.getGroupName())
+            .groupImage(group.getGroupImage())
+            .createdAt(group.getCreatedAt())
+            .build();
     }
 
+    public static GroupDto fromEntity(Group group, List<GroupJoinMember> groupJoinMembers){
+        List<MemberDto> memberDtos = new LinkedList<>();
+        for(GroupJoinMember m: groupJoinMembers){
+            Member member = m.getMember();
+            memberDtos.add(MemberDto.fromEntity(member));
+        }
+
+        return GroupDto.builder()
+            .groupId(group.getGroupId())
+            .groupName(group.getGroupName())
+            .groupImage(group.getGroupImage())
+            .createdAt(group.getCreatedAt())
+            .members(memberDtos)
+            .build();
+    }
 }
