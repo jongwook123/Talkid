@@ -190,4 +190,14 @@ public class MemberController {
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/exp/{memberId}")
+    public ApiResult<?> getExp(@PathVariable int  memberId) {
+        try{
+            int result = memberService.getExp(memberId);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -34,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
     private final SchoolRepository schoolRepository;
     private final BookMarkRepository bookMarkRepository;
     private final FollowerRepository followerRepository;
+    private final ExpRepository expRepository;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -357,6 +358,20 @@ public class MemberServiceImpl implements MemberService {
 
             return ret;
         }
+    }
+
+    @Override
+    public int getExp(int memberId) throws NotFoundException {
+        memberRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new NotFoundException("회원 정보가 없습니다."));
+
+        int totalExp = 0;
+        List<Exp> expList = expRepository.findByMember_MemberId(memberId);
+        for(Exp e : expList){
+            totalExp+=e.getExpPoint();
+        }
+
+        return totalExp;
     }
 
 }
