@@ -58,7 +58,6 @@ public class Member {
 
     /* ---------------------------------- */
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberTypeId")
     private MemberType memberType;
