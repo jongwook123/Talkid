@@ -155,8 +155,6 @@ export default function SignupPage({ max = 3 }) {
         setSelectedLanguage("Select your language!");
     }, [languageList]);
 
-
-
     // 확인 버튼 클릭
     const buttonClickHandler = async (e) => {
         e.preventDefault();
@@ -205,9 +203,9 @@ export default function SignupPage({ max = 3 }) {
             return;
         }
         
-        const schoolid = Math.floor(Math.random() * 4 + 1)
+        const schoolid = Math.floor(Math.random() * 4 + 1);
 
-        const membertypeid = inputs.type === 'student' ? 2 : 1
+        const membertypeid = inputs.type === 'student' ? 2 : 1;
 
         const selectedCountryId = countryInfo.filter((country) => {
             if (country["countryName"] === selectedCountry) {

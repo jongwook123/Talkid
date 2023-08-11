@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router";
 
 import * as S from './style';
 
@@ -9,6 +10,8 @@ import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
 
 export default function FindPasswordPage() {
+    const navigate = useNavigate();
+
     const [inputs, setInputs] = useState({
         email: "",
     });
@@ -20,7 +23,7 @@ export default function FindPasswordPage() {
         });
     }
 
-    const buttonClickHandler = (e) => {
+    const buttonClickHandler = async (e) => {
         e.preventDefault();
 
         if (!inputs.email) {
@@ -37,7 +40,14 @@ export default function FindPasswordPage() {
             return;
         }
 
-        TryFindPassword(inputs.email);
+        const result = await TryFindPassword(inputs.email);
+
+        if (!result.success) {
+            alert("비밀번호 발급 실패, 다시 확인해주세요.");
+        } else {
+            alert("비밀번호 발급 성공!");
+            navigate("/signin");
+        }
     }
 
     return (

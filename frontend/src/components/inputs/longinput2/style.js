@@ -22,8 +22,8 @@ export const FieldSet = styled.fieldset`
         z-index: 200;
         padding: 0 5px;
         background-color: ${props => props.theme.colors.background_color.white};
-        color: ${props => props.isFill ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === '' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : props.theme.colors.font.light_gray};
-        font-size: ${props => props.isFill ? props.theme.font_size.lv4 : props.theme.font_size.lv4};
+        color: ${props => props.isFill ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : props.theme.colors.font.light_gray};
+        font-size: ${props => props.isFill ? props.theme.font_size.lv3 : props.theme.font_size.lv4};
     }
 
     &:focus-within > label {
@@ -41,7 +41,7 @@ export const Input2 = styled.input`
     padding: 0 15px;
     border: 0;
     position: relative;
-    /* border: 2px solid ${props => props.isFill ? props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : "0"}; */
+    border: 2px solid ${props => props.isFill ? props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : "0"};
     /* border-bottom: 2px solid ${props => props.isFill ? props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : props.theme.colors.border.light_gray}; */
     font-size: ${props => props.theme.font_size.lv4};
     border-radius: ${props => props.isFill ? props.theme.border_radius.lv2 : "0"};
