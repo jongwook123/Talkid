@@ -3,7 +3,6 @@ package com.talkids.backend.meeting.controller;
 import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
-import com.talkids.backend.dm.dto.DmRoomDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
 import com.talkids.backend.meeting.dto.*;
