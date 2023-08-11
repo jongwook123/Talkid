@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="Meeting")
@@ -42,4 +43,7 @@ public class Meeting {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    /* ---------------------------------- */
+    @OneToMany(mappedBy="meeting", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<SmallGroup> smallGroups;
 }

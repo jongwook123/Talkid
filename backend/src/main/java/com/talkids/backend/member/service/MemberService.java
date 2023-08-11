@@ -59,4 +59,5 @@ public interface MemberService {
     Map<String, ?> cntFollower(int memberId, String info) throws NotFoundException;
 
     int getExp(int memberId) throws NotFoundException;
+
 }

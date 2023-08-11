@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final Key key;
+    private final int DAY = 1000 * 60 * 60 * 24;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] secretByteKey = Decoders.BASE64.decode(secretKey);
@@ -43,7 +44,7 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
-                .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + 365*DAY))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -53,7 +54,6 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        System.out.println(refreshToken);
         return JwtToken.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
