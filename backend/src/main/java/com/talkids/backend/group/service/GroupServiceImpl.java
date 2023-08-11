@@ -199,4 +199,16 @@ public class GroupServiceImpl implements GroupService {
         }
         return null;    //없을 경우 null을 반환, 할 경우는 없다
     }
+
+    @Override
+    public List<?> findGroup(String keyword) throws NotFoundException {
+        List<Group> groupList = groupRepository.findByGroupNameContains(keyword);
+
+        if(groupList.isEmpty())
+            throw new NotFoundException("그룹 정보가 없습니다.");
+
+        return groupList.stream()
+                .map(group -> GroupDto.fromEntity(group))
+                .toList();
+    }
 }
