@@ -15,5 +15,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     List<Member> findBySchool_SchoolId(int schoolId);
     List<Member> findByLanguage_LanguageId(int languageId);
     List<Member> findByCountry_CountryId(int countryId);
-
+    Optional<Member> findByRefreshToken(String refreshToken);
 }
