@@ -28,7 +28,7 @@ public class MemberController {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
         try{
-            return ApiUtils.success(member);
+            return ApiUtils.success(MemberDto.fromEntity(member));
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -185,6 +185,16 @@ public class MemberController {
     public ApiResult<?> cntFollower(@PathVariable int  memberId) {
         try{
             Map<String, ?> result = memberService.cntFollower(memberId, "list");
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/exp/{memberId}")
+    public ApiResult<?> getExp(@PathVariable int  memberId) {
+        try{
+            int result = memberService.getExp(memberId);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
