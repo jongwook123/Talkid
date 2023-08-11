@@ -1,13 +1,63 @@
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import * as S from './style';
 import LongButton1 from 'components/buttons/longbutton1';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 import AlarmModal from 'components/alarmmodal';
+import { useSelector } from 'react-redux';
+import { TryFollow, TryGetUser } from 'apis/GetUserAPIs';
+import { TryGetFollow } from 'apis/GetUserAPIs';
+import { TryGetExp } from 'apis/GetUserAPIs';
+import { FindMembers } from 'apis/StudentMatchPageAPIs';
+import { useEffect } from 'react';
 
 
 
 export default function ProfilePage() {
+    const params = useParams(); 
+    const token = useSelector(state => state.user.token);
+    
+    const [user, setUser] = useState({});
+
+    const handleFindUser = async () => {
+        const result = await TryGetUser(token);
+        setUser({
+            ...result.response
+        })
+    };
+       
+    const [member, setMember] = useState({});
+    const [followers, setFollowers] = useState({})
+    const [followings, setFollowings] = useState({})
+    const [exp, setExp] = useState({})
+    
+    const handleFindMember = async () => {
+        const memberMail = params.memberMail;
+        const result = await FindMembers("all", memberMail);
+        setMember({
+            ...result.response[0]
+        })
+        const result1 = await TryGetFollow(result.response[0].memberId)
+
+        if (Array.isArray(result1.response.Follower)) {
+            setFollowers(result1.response.Follower);
+        }
+        if (Array.isArray(result1.response.Following)) {
+            setFollowings(result1.response.Following);
+        }
+        const result2 = await TryGetExp(result.response[0].memberId)
+        console.log(result2)
+        if (Array.isArray(result2.response)) {
+            setExp(result2.response);
+        }
+    } 
+    
+    useEffect(() => {
+        handleFindUser();
+        handleFindMember();
+    }, []);
+
+
     const dummydata = {
         name:'Kim',
         Exp : 10,
@@ -44,16 +94,25 @@ export default function ProfilePage() {
     const close = () => {
         setIsOpen(false);
     };
-    const confirm = () => {
-        console.log("confirm clicked");
-        setIsOpen(false);
-    };
+    // const confirm = () => {
+    //     console.log("confirm clicked");
+    //     setIsOpen(false);
+    // };
 
-    
+    const FollowClickHandler = async () => {
+        const memberMail = params.memberMail;
+        const result = await FindMembers("all", memberMail);
+        setMember({
+            ...result.response[0]
+        })
+        const result1 = await TryFollow(result.response[0].memberId,token)
+        
+        
+    }
+
+    const isFollowing = Array.isArray(followers) && followers.some(follower => follower.followMemberName === user.memberMail);
 
     return (
-        <>
-        {dummydata.type === 1 && (
             <>
             <S.PageHeader>
                 <h1>TALKIDS</h1>
@@ -61,7 +120,7 @@ export default function ProfilePage() {
             <S.Body>
                 <S.BodyHeader>
                     <h2>버튼 삽입</h2>
-                    {dummydata.user === 'me' && (
+                    {member.memberId === user.memberId ? (
                     <S.ButtonWrapper1>
                         <LongButton1 props={{ color: "#8EA3BC", text: "Edit", callback: EditClickHandler }} />
                         <NotificationsIcon sx={{ fontSize: 48,cursor: 'pointer' }} onClick={open}/>
@@ -73,90 +132,13 @@ export default function ProfilePage() {
                             ></AlarmModal>
                         )}
                     </S.ButtonWrapper1>
-                    )}
-                    {dummydata.user !== 'me' && (
-                    <S.ButtonWrapper2>
-                        <LongButton1 props={{ color: "#8EA3BC", text: "Follow", callback: 'buttonClickHandler' }} />
-                        <LongButton1 props={{ color: "#8EA3BC", text: "Message", callback: 'buttonClickHandler' }} />
-                    </S.ButtonWrapper2>
-                    )}
-                    
-                    
-                </S.BodyHeader>
-                <S.PageBody>
-                    <h2>프로필 내용 영역</h2>
-                    <S.LeftBody>
-                        <h3>왼쪽바디</h3>
-                        <S.Pic src="https://cdn.pixabay.com/photo/2020/04/28/19/36/heart-5106075_960_720.png" alt="15616" />
-                        <S.Name>{dummydata.name}</S.Name>
-                        <S.Exptitle>
-                            EXP
-                        </S.Exptitle>
-                        <S.ExpBarBackground>
-                            <S.ExpBar style={{ width: calculateExpBarWidth(dummydata.Exp)}}/>
-                        </S.ExpBarBackground>
-                        <S.Follow>
-                            <S.Followers>
-                                Follwers
-                                <p>{dummydata.Followers}</p>
-                            </S.Followers>
-                            <S.Following>
-                                Folllowing
-                                <p>{dummydata.Following}</p>
-                            </S.Following>
-                        </S.Follow>
-                    </S.LeftBody>
-                    <S.RightBody>
-                        <h3>오른쪽바디</h3>
-                        <S.Title>
-                            Nation
-                        </S.Title>
-                        <S.Info>
-                            {dummydata.Nation}
-                        </S.Info>
-                        <S.Title>
-                            Language
-                        </S.Title>
-                        <S.Info>
-                            {dummydata.Language}
-                        </S.Info>
-                        <S.Title>
-                            School
-                        </S.Title>
-                        <S.Info>
-                            {dummydata.school}
-                        </S.Info>
-                    </S.RightBody>
-                </S.PageBody>
-            </S.Body>
-            <footer></footer>
-            </>
-            )}
-
-            {dummydata.type === 2 && (
-            <>
-            <S.PageHeader>
-                <h1>TALKIDS</h1>
-            </S.PageHeader>
-            <S.Body>
-                <S.BodyHeader>
-                    <h2>버튼 삽입</h2>
-                    {dummydata.user === 'me' && (
-                    <S.ButtonWrapper1>
-                        <LongButton1 props={{ color: "#8EA3BC", text: "Edit", callback: EditClickHandler }} />
-                        <NotificationsIcon sx={{ fontSize: 48,cursor: 'pointer' }} onClick={open}/>
-                        {isOpen && (
-                            <AlarmModal
-                            title="알림"
-                            message="알림내역을 보여드립니다 와우와우"
-                            close={close}
-                            ></AlarmModal>
+                    ) : 
+                    (<S.ButtonWrapper2>
+                        {isFollowing ? (
+                            <LongButton1 props={{ color: "#8EA3BC", text: "unFollow", callback: FollowClickHandler }} />
+                        ) : (
+                            <LongButton1 props={{ color: "#8EA3BC", text: "Follow", callback: FollowClickHandler }} />
                         )}
-                    </S.ButtonWrapper1>
-                    )}
-                    {dummydata.user !== 'me' && (
-                    <S.ButtonWrapper2>
-                        <LongButton1 props={{ color: "#8EA3BC", text: "Follow", callback: 'buttonClickHandler' }} />
                         <LongButton1 props={{ color: "#8EA3BC", text: "Message", callback: 'buttonClickHandler' }} />
                     </S.ButtonWrapper2>
                     )}
@@ -168,51 +150,67 @@ export default function ProfilePage() {
                     <S.LeftBody>
                         <h3>왼쪽바디</h3>
                         <S.Pic src="https://cdn.pixabay.com/photo/2020/04/28/19/36/heart-5106075_960_720.png" alt="15616" />
-                        <S.Name>{dummydata.name}</S.Name>
+                        <S.Name>{member.memberName}</S.Name>
                         <S.Exptitle>
                             EXP
                         </S.Exptitle>
                         <S.ExpBarBackground>
-                            <S.ExpBar style={{ width: calculateExpBarWidth(dummydata.Exp)}}/>
+                            <S.ExpBar style={{ width: calculateExpBarWidth({exp})}}/>
                         </S.ExpBarBackground>
                         <S.Follow>
                             <S.Followers>
                                 Follwers
-                                <p>{dummydata.Followers}</p>
+                                <p>{followers.length}</p>
                             </S.Followers>
                             <S.Following>
                                 Folllowing
-                                <p>{dummydata.Following}</p>
+                                <p>{followings.length}</p>
                             </S.Following>
                         </S.Follow>
                     </S.LeftBody>
                     <S.RightBody>
                         <h3>오른쪽바디</h3>
+                        {member.memberType && member.memberType.memberTypeId === 1 && (
+                            <S.Title>
+                                {member.memberType && member.memberType.memberTypeName}
+                            </S.Title>
+                        )}
                         <S.Title>
                             Nation
                         </S.Title>
                         <S.Info>
-                            {dummydata.Nation}
+                            {member.country && member.country.countryName}
                         </S.Info>
                         <S.Title>
                             Language
                         </S.Title>
                         <S.Info>
-                            {dummydata.Language}
+                            {member.language && member.language.languageEng}
                         </S.Info>
-                        <S.Title>
-                            About Me
-                        </S.Title>
-                        <S.Info>
-                            {dummydata.Introduce}
-                        </S.Info>
+                        {member.memberType && member.memberType.memberTypeId === 1 && (
+                        <>
+                            <S.Title>
+                                School
+                            </S.Title>
+                            <S.Info>
+                                {member.school && member.school.schoolName}
+                            </S.Info>
+                        </>
+                        )}
+                        {member.memberType && member.memberType.memberTypeId === 2 && (
+                        <>
+                            <S.Title>
+                                Introduction
+                            </S.Title>
+                            <S.Info>
+                                {member.memberIntroduce}
+                            </S.Info>
+                        </>
+                        )}
                     </S.RightBody>
                 </S.PageBody>
             </S.Body>
             <footer></footer>
             </>
-            )}
-        </>
-        
-    )
+    );
 }
