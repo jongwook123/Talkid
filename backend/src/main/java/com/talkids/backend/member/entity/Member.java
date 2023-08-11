@@ -1,5 +1,6 @@
 package com.talkids.backend.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -75,14 +76,17 @@ public class Member {
 
     /* ---------------------------------- */
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     @JsonManagedReference
     private List<Exp> exp;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     @JsonManagedReference
     private List<BookMark> bookMark;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Follower> followers = new ArrayList<>();
 
