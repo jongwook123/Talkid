@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 
 import * as S from './style'
 
-import { GetList, GetUserInfo, TryModifyUser } from "apis/UserAPIs";
+import { GetList, GetUserInfo, TryModifyUser, DeleteAccount } from "apis/UserAPIs";
 
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
@@ -138,6 +138,23 @@ export default function UserEditPage() {
         }
     }
 
+    const DeleteAccount = async (e) => {
+        e.preventDefault();
+
+        try {
+            const result = await DeleteAccount(user.accessToken);
+
+            if (!result.success) {
+                alert(result.error.message);
+            } else {
+                alert("회원 정보 삭제 성공!");
+                navigate("/signin");
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     useEffect(() => {
         const getUserInfo = async (token) => {
             const result = await GetUserInfo(token);
@@ -187,6 +204,7 @@ export default function UserEditPage() {
                             <InputBox props={{ id: "userinfo", desc: "Check your password", color: "green", placeholder: "userinfo", type: "textarea", value: inputs.userinfo, callback: onChangeHandler }} />
                             <S.ButtonWrapper>
                                 <LongButton1 props={{ color: "green", text: "Edit Confirm", callback: buttonClickHandler }} />
+                                <LongButton1 props={{ color: "orange", text: "Delete Account", callback: DeleteAccount }} />
                             </S.ButtonWrapper>
                         </S.SigninForm>
                     </S.SigninSection>

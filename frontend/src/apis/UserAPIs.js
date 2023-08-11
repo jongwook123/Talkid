@@ -121,3 +121,21 @@ export const TryModifyUser = async (accessToken, password, country, language, us
         console.log(e);
     }
 }
+
+export const TryDeleteUser = async (accessToken) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + `/member`,
+            method: "DELETE",
+            headers: {
+                "Authorization" : `Bearer ${accessToken}`
+            }
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}

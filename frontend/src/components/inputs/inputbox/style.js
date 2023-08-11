@@ -61,5 +61,7 @@ export const TextBox = styled.textarea`
         color: ${props => props.theme.colors.font.light_gray2};
     }
 
-   
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `
