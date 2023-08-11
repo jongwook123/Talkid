@@ -34,7 +34,7 @@ public class MeetingController {
 
 
     //등록한 미팅 일정 및 성사된 미팅일정을 년, 월별로 가져온다
-    @GetMapping
+    @GetMapping("")
     public ApiResult getMeetings(@LoginUser Member member,
                                   @RequestParam("year") Integer year,
                                   @RequestParam("month") Integer month) throws Exception{
@@ -181,7 +181,7 @@ public class MeetingController {
 
     // 소그룹 생성
     @PostMapping("/group")
-    public ApiResult<?> createSmallGroup(@LoginUser Member member, @Valid @RequestBody SmallGroupDto.Request req) {
+    public ApiResult<?> createSmallGroup(@LoginUser Member member, @Valid @RequestBody CreateSmallGroupDto.Request req) {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
 
@@ -215,7 +215,7 @@ public class MeetingController {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
         try{
-            SmallGroupDto.Response result = smallGroupService.enterSmallGroup(member, smallGroupId);
+            CreateSmallGroupDto.Response result = smallGroupService.enterSmallGroup(member, smallGroupId);
             return ApiUtils.success(result);
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -235,4 +235,26 @@ public class MeetingController {
         }
     }
 
+    //미팅 그룹 조회
+    @GetMapping("/group/list/{meetingId}")
+    public ApiResult meetingGroup(@LoginUser Member member, @PathVariable("meetingId") Integer meetingId){
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            Meeting meeting = meetingService.getMeetingByMeetingId(meetingId);
+            Integer resMemberId = groupService.getGroupTeacher(meeting.getGroupReq()).getMemberId();
+            Integer reqMemberId = groupService.getGroupTeacher(meeting.getGroupRes()).getMemberId();
+            if(member.getMemberId() == resMemberId || member.getMemberId() == reqMemberId){
+                //요청하거나 요청 받은 그룹의 장이 맞으면
+                MeetingDto meetingDto = MeetingDto.fromEntity(meeting, meeting.getSmallGroups());
+                return ApiUtils.success(meetingDto);
+            }
+            else{
+                return ApiUtils.error("요청 권한이 없습니다", HttpStatus.BAD_REQUEST);
+            }
+
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

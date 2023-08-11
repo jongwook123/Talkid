@@ -236,4 +236,10 @@ public class MeetingServiceImpl implements MeetingService{
         //거절 한다는 뜻은 해당 요청을 삭제 한다는 뜻이다
         meetingJoinReqRepository.delete(meetingJoinReq);
     }
+
+    @Override
+    public Meeting getMeetingByMeetingId(Integer meetingId) throws Exception {
+        Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(()-> new NotFoundException("존재하지 않는 미팅입니다"));
+        return meeting;
+    }
 }

@@ -74,4 +74,6 @@ public interface MeetingService {
      * @throws Exception 해당 요청에 대해 member가 권한이 없는 경우, 존재하지 않는 meetingJoinReq인 경우
      */
     void rejectRequest(Member member, Integer meetingJoinReqId) throws Exception;
+
+    Meeting getMeetingByMeetingId(Integer meetingId) throws Exception;
 }
