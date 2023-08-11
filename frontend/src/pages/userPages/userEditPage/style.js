@@ -22,7 +22,7 @@ export const SectionWrapper = styled.div`
 
 export const SigninSection = styled.section`
     width: 620px;
-    padding: 70px 50px 90px;
+    padding: 80px 50px 90px;
     position: relative;
     height: fit-content;
     border: 8px solid ${props => props.theme.colors.theme.green_light};
@@ -256,6 +256,8 @@ export const DropboxFieldset = styled.fieldset`
 `
 
 export const ButtonWrapper = styled.div`
+    display: flex;
+    gap: 20px;
     position: absolute;
     width: 520px;
     padding: 0 15px;

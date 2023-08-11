@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 
 export default function ProfilePage() {
     const params = useParams(); 
-    const token = useSelector(state => state.user.token);
+    const token = useSelector(state => state.user.accessToken);
     
     const [user, setUser] = useState({});
 
@@ -32,24 +32,29 @@ export default function ProfilePage() {
     const [exp, setExp] = useState({})
     
     const handleFindMember = async () => {
-        const memberMail = params.memberMail;
-        const result = await FindMembers("all", memberMail);
-        setMember({
-            ...result.response[0]
-        })
-        const result1 = await TryGetFollow(result.response[0].memberId)
+        const memberMail = params.user;
 
-        if (Array.isArray(result1.response.Follower)) {
-            setFollowers(result1.response.Follower);
-        }
-        if (Array.isArray(result1.response.Following)) {
-            setFollowings(result1.response.Following);
-        }
-        const result2 = await TryGetExp(result.response[0].memberId)
-        console.log(result2)
-        if (Array.isArray(result2.response)) {
-            setExp(result2.response);
-        }
+        const result = await FindMembers("all", memberMail);
+        
+        setMember({
+            ...result.response[0],
+        })
+
+        // const result1 = await TryGetFollow(token, result.response[0].memberId)
+
+        // console.log(result1);
+
+        // if (Array.isArray(result1.response.Follower)) {
+        //     setFollowers(result1.response.Follower);
+        // }
+        // if (Array.isArray(result1.response.Following)) {
+        //     setFollowings(result1.response.Following);
+        // }
+        // const result2 = await TryGetExp(result.response[0].memberId)
+        // console.log(result2)
+        // if (Array.isArray(result2.response)) {
+        //     setExp(result2.response);
+        // }
     } 
     
     useEffect(() => {
@@ -84,7 +89,7 @@ export default function ProfilePage() {
     const navigate = useNavigate();
 
     const EditClickHandler = () => {
-        navigate('/modifyuser');
+        navigate('/modify');
     }
 
     const [isOpen, setIsOpen] = useState(false);
@@ -135,7 +140,7 @@ export default function ProfilePage() {
                     ) : 
                     (<S.ButtonWrapper2>
                         {isFollowing ? (
-                            <LongButton1 props={{ color: "#8EA3BC", text: "unFollow", callback: FollowClickHandler }} />
+                            <LongButton1 props={{ c1olor: "#8EA3BC", text: "unFollow", callback: FollowClickHandler }} />
                         ) : (
                             <LongButton1 props={{ color: "#8EA3BC", text: "Follow", callback: FollowClickHandler }} />
                         )}
