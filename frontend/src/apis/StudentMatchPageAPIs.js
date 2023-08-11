@@ -4,6 +4,7 @@ export const FindMembers = async (category, keyword) => {
     try {
         const response = await FetchTemplate({
             path: process.env.REACT_APP_BASE_SERVER + `/member/findmember?searchBy=${category}&keyword=${keyword}`,
+            headers: {},
             method: "GET",
         });
 
