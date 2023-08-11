@@ -12,8 +12,8 @@ export const TrySignin = async (email, password) => {
         });
 
         const result = await response.json();
-        console.log(result)
-        return result
+
+        return result;
     } catch (e) {
         console.log(e);
     }

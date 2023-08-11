@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { loginUser } from "redux/slice/userSlice";
 
 import * as S from './style';
 
@@ -11,7 +10,6 @@ import { signinUser } from "redux/slice/userSlice";
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
-import { useNavigate } from "react-router";
 
 
 export default function SigninPage() {
@@ -20,7 +18,6 @@ export default function SigninPage() {
     const navigate = useNavigate();
 
     // 사용자 입력 관련
-
     // 사용자 입력 값 저장
     const [inputs, setInputs] = useState({
         id: "",
@@ -35,16 +32,11 @@ export default function SigninPage() {
         });
     }
 
-    const handleLogin = (response) => {
-        const accessToken = response.response.accessToken;
-        dispatch(loginUser({ token: accessToken }));
-    };
-
     const buttonClickHandler = async (e) => {
         e.preventDefault();
 
         if (!inputs.id) {
-            alert("ID를 입력하세요.");
+            alert("email을 입력하세요.");
 
             return;
         }
@@ -54,34 +46,24 @@ export default function SigninPage() {
 
             return;
         }
-
-        // const result = await TrySignin(inputs.id, inputs.password);
-
-        // console.log(result);
-
-        // if (result.accessToken) {
-        //     dispatch(signinUser({
-        //         accessToken: result.accessToken,
-        //         refreshToken: result.refreshToken,
-        //     }));
-
-        //     navigate('/');
-        // } else {
-        //     alert('이메일 혹은 비밀번호가 일치하지 않습니다!');
-        // }
         
         try {
             const result = await TrySignin(inputs.id, inputs.password);
-            handleLogin(result);
-            navigate('/match/teachers');
-
+            
+            if (!result.success) {
+                alert("아이디 혹은 비밀번호가 일치하지 않습니다.")
+            } else {
+                dispatch(signinUser({
+                    "accessToken": result.response.accessToken,
+                    "refreshToken": result.response.refreshToken,
+                }));
+    
+                navigate("/");
+            }
         } catch (error) {
             console.log(error)
         }
     }
-
-
-
 
     return (
         <>

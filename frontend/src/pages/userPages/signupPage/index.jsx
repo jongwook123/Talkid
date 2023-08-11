@@ -1,16 +1,15 @@
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
+import { useNavigate } from "react-router";
 
 import * as S from './style'
 
-import { TrySignup } from "apis/SignupPageAPIs";
+import { TrySignup } from "apis/UserAPIs";
 import { GetList } from "apis/GetListAPIs";
 
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
 import DropBox1 from "components/dropboxes/dropbox1";
-import { useRef } from "react";
-import { useEffect } from "react";
 
 
 function ImagePreview({ image, deleteFunc }) {
@@ -24,7 +23,9 @@ function ImagePreview({ image, deleteFunc }) {
     );
 }
 
-export default function SignupPage({ max = 10 }) {
+export default function SignupPage({ max = 3 }) {
+    const navigate = useNavigate();
+
     // 사용자 입력
     const [inputs, setInputs] = useState({
         name: "",
@@ -159,8 +160,44 @@ export default function SignupPage({ max = 10 }) {
 
 
     // 확인 버튼 클릭
-    const buttonClickHandler = (e) => {
+    const buttonClickHandler = async (e) => {
         e.preventDefault();
+
+        if (!inputs.name) {
+            alert("이름을 입력하세요.");
+
+            return;
+        }
+
+        if (!inputs.id) {
+            alert("Email을 입력하세요.");
+
+            return;
+        }
+
+        if (!inputs.password) {
+            alert("Password를 입력하세요.");
+
+            return;
+        }
+
+        if (inputs.password !== inputs.password_confirm) {
+            alert("비밀번호를 다시 확인해주세요.");
+
+            return;
+        }
+
+        if (!selectedCountry) {
+            alert("국가를 다시 확인해주세요.");
+
+            return;
+        }
+
+        if (!selectedLanguage) {
+            alert("언어를 다시 확인해주세요.");
+
+            return;
+        }
         
         const schoolid = Math.floor(Math.random() * 4 + 1)
 
@@ -172,7 +209,7 @@ export default function SignupPage({ max = 10 }) {
             } else {
                 return false;
             }
-        })[0].countryId
+        })[0].countryId;
 
         const selectedLanguageId = languageInfo.filter((language) => {
             if (language["languageEng"] === selectedLanguage) {
@@ -180,9 +217,20 @@ export default function SignupPage({ max = 10 }) {
             } else {
                 return false;
             }
-        })[0].languageId
+        })[0].languageId;
 
-        TrySignup(inputs.id, inputs.password, inputs.name, schoolid, selectedCountryId, selectedLanguageId, membertypeid);
+        try {
+            const result = await TrySignup(inputs.id, inputs.password, inputs.name, schoolid, selectedCountryId, selectedLanguageId, membertypeid);
+
+            if (!result.success) {
+                alert(result.error.message);
+            } else {
+                alert("회원가입 성공");
+                navigate("/");
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
@@ -199,7 +247,7 @@ export default function SignupPage({ max = 10 }) {
                         </S.SigninSectionHeader>
                         <S.SigninForm action="">
                             <LongInput1 props={{ id: "name", desc: "Insert your name", color: "green", placeholder: "Your Name", type: "text", value: inputs.name, callback: onChangeHandler }} />
-                            <LongInput1 props={{ id: "id", desc: "Insert your id", color: "orange", placeholder: "Your ID", type: "text", value: inputs.id, callback: onChangeHandler }} />
+                            <LongInput1 props={{ id: "id", desc: "Insert your email", color: "orange", placeholder: "Your Email", type: "text", value: inputs.id, callback: onChangeHandler }} />
                             <LongInput1 props={{ id: "password", desc: "Insert your password", color: "blue", placeholder: "Your Password", type: "password", value: inputs.password, callback: onChangeHandler }} />
                             <LongInput1 props={{ id: "password_confirm", desc: "Check your password", color: "green", placeholder: "Confirm Password", type: "password", value: inputs.password_confirm, callback: onChangeHandler }} />
                             <S.RadioFieldset>

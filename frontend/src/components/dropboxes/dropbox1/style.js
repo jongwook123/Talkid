@@ -56,6 +56,26 @@ export const List = styled.ul`
     border-radius: ${props => props.theme.border_radius.lv1};
     background-color: ${props => props.theme.colors.background_color.white};
     display: ${props => props.clicked ? "block" : "none"};
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_light}` : props.color === 'green' ? `${props.theme.colors.theme.green_light}` : `${props.theme.colors.theme.blue_light}`}
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}`};
+        border-radius: 10px;
+        background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+    }
 `
 
 export const ListItem = styled.li`
