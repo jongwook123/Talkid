@@ -7,7 +7,6 @@ import com.talkids.backend.group.dto.MemberApplyDto;
 import com.talkids.backend.group.dto.MemberApproveDto;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.member.entity.Member;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -39,4 +38,6 @@ public interface GroupService {
     
     /** 그룹 - 그룹의 선생님 찾기 */
     Member getGroupTeacher(Group group);
+
+    List<?> findGroup(String keyword) throws NotFoundException;
 }
