@@ -51,34 +51,20 @@ export default function SigninPage() {
 
             return;
         }
-
-        // const result = await TrySignin(inputs.id, inputs.password);
-
-        // console.log(result);
-
-        // if (result.accessToken) {
-        //     dispatch(signinUser({
-        //         accessToken: result.accessToken,
-        //         refreshToken: result.refreshToken,
-        //     }));
-
-        //     navigate('/');
-        // } else {
-        //     alert('이메일 혹은 비밀번호가 일치하지 않습니다!');
-        // }
         
         try {
             const result = await TrySignin(inputs.id, inputs.password);
-            handleLogin(result);
-            navigate('/match/teachers');
 
+            dispatch(signinUser({
+                "accessToken": result.accessToken,
+                "refreshToken": result.refreshToken,
+            }));
+
+            navigate("/");
         } catch (error) {
             console.log(error)
         }
     }
-
-
-
 
     return (
         <>
