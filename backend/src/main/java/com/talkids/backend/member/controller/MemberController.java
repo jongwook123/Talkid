@@ -28,7 +28,7 @@ public class MemberController {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
         try{
-            return ApiUtils.success(member);
+            return ApiUtils.success(MemberDto.fromEntity(member));
         } catch(Exception e){
             return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
         }
