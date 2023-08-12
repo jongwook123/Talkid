@@ -49,7 +49,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 			}
 
 			socketRef.current.emit('join_room', {
-				room: room.dmRoomId,
+				room: room,
 				email: nowUser.memberMail,
 			});
 		} catch (e) {
