@@ -154,7 +154,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
                 <S.DictionaryWrapper>
                     {
                         <S.VideoWrapper>
-                            <Video props={{ room: selectedRoom, user }} />
+                            <Video props={{ room: selectedRoom, user, groupId }} />
                             <S.ListChat>
                                 {
                                     chats.map((chat, index) => {

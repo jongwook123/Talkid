@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import * as S from './style';
 
 import ChatVideo from 'components/videos/chatvideo';
+import VideoCarousel from 'components/carousel/videocarousel';
 
 const pc_config = {
 	iceServers: [
@@ -118,7 +119,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 	useEffect(() => {
 		socketRef.current = io.connect(process.env.REACT_APP_VIDEO_SERVER_HOME);
 
-		getLocalStream();
+		// getLocalStream();
 
 		socketRef.current.on('all_users', (allUsers) => {
 			allUsers.forEach(async (user) => {
@@ -295,17 +296,20 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 	}, [headsetOn]);
 
 	return (
-		<S.VideoList>
-			<S.VideoListItem>
-				<video
-					muted
-					ref={localVideoRef}
-					autoPlay
-				/>
-			</S.VideoListItem>
-			{users.map((user, index) => (
-				<ChatVideo key={index} email={user.email} stream={user.stream} translated={translated[user.email]} translateOn />
-			))}
-		</S.VideoList>
+
+		<VideoCarousel props={{
+			list: [
+				<S.VideoListItem key={-1}>
+					<video
+						muted
+						ref={localVideoRef}
+						autoPlay
+					/>
+				</S.VideoListItem>,
+				...users.map((user, index) => (
+					<ChatVideo key={index} email={user.email} stream={user.stream} translated={translated[user.email]} translateOn={translateOn} />
+				))
+			]
+		}} />
 	);
 };

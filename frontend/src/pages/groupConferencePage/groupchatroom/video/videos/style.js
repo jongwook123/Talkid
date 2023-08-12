@@ -6,6 +6,7 @@ export const VideoList = styled.ul`
     align-items: center;
     justify-content: center;
     gap: 50px;
+    height: 100%;
 `
 
 export const VideoListItem = styled.li`
@@ -20,4 +21,10 @@ export const VideoListItem = styled.li`
 
 export const Translated = styled.p`
     position: absolute;
+`
+
+export const TestDiv = styled.div`
+    width: 220px;
+    height: 100%;
+    background-color: rebeccapurple;
 `

@@ -10,9 +10,8 @@ import HeadsetOffIcon from '@mui/icons-material/HeadsetOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import TranslateIcon from '@mui/icons-material/Translate';
-import PhoneDisabledIcon from '@mui/icons-material/PhoneDisabled';
 
-export default function Video({ props: { room, user } }) {
+export default function Video({ props: { room, user, groupId } }) {
     const [headsetOn, setHeadsetOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
     const [translateOn, setTranslateOn] = useState(false);
@@ -23,6 +22,10 @@ export default function Video({ props: { room, user } }) {
     }
 
     const onClickVideo = () => {
+        if (room === groupId && user.memberType.memberTypeId === 2) {
+            return;
+        }
+
         setVideoOn(video => !video);
     }
 
@@ -64,8 +67,8 @@ export default function Video({ props: { room, user } }) {
             </S.SectionHeader>
             {
                 <>
-                    {/* <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn, translateOn }} />
-                    <Texts props={{ setPropagate }} /> */}
+                    <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn, translateOn }} />
+                    <Texts props={{ setPropagate }} />
                 </>
             }
         </S.Section>

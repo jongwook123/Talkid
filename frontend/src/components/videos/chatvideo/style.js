@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const VideoWrapper = styled.video`
+export const VideoWrapper = styled.li`
     width: 220px;
     position: relative;
 
