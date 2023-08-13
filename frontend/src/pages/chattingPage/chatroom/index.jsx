@@ -30,6 +30,11 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         return timeValue;
     }
 
+    useEffect(() => {
+        setVideoClicked(false);
+        setVideoStart(false);
+    }, [room]);
+
     const updateChatList = useCallback((data, roomId) => {
         setChatRooms(chatRooms => {
             const targetRoom = chatRooms.filter(chatRoom => chatRoom.dmRoomId === data.roomId)[0];
@@ -120,7 +125,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         videoTextRef.current.innerText = "영상 통화 모달";
 
         setVideoClicked(false);
-        setVideoStart(false)
+        setVideoStart(false);
     }, [videoTextRef, setVideoClicked, setVideoStart]);
 
     useEffect(() => {

@@ -1,21 +1,27 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import io from 'socket.io-client';
 
 import * as S from './style';
 
 import ChatList from "./chatlist";
 
+import { GetUserInfo } from "apis/UserAPIs";
+
 export default function ChattingPage() {
     const socketRef = useRef();
     const [socketUpdated, setSocketUpdated] = useState(false);
     const [user, setUser] = useState({});
+    const nowUser = useSelector(state => state.user);
 
     useEffect(() => {
-        setUser({
-            "memberId": "2",
-            "memberMail": "lwc@naver.com",
-            "memberName": "이우철",
-        });
+        const getUser = async () => {
+            const result = await GetUserInfo(nowUser.accessToken);
+
+            setUser(result.response);
+        }
+
+        getUser();
     }, []);
 
     useEffect(() => {
@@ -23,7 +29,7 @@ export default function ChattingPage() {
             return;
         }
 
-        socketRef.current = io.connect(process.env.REACT_APP_CHATTING_SERVER);
+        socketRef.current = io.connect(process.env.REACT_APP_CHATTING_SERVER_HOME);
 
         socketRef.current.emit('connectUser', {
             userMail: user.memberMail,
