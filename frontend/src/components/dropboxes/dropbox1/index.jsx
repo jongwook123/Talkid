@@ -38,7 +38,6 @@ export default function DropBox1({ props: { list, target, callback } }) {
                 <span>{target}</span>
             </S.Button>
             <S.List clicked={clicked} color={color} onClick={(e) => {e.stopPropagation();}}>
-            <S.List clicked={clicked} onClick={(e) => { e.stopPropagation(); }}>
                 {
                     list.map(item => {
                         return (
