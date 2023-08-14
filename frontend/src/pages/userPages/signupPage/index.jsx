@@ -9,6 +9,7 @@ import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
 import DropBox1 from "components/dropboxes/dropbox1";
+import { Link } from "react-router-dom";
 
 function ImagePreview({ image, deleteFunc }) {
     return (
@@ -202,7 +203,7 @@ export default function SignupPage({ max = 3 }) {
 
             return;
         }
-        
+
         const schoolid = Math.floor(Math.random() * 4 + 1);
 
         const membertypeid = inputs.type === 'student' ? 2 : 1;
@@ -245,8 +246,10 @@ export default function SignupPage({ max = 3 }) {
                 <S.SectionWrapper>
                     <S.SigninSection>
                         <S.SigninSectionHeader>
-                            <h2>로그인 영역</h2>
-                            <img src={TALKIDS} alt="" />
+                            <Link to='/'>
+                                <h2>회원가입 영역</h2>
+                                <img src={TALKIDS} alt="" />
+                            </Link>
                         </S.SigninSectionHeader>
                         <S.SigninForm action="">
                             <LongInput1 props={{ id: "name", desc: "Insert your name", color: "green", placeholder: "Your Name", type: "text", value: inputs.name, callback: onChangeHandler }} />

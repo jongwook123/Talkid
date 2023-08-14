@@ -8,6 +8,7 @@ import { TryFindPassword } from "apis/UserAPIs";
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
+import { Link } from "react-router-dom";
 
 export default function FindPasswordPage() {
     const navigate = useNavigate();
@@ -58,8 +59,10 @@ export default function FindPasswordPage() {
             <main>
                 <S.FindPasswordSection>
                     <S.FindPasswordSectionHeader>
-                        <h2>비밀번호찾기 영역</h2>
-                        <img src={TALKIDS} alt="" />
+                        <Link to='/'>
+                            <h2>비밀번호찾기 영역</h2>
+                            <img src={TALKIDS} alt="" />
+                        </Link>
                     </S.FindPasswordSectionHeader>
                     <S.FindPasswordForm action="">
                         <LongInput1 props={{ id: "email", desc: "Insert your email", color: "orange", placeholder: "Your E-mail", type: "text", value: inputs.email, callback: onChangeHandler }} />

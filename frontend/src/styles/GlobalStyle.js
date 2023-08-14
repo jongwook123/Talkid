@@ -12,6 +12,7 @@ export const GlobalStyle = createGlobalStyle`
 
     button, a, label {
         cursor: pointer;
+        padding: 0;
     }
 
     input {
@@ -20,5 +21,10 @@ export const GlobalStyle = createGlobalStyle`
 
     ul, li, ol {
         list-style: none;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
     }
 `

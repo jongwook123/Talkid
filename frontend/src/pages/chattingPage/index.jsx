@@ -22,7 +22,7 @@ export default function ChattingPage() {
         }
 
         getUser();
-    }, []);
+    }, [nowUser]);
 
     useEffect(() => {
         if (!user.memberName) {

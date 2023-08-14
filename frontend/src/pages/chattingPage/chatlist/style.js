@@ -4,7 +4,8 @@ import IROnly from "styles/IROnly"
 export const SectionUser = styled.section`
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: calc(100vh - 80px);
+    margin-top: 80px;
     background-color: ${props => props.theme.colors.theme.blue};
 `
 
