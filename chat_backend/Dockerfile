@@ -6,6 +6,6 @@ COPY ./ /app
 
 RUN npm install
 
-EXPOSE 8090
+EXPOSE 8092
 
 CMD ["npm", "start"]
