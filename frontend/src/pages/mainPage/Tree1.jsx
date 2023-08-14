@@ -1,25 +1,18 @@
-import React from 'react';
-import { Clone, useGLTF, useTexture } from '@react-three/drei';
-import te1 from 'assets/images/Tree1.png'
-import te2 from 'assets/images/foliage_alpha3-remove.png'
-export function Tree1({ position, rotation,scale }) {
-  const tree = useGLTF('https://douges.dev/static/tree.glb');
-    const yourTexture = useTexture(te1)
-    const yourTexture1 = useTexture(te2)
-    
+import React from "react";
+import { Clone, useGLTF, useTexture } from "@react-three/drei";
+import te1 from "assets/images/Tree1.png";
+import te2 from "assets/images/foliage_alpha3-remove.png";
+export function Tree1({ position, rotation, scale }) {
+  const tree = useGLTF("https://douges.dev/static/tree.glb");
+  const yourTexture = useTexture(te1);
+  const yourTexture1 = useTexture(te2);
+
   return (
     <group rotation={rotation} position={position} scale={scale} color="green">
-      <Clone
-        receiveShadow
-        castShadow
-        object={tree.nodes.trunk}
-        >
-        <meshStandardMaterial 
-        attach="material" 
-        map={yourTexture}
-        />
-        </Clone>
-    {/* <Clone receiveShadow castShadow object={tree.nodes.foliage} >
+      <Clone receiveShadow castShadow object={tree.nodes.trunk}>
+        <meshStandardMaterial attach="material" map={yourTexture} />
+      </Clone>
+      {/* <Clone receiveShadow castShadow object={tree.nodes.foliage} >
         <meshStandardMaterial 
         attach="material" 
         map={yourTexture} 

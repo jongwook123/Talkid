@@ -1,4 +1,4 @@
-import * as S from './style';
+import * as S from "./style";
 
 export default function Modal(props) {
   const {
@@ -47,5 +47,4 @@ export default function Modal(props) {
       </S.Close>
     </S.ModalForm>
   );
-};
-
+}

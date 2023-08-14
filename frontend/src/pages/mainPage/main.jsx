@@ -24,7 +24,7 @@ import { Bookmark } from "./Bookmark";
 import { useEffect } from "react";
 
 import { TryGetUser, TryGetExp } from "apis/GetUserAPIs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function MainPage() {
   const user = useSelector((state) => state.user);

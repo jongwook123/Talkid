@@ -1,13 +1,21 @@
-import * as S from './style';
-
+import * as S from "./style";
 
 export default function Dates(props) {
-  const { lastDate, firstDate, elm, findToday, idx, mySchedules, schedules, meetings, setClickedData } =
-    props;
+  const {
+    lastDate,
+    firstDate,
+    elm,
+    findToday,
+    idx,
+    mySchedules,
+    schedules,
+    meetings,
+    setClickedData,
+  } = props;
 
   const clickHandler = (type, data) => {
-    setClickedData({ 'type': type, 'data': data ,'today': elm});
-  }
+    setClickedData({ type: type, data: data, today: elm });
+  };
   return (
     <>
       <S.DatesForm>
@@ -20,17 +28,19 @@ export default function Dates(props) {
           <S.TodayCSS findToday={findToday}>{elm}</S.TodayCSS>
         </S.DateNum>
         <S.Lists>
-          <S.ListMySchedules onClick={() => clickHandler('mySchedules', mySchedules)}>
+          <S.ListMySchedules
+            onClick={() => clickHandler("mySchedules", mySchedules)}
+          >
             {mySchedules[0] && mySchedules.length}
           </S.ListMySchedules>
-          <S.ListSchedules onClick={() => clickHandler('schedules', schedules)}>
+          <S.ListSchedules onClick={() => clickHandler("schedules", schedules)}>
             {schedules[0] && schedules.length}
           </S.ListSchedules>
-          <S.ListMeetings onClick={() => clickHandler('meetings', meetings)}>
+          <S.ListMeetings onClick={() => clickHandler("meetings", meetings)}>
             {meetings[0] && meetings.length}
           </S.ListMeetings>
         </S.Lists>
       </S.DatesForm>
     </>
   );
-};
+}

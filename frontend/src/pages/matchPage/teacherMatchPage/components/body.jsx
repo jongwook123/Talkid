@@ -1,17 +1,16 @@
-import Dates from './dates';
+import Dates from "./dates";
 
-import * as S from './style';
+import * as S from "./style";
 
 export default function Body(props) {
-  const { totalDate, today, month, year, mySchedules, schedules, meetings } = props;
+  const { totalDate, today, month, year, mySchedules, schedules, meetings } =
+    props;
   const lastDate = totalDate.indexOf(1);
   const firstDate = totalDate.indexOf(1, 7);
 
   //today
   const findToday = totalDate.indexOf(today);
   const getMonth = new Date().getMonth() + 1;
-
-
 
   return (
     <S.BodyForm>
@@ -33,5 +32,4 @@ export default function Body(props) {
       })}
     </S.BodyForm>
   );
-};
-
+}

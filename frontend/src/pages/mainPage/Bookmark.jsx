@@ -1,14 +1,12 @@
 export function Bookmark(props) {
   return (
     <group {...props}>
-        <DifferentColoredFaces position={[0, 0, 0]} />
+      <DifferentColoredFaces position={[0, 0, 0]} />
     </group>
   );
 }
 
 function DifferentColoredFaces(props) {
-
-
   return (
     <group {...props}>
       {/* 윗면 */}
