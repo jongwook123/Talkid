@@ -32,16 +32,11 @@ export default function SigninPage() {
         });
     }
 
-    // const handleLogin = (response) => {
-    //     const accessToken = response.response.accessToken;
-    //     // dispatch(loginUser({ token: accessToken }));
-    // };
-
     const buttonClickHandler = async (e) => {
         e.preventDefault();
 
         if (!inputs.id) {
-            alert("ID를 입력하세요.");
+            alert("email을 입력하세요.");
 
             return;
         }
@@ -51,16 +46,28 @@ export default function SigninPage() {
 
             return;
         }
+
+        const regex = new RegExp(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/);
+
+        if (!regex.test(inputs.id)) {
+            alert("이메일 형식이 유효하지 않습니다.");
+
+            return;
+        }
         
         try {
             const result = await TrySignin(inputs.id, inputs.password);
-
-            dispatch(signinUser({
-                "accessToken": result.accessToken,
-                "refreshToken": result.refreshToken,
-            }));
-
-            navigate("/");
+            
+            if (!result.success) {
+                alert("이메일 혹은 비밀번호가 일치하지 않습니다.")
+            } else {
+                dispatch(signinUser({
+                    "accessToken": result.response.accessToken,
+                    "refreshToken": result.response.refreshToken,
+                }));
+    
+                navigate("/");
+            }
         } catch (error) {
             console.log(error)
         }

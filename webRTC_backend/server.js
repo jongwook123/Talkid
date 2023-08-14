@@ -16,6 +16,8 @@ app.use(cors());
 
 io.on('connection', socket => {
     socket.on('join_room', data => {
+        console.log(data);
+
         if (users[data.room]) {
             const length = users[data.room].length;
 

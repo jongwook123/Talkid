@@ -11,6 +11,7 @@ const PORT = 8092;
 const ConnectedUsers = [];
 const ConnectedUserRooms = {};
 const ConnectedUserSocket = {};
+const GroupConference = {};
 
 const backendServer = 'http://i9d106.p.ssafy.io:8080';
 
@@ -39,6 +40,15 @@ io.on('connection', socket => {
         }
 
         ConnectedUsers.splice(ConnectedUsers.indexOf(data.userMail), 1);
+
+        // 08.12 추가
+        ConnectedUserRooms[data.userMail].forEach(room => {
+            socket.leave(room);
+        })
+
+        delete ConnectedUserSocket[data.userMail];
+        // 08.12 추가
+
         delete ConnectedUserRooms[data.userMail];
 
         console.log('User ' + data.userMail + ' disconnected');
@@ -156,34 +166,53 @@ io.on('connection', socket => {
     });
 
     // 그룹 채팅
+
+    // 그룹 입장, 퇴장
     socket.on('joinGroupConference', data => {
-        console.log('join group', data);
+        if (!GroupConference[data.roomId]) {
+            GroupConference[data.roomId] = [];
+        }
 
-        // if (ConnectedUsers.includes(data.userMail)) {
-        //     console.log("user " + data.userMail + " is already connected");
+        if (GroupConference[data.roomId].includes(data.userMail)) {
+            console.log("user " + data.userMail + " is already joined");
 
-        //     return;
-        // }
+            return;
+        }
 
-        // ConnectedUsers.push(data.userMail);
-        // ConnectedUserSocket[data.userMail] = socket;
+        GroupConference[data.roomId].push(data.userMail);
 
-        // console.log('User ' + data.userMail + ' connected');
+        socket.join(data.roomId);
+
+        console.log(data.userMail + " joined " + data.roomId);
     });
 
     socket.on('exitGroupConference', data => {
-        console.log('exit group', data);
+        if (!GroupConference[data.roomId].includes(data.userMail)) {
+            console.log("user " + data.userMail + " is already exited");
 
-        // if (!ConnectedUsers.includes(data.userMail)) {
-        //     console.log("user " + data.userMail + " is already disconnected");
+            return;
+        }
 
-        //     return;
-        // }
+        GroupConference[data.roomId].splice(GroupConference[data.roomId].indexOf(data.userMail), 1);
 
-        // ConnectedUsers.splice(ConnectedUsers.indexOf(data.userMail), 1);
-        // delete ConnectedUserRooms[data.userMail];
+        socket.leave(data.roomId);
 
-        // console.log('User ' + data.userMail + ' disconnected');
+        console.log(data.userMail + " exited " + data.roomId);
+    });
+
+    socket.on('disconnectGroup', data => {
+        Object.keys(GroupConference).forEach(key => {
+            if (GroupConference[key].includes(data.userMail)) {
+                GroupConference[key].splice(GroupConference[key].indexOf(data.userMail), 1);
+            }
+        })
+
+        console.log(data.userMail + " disconnetced Group Page");
+    });
+
+    // 메시지 송수신 responseGroupMessage
+    socket.on('requestGroupMessage', data => {
+        io.sockets.to(data.roomId).emit('responseGroupMessage', { ...data });
     });
 });
 

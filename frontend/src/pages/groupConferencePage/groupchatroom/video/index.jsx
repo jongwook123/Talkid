@@ -10,9 +10,8 @@ import HeadsetOffIcon from '@mui/icons-material/HeadsetOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import TranslateIcon from '@mui/icons-material/Translate';
-import PhoneDisabledIcon from '@mui/icons-material/PhoneDisabled';
 
-export default function Video({ props: { videoStart, setVideoStart, room, user } }) {
+export default function Video({ props: { room, user, groupId } }) {
     const [headsetOn, setHeadsetOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
     const [translateOn, setTranslateOn] = useState(false);
@@ -23,19 +22,19 @@ export default function Video({ props: { videoStart, setVideoStart, room, user }
     }
 
     const onClickVideo = () => {
+        if (room === groupId && user.memberType.memberTypeId === 2) {
+            return;
+        }
+
         setVideoOn(video => !video);
     }
 
     const onClickTranslate = () => {
         setTranslateOn(translate => !translate)
     }
-
-    const onClickVideoOff = () => {
-        setVideoStart(false);
-    }
     
     return (
-        <S.Section videoStart={videoStart}>
+        <S.Section videoStart={true}>
             <S.SectionHeader>
                 <h3>화상 회의 영역</h3>
                 <S.HeaderList>
@@ -64,15 +63,9 @@ export default function Video({ props: { videoStart, setVideoStart, room, user }
                             <TranslateIcon />
                         </S.ListButtonTranslate>
                     </li>
-                    <li>
-                        <S.ListButtonOff onClick={onClickVideoOff} visible={true}>
-                            <PhoneDisabledIcon />
-                        </S.ListButtonOff>
-                    </li>
                 </S.HeaderList>
             </S.SectionHeader>
             {
-                videoStart &&
                 <>
                     <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn, translateOn }} />
                     <Texts props={{ setPropagate }} />

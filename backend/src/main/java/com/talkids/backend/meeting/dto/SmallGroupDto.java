@@ -1,57 +1,44 @@
 package com.talkids.backend.meeting.dto;
 
-import com.talkids.backend.dm.dto.DmRoomDto;
-import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.meeting.entity.Meeting;
 import com.talkids.backend.meeting.entity.SmallGroup;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
+import com.talkids.backend.meeting.entity.SmallGroupMember;
+import com.talkids.backend.member.dto.MemberDto;
+import com.talkids.backend.member.entity.Member;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
+import lombok.Getter;
 
+import java.util.List;
+
+@Getter @Builder
 public class SmallGroupDto {
+    private Integer smallGroupId;
+    private String smallGroupName;
+    private MeetingDto meeting;
+    private List<MemberDto> members;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Request{
-
-        @NotNull(message = "미팅 ID를 입력해주세요")
-        private Integer meetingId;
-
-        @Length(min = 1, max = 45)
-        @NotBlank(message = "소그룹 이름을 입력해주세요")
-        private String smallGroupName;
-
-        @Builder
-        public SmallGroup saveSmallGroupDto(Meeting meeting){
-            return SmallGroup.builder()
-                    .meeting(meeting)
-                    .smallGroupName(smallGroupName)
-                    .build();
-        }
+    public static SmallGroupDto fromEntity(SmallGroup smallGroup){
+        return SmallGroupDto.builder()
+            .smallGroupId(smallGroup.getSmallGroupId())
+            .smallGroupName(smallGroup.getSmallGroupName())
+            .build();
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Response {
+    public static SmallGroupDto fromEntity(SmallGroup smallGroup, Meeting meeting){
+        return SmallGroupDto.builder()
+            .smallGroupId(smallGroup.getSmallGroupId())
+            .smallGroupName(smallGroup.getSmallGroupName())
+            .meeting(MeetingDto.fromEntity(meeting))
+            .build();
+    }
 
-        private Integer meetingId;
-        private Integer smallGroupId;
-        private String smallGroupName;
-        private String memberName;
+    public static SmallGroupDto fromEntity(SmallGroup smallGroup, List<SmallGroupMember> members){
+        List<MemberDto> memberDtos = members.stream().map((m) -> MemberDto.fromEntity(m.getMember())).toList();
 
-        public static Response smallGroupResponseDto(int meetingId, int smallGroupId, String smallGroupName, String memberName) {
-            Response response = new SmallGroupDto.Response();
-            response.setMeetingId(meetingId);
-            response.setSmallGroupId(smallGroupId);
-            response.setSmallGroupName(smallGroupName);
-            response.setMemberName(memberName);
-            return response;
-        }
+        return SmallGroupDto.builder()
+            .smallGroupId(smallGroup.getSmallGroupId())
+            .smallGroupName(smallGroup.getSmallGroupName())
+            .members(memberDtos)
+            .build();
     }
 }

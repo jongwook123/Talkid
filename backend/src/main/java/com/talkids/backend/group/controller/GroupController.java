@@ -136,4 +136,16 @@ public class GroupController {
         }
     }
 
+    /** 그룹 검색 */
+    @GetMapping("/find")
+    public ApiResult<?> findGroup(@LoginUser Member member, @RequestParam("keyword") String keyword) {
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+
+        try{
+            List<?> result = groupService.findGroup(keyword);
+            return ApiUtils.success(result);
+        } catch(Exception e){
+            return ApiUtils.error(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

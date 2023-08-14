@@ -2,7 +2,7 @@ package com.talkids.backend.meeting.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.meeting.repository.SmallGroupMemberRepository;
-import com.talkids.backend.meeting.dto.SmallGroupDto;
+import com.talkids.backend.meeting.dto.CreateSmallGroupDto;
 import com.talkids.backend.meeting.entity.SmallGroup;
 import com.talkids.backend.meeting.entity.SmallGroupMember;
 import com.talkids.backend.meeting.repository.MeetingRepository;
@@ -33,7 +33,7 @@ public class SmallGroupServiceImpl implements SmallGroupService {
     /** 소그룹 생성 */
     @Transactional
     @Override
-    public int createSmallGroup(SmallGroupDto.Request req) throws NotFoundException {
+    public int createSmallGroup(CreateSmallGroupDto.Request req) throws NotFoundException {
         if(meetingRepository.findById(req.getMeetingId()).isEmpty())
             throw new NotFoundException("등록된 미팅이 없습니다.");
 
@@ -63,7 +63,7 @@ public class SmallGroupServiceImpl implements SmallGroupService {
     /** 소그룹 입장 */
     @Transactional
     @Override
-    public SmallGroupDto.Response enterSmallGroup(Member member, int smallGroupId) throws NotFoundException {
+    public CreateSmallGroupDto.Response enterSmallGroup(Member member, int smallGroupId) throws NotFoundException {
         SmallGroup smallGroup = smallGroupRepository.findBySmallGroupId(smallGroupId)
                 .orElseThrow(() -> new NotFoundException("등록된 소그룹이 없습니다."));
 
@@ -82,7 +82,7 @@ public class SmallGroupServiceImpl implements SmallGroupService {
             smallGroupMember.get().setSmallGroup(smallGroup);
         }
 
-        return SmallGroupDto.Response.smallGroupResponseDto(
+        return CreateSmallGroupDto.Response.smallGroupResponseDto(
                 smallGroup.getMeeting().getMeetingId(),
                 smallGroupId,
                 smallGroup.getSmallGroupName(),

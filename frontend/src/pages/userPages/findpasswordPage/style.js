@@ -18,7 +18,7 @@ export const PageMain = styled.main`
 export const FindPasswordSection = styled.section`
     position: absolute;
     width: 620px;
-    padding: 70px 50px 90px;
+    padding: 80px 50px 80px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

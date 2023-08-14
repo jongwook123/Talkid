@@ -33,12 +33,15 @@ export default function App() {
             <GlobalStyle />
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Routes>
-                    {/* 사용자 관련 */}
+                    {/* 메인 페이지 */}
                     <Route path="/" element={<MainPage />} />
+                    
+                    {/* 사용자 관련 */}
                     <Route path="/signin" element={<SigninPage />} />
                     <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/:user/modify" element={<UserEditPage />} />
                     <Route path="/findpassword" element={<FindPasswordPage />} />
+                    <Route path="/modify" element={<UserEditPage />} />
+                    <Route path="/:user/profile" element={<ProfilePage />} />
 
                     {/* 채팅, 화상 관련 */}
                     {/* <Route path="/chattingtest" element={<ChattingPages />} /> */}
@@ -46,10 +49,12 @@ export default function App() {
                     <Route path="/conference" element={<GroupConferencePage />} /> 
                     
                     
-                    <Route path="/profile" element={<ProfilePage />} />
                     {/* <Route path="/modifyuser" element={<UserEditPage />} /> */}
+                    {/* 그룹 관련 */}
                     <Route path="/group" element={<GroupPage />} />
                     <Route path="/groupdetail/:groupId" element={<GroupDetailPage />} />
+
+                    {/* 매칭 관련 */}
                     <Route path="/match/students" element={<StudentMatchPage />} />
                     <Route path="/match/teachers" element={<TeacherMatchPage />} />
                 </Routes>
