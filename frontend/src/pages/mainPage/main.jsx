@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 import { Canvas } from "@react-three/fiber";
@@ -9,32 +9,38 @@ import GrassWithFlowers from "./Grass";
 import Ground from "./Ground";
 import { Tree3 } from "./Tree3";
 import Cloud1 from "./Clouds";
-import { AShapeStructure, DShapeStructure, IShapeStructure, KShapeStructure, LShapeStructure, SShapeStructure, TShapeStructure } from "./ShapeStructure";
+import {
+  AShapeStructure,
+  DShapeStructure,
+  IShapeStructure,
+  KShapeStructure,
+  LShapeStructure,
+  SShapeStructure,
+  TShapeStructure,
+} from "./ShapeStructure";
 import { Tree2 } from "./Tree2";
 import { Tree1 } from "./Tree1";
 import { Bookmark } from "./Bookmark";
 import { useEffect } from "react";
 
 import { TryGetUser, TryGetExp } from "apis/GetUserAPIs";
-import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
-
 export default function MainPage() {
-    const user = useSelector(state => state.user);
-    const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
-    console.log(user);
+  console.log(user);
 
-    useEffect(() => {
-        if (!user.accessToken) {
-            navigate("/signin");
-        }
-    }, []);
+  useEffect(() => {
+    if (!user.accessToken) {
+      navigate("/signin");
+    }
+  }, []);
 
-    return (
-        <Wrapper>
-            {/* <Canvas style={{ width: "100%", height: "100vh" }} camera={{ position: [0, 0, 150]}}>
+  return (
+    <Wrapper>
+      {/* <Canvas style={{ width: "100%", height: "100vh" }} camera={{ position: [0, 0, 150]}}>
   
   const token = useSelector(state => state.user.token);
 
@@ -91,6 +97,6 @@ export default function MainPage() {
         </Suspense>
         <OrbitControls minPolarAngle={Math.PI / 2.5} maxPolarAngle={Math.PI / 2.5} enableZoom={true} />
       </Canvas> */}
-        </Wrapper>
-    );
+    </Wrapper>
+  );
 }
