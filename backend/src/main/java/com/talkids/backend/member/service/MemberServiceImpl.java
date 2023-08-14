@@ -4,6 +4,8 @@ import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.common.token.JwtToken;
 import com.talkids.backend.common.token.JwtTokenProvider;
 
+import com.talkids.backend.language.entity.Language;
+import com.talkids.backend.language.repository.LanguageRepository;
 import com.talkids.backend.member.dto.*;
 import com.talkids.backend.member.entity.*;
 import com.talkids.backend.member.repository.*;
