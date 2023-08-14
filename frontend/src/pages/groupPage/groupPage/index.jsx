@@ -48,7 +48,7 @@ export default function GroupPage() {
               ></Card>
             </S.CardItem>
           ))}
-          <Modal />
+          <GroupModal />
         </S.CardList>
       </main>
       <footer></footer>
