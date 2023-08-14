@@ -19,7 +19,7 @@ export default function Modal(props) {
 
   return (
     <S.ModalForm>
-      <S.Header>Event 생성</S.Header>
+      <S.Header>일정 등록</S.Header>
       <S.ViewDate>
         날짜 {year}.{month}.{elm}
       </S.ViewDate>

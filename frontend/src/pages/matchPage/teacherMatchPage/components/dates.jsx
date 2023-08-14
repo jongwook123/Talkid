@@ -1,35 +1,16 @@
-import { useEffect, useState } from 'react';
-import Modal from './modal';
-
 import * as S from './style';
 
+
 export default function Dates(props) {
-  const { lastDate, firstDate, elm, findToday, month, year, idx } =
+  const { lastDate, firstDate, elm, findToday, idx, mySchedules, schedules, meetings, setClickedData } =
     props;
 
-  const [userInput, setUserInput] = useState({});
-  const [evtList, setEvtList] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [clickedDate, setClickedDate] = useState({});
-
-  let dateKey = `${month}` + `${elm}`;
-  const registEvent = (value) => {
-    setEvtList([...evtList, value]);
-    setUserInput('');
-    setOpenModal(false);
-  };
-  const clickHandler = () => {
-    setClickedDate({ 'year': year, 'month': month, 'day': elm });
+  const clickHandler = (type, data) => {
+    setClickedData({ 'type': type, 'data': data ,'today': elm});
   }
-
   return (
     <>
-      <S.DatesForm
-        onClick={clickHandler}
-        onDoubleClick={() => {
-          setOpenModal(true);
-        }}
-      >
+      <S.DatesForm>
         <S.DateNum
           idx={idx}
           lastDate={lastDate}
@@ -38,36 +19,17 @@ export default function Dates(props) {
         >
           <S.TodayCSS findToday={findToday}>{elm}</S.TodayCSS>
         </S.DateNum>
-        {openModal && (
-          <Modal
-            elm={elm}
-            month={month}
-            year={year}
-            registEvent={registEvent}
-            setOpenModal={setOpenModal}
-            openModal={openModal}
-            userInput={userInput}
-            setUserInput={setUserInput}
-          />
-        )}
-        {Boolean(evtList[0]) && (
-          <S.Lists>
-            {evtList.map((list, index) => {
-              return (
-                list.slice(0, list.indexOf('_')) === dateKey && (
-                  <S.List
-                    key={index}
-                    onClick={() => {
-                      setOpenModal(true);
-                    }}
-                  >
-                    {list.slice(list.indexOf('_') + 1, list.length)}
-                  </S.List>
-                )
-              );
-            })}
-          </S.Lists>
-        )}
+        <S.Lists>
+          <S.ListMySchedules onClick={() => clickHandler('mySchedules', mySchedules)}>
+            {mySchedules[0] && mySchedules.length}
+          </S.ListMySchedules>
+          <S.ListSchedules onClick={() => clickHandler('schedules', schedules)}>
+            {schedules[0] && schedules.length}
+          </S.ListSchedules>
+          <S.ListMeetings onClick={() => clickHandler('meetings', meetings)}>
+            {meetings[0] && meetings.length}
+          </S.ListMeetings>
+        </S.Lists>
       </S.DatesForm>
     </>
   );

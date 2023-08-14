@@ -9,7 +9,6 @@ import SigninPage from "pages/userPages/signinPage"
 import SignupPage from "pages/userPages/signupPage"
 import UserEditPage from "pages/userPages/userEditPage"
 import FindPasswordPage from "pages/userPages/findpasswordPage"
-import ProfilePage from "pages/userPages/profilePage"
 import GroupPage from "pages/groupPage/groupPage"
 import GroupDetailPage from "pages/groupPage/groupDetailPage"
 import StudentMatchPage from "pages/matchPage/studentMatchPage"
@@ -30,7 +29,6 @@ export default function App() {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/signin" element={<SigninPage />} />
                     <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/modifyuser" element={<UserEditPage />} />
                     <Route path="/findpassword" element={<FindPasswordPage />} />
                     <Route path="/group" element={<GroupPage />} />

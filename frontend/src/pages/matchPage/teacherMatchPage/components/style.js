@@ -15,7 +15,7 @@ export const Nav = styled.section`
  display: grid;
  grid-template-columns: 3fr 1fr;
  justify-items: stretch;
- margin:10px;
+ margin:30px;
 `;
 export const Year = styled.div`
   font-size: 2rem;
@@ -29,7 +29,23 @@ export const ButtonWrapper = styled.div`
     grid-template-columns: 1fr 1.5fr 1fr;
     & > button {
         width: 95%;
-        height:60%;
+        height:100%;
+    }
+`
+export const ButtonWrapper2 = styled.div`
+    & > button {
+        width: 100%;
+        height:50%;
+        margin-bottom:5px;
+    }
+`
+
+export const ButtonWrapper3 = styled.div`
+    display: grid;
+    justify-items: right;
+    & > button {
+        width: 20%;
+        height:130%;
     }
 `
 
@@ -97,9 +113,22 @@ export const Lists = styled.div`
 export const List = styled.span`
   margin-top: 0.3vw;
   padding-left: 0.5vw;
-  background-color: #f7ced9;
   border-radius: 5px;
+  color: white;
 `;
+
+export const ListMySchedules = styled(List)`
+background-color: #f7ced9; /* 배경색 설정 */
+`;
+
+export const ListSchedules = styled(List)`
+background-color: #b6e2d8; /* 배경색 설정 */
+`;
+
+export const ListMeetings = styled(List)`
+background-color: #f4b284; /* 배경색 설정 */
+`;
+
 
 export const ModalForm = styled.div`
   position: absolute;
@@ -164,13 +193,28 @@ export const Close = styled.div`
 `;
 
 export const ScheduleList = styled.ul`
-  height: 95%;
-  overflow-y: auto; 
+  max-height: 85%;
+  overflow-y: scroll;
   font-weight: 600;
   & > li {
-    margin-bottom: 50px;
+    padding-bottom: 30px;
+    margin-top: 30px;
+    border-bottom: 2px solid;
   }
   & > li > p {
     margin-bottom:10px;
   }
-`;
+  &::-webkit-scrollbar {
+        display: none;
+        width: 8px;
+        background-color: ${props => props.theme.colors.theme.blue};
+  }
+  
+`
+
+
+export const Listheader = styled.header`
+  font-size : 30px;
+  margin-bottom: 30px;
+  text-align: center;
+`
