@@ -3,6 +3,7 @@ package com.talkids.backend.language.controller;
 import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
+import com.talkids.backend.language.dto.PartOfDictDto;
 import com.talkids.backend.language.entity.Language;
 import com.talkids.backend.language.service.LanguageService;
 import com.talkids.backend.member.entity.Member;
@@ -30,10 +31,10 @@ public class LanguageController {
 
     @GetMapping("/{from}/{to}/{text}")
     public ApiResult getDictionary(@LoginUser Member member, @PathVariable String from, @PathVariable String to, @PathVariable String text){
-//        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
+        if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
 
-        languageService.getDictionary(member, from, to, text);
+        List<PartOfDictDto> result = languageService.getDictionary(member, from, to, text);
 
-        return null;
+        return ApiUtils.success(result);
     }
 }
