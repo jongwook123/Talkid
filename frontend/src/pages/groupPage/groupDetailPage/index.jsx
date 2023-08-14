@@ -1,47 +1,60 @@
+import AlarmModal from 'components/modals/alarmmodal';
 import * as S from './style';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import LongButton1 from 'components/buttons/longbutton1';
 
 import Card from "components/cards/studentcards";
-import { useParams } from 'react-router';
-
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { TryDeleteGroup, TryGetStudent } from 'apis/GroupPageAPIs';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 export default function GroupDetailPage() {
     const params = useParams(); 
     const groupIdFromUrl = params.groupId; 
-    
-    console.log(groupIdFromUrl);
+    const token = useSelector(state => state.user.token); // accessToken 가져오기
 
-    const dummyStudentList = [
-        {
-            "student_name": "studentName",
-            "bad_words": 30,
-        },
-        {
-            "student_name": "Name",
-            "students": 21,
-            "created_date": '2023-08-01',
-        },
-        {
-            "student_name": "Name",
-            "students": 14,
-            "created_date": '2023-08-01',
-        },
-        {
-            "student_name": "Name",
-            "students": 53,
-            "created_date": '2023-08-01',
-        },
-        {
-            "student_name": "Name",
-            "students": 25,
-            "created_date": '2023-08-01',
-        },
-        {
-            "student_name": "Name",
-            "students": 466,
-            "created_date": '2023-08-01',
-        },
-    ]
+    const [isOpen, setIsOpen] = useState(false);
+    const open = () => {
+        setIsOpen(true);
+    };
+    const close = () => {
+        setIsOpen(false);
+    };
+
+    
+    
+    const navigate = useNavigate();
+    
+    const del = async () => {
+        await handleDeleteGroups();
+        navigate('/group'); 
+    }
+    
+    const handleDeleteGroups = async () => {
+        const result = await TryDeleteGroup(groupIdFromUrl,token);
+        console.log(result)
+    
+    };
+
+
+    const [students, setStudents] = useState([]);
+
+
+    const handleFindStudents = async () => {
+        const result = await TryGetStudent(groupIdFromUrl,token);
+        setStudents([
+            ...result.response
+        ]);
+        console.log(result)
+    };
+    console.log(students)
+    useEffect(() => {
+        handleFindStudents();
+    }, []);
+
+    
 
     return (
         <>
@@ -59,12 +72,22 @@ export default function GroupDetailPage() {
                         <PersonAddAlt1Icon />
                     </S.CardHeader>
                     <S.CardList>
-                        {dummyStudentList.map((student, index) => (
+                        {students.map((student, index) => (
                             <S.CardItem key={index}>
-                                <Card props={{ studentName: student.student_name, badWords: student.bad_words }}></Card>
+                                <Card props={{ studentName: student.member.memberName, badWords: student.member.memberFilterCount, monthExp : student.monthExp, totalExp : student.totalExp}}></Card>
                             </S.CardItem>
                         ))}
                     </S.CardList>
+                    <S.ButtonWrapper>
+                    <LongButton1 props={{ color: "orange", text: "Delete", callback: open }} />
+                            {isOpen && (
+                                <AlarmModal
+                                message="그룹을 삭제하시겠습니까"
+                                del={del}
+                                close={close}
+                                ></AlarmModal>
+                            )}
+                    </S.ButtonWrapper>
                 </S.CardSection>
             </main>
             <footer></footer>

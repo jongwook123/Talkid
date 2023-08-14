@@ -6,6 +6,9 @@ import LongInput1 from 'components/inputs/longinput1';
 import LongButton1 from 'components/buttons/longbutton1';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { TryMakeGroup } from 'apis/GroupPageAPIs';
+import { useSelector } from 'react-redux';
+import { TryGetUser } from 'apis/GetUserAPIs';
+import { useNavigate } from 'react-router';
 
 function ImagePreview({ image, deleteFunc }) {
   return (
@@ -19,12 +22,23 @@ function ImagePreview({ image, deleteFunc }) {
 }
 
 function Modal() {
+  
   const max = 10;
   const [isOpen, setIsOpen] = useState(false);
   const [inputs, setInputs] = useState({
     groupName: "",
     groupImage: "",
   });
+  const token = useSelector(state => state.user.token); // accessToken 가져오기
+
+  const handleGetUser = async () => {
+    const result = await TryGetUser(token);
+    console.log(result)
+}
+
+  useEffect(() => {
+      handleGetUser();
+  }, [isOpen]);
 
   const onChangeHandler = (e) => {
     setInputs({
@@ -32,7 +46,7 @@ function Modal() {
       [e.target.name]: e.target.value,
     });
   }
-
+  
   const [uploadedImages, setUploadedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const uploadBoxRef = useRef();
@@ -101,10 +115,7 @@ function Modal() {
     });
     setPreviewImages(imageJSXs);
   }, [uploadedImages]);
-
-    
         
-
   
   const buttonClickHandler = (e) => {
     e.preventDefault();
@@ -114,12 +125,21 @@ function Modal() {
 
       return;
     } 
-    TryMakeGroup(2, inputs.groupName, inputs.groupImage);
+    TryMakeGroup(inputs.groupName, inputs.groupImage, token);
+    refreshPage()
+
   }
   
+  const refreshPage = () => {
+    window.location.reload(); 
+  };
+
   const openModalHandler = () => {
     setIsOpen(!isOpen)
   };
+
+
+  
 
   return (
     <>

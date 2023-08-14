@@ -3,14 +3,14 @@ import * as S from './style';
 import LongButton1 from 'components/buttons/longbutton1';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
-import AlarmModal from 'components/alarmmodal';
 import { useSelector } from 'react-redux';
 import { TryFollow, TryGetUser } from 'apis/GetUserAPIs';
 import { TryGetFollow } from 'apis/GetUserAPIs';
 import { TryGetExp } from 'apis/GetUserAPIs';
 import { FindMembers } from 'apis/StudentMatchPageAPIs';
 import { useEffect } from 'react';
-
+import GroupApplyModal from 'components/modals/groupApplyModal';
+import AlarmModal from 'components/modals/alarmmodal';
 
 
 export default function ProfilePage() {
@@ -38,7 +38,7 @@ export default function ProfilePage() {
             ...result.response[0]
         })
         const result1 = await TryGetFollow(result.response[0].memberId)
-
+        console.log(result1)
         if (Array.isArray(result1.response.Follower)) {
             setFollowers(result1.response.Follower);
         }
@@ -46,7 +46,7 @@ export default function ProfilePage() {
             setFollowings(result1.response.Following);
         }
         const result2 = await TryGetExp(result.response[0].memberId)
-        console.log(result2)
+        
         if (Array.isArray(result2.response)) {
             setExp(result2.response);
         }
@@ -57,20 +57,6 @@ export default function ProfilePage() {
         handleFindMember();
     }, []);
 
-
-    const dummydata = {
-        name:'Kim',
-        Exp : 10,
-        Followers : 238,
-        Following : 101,
-        Nation : 'Korea',
-        Language : 'Korean',
-        school : '안녕초',
-        Introduce : 'I;;m~~~~~flsdlkfajfisfjfaf',
-        user : 'me',
-        type : 2
-
-    }
 
     const calculateExpBarWidth = (exp) => {
         const maxExp = 100; // 최대 경험치 값
@@ -105,9 +91,7 @@ export default function ProfilePage() {
         setMember({
             ...result.response[0]
         })
-        const result1 = await TryFollow(result.response[0].memberId,token)
-        
-        
+        const result1 = await TryFollow(result.response[0].memberId,token)    
     }
 
     const isFollowing = Array.isArray(followers) && followers.some(follower => follower.followMemberName === user.memberMail);
@@ -123,14 +107,8 @@ export default function ProfilePage() {
                     {member.memberId === user.memberId ? (
                     <S.ButtonWrapper1>
                         <LongButton1 props={{ color: "#8EA3BC", text: "Edit", callback: EditClickHandler }} />
-                        <NotificationsIcon sx={{ fontSize: 48,cursor: 'pointer' }} onClick={open}/>
-                        {isOpen && (
-                            <AlarmModal
-                            title="알림"
-                            message="알림내역을 보여드립니다 와우와우"
-                            close={close}
-                            ></AlarmModal>
-                        )}
+                        <GroupApplyModal />
+                        {/* <AlarmModal /> */}
                     </S.ButtonWrapper1>
                     ) : 
                     (<S.ButtonWrapper2>

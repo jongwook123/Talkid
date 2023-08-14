@@ -48,13 +48,12 @@ export const BodyHeader = styled.header`
     height: 15%;
 `
 export const ButtonWrapper1 = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    /* grid-template-columns: 1fr 1fr 1fr; */
     width: 300px;
     margin-left:80%;
     height: 100%;
     align-items: center;
-    grid-gap: 30px; /* 버튼들 간의 간격을 설정합니다 */
     
 `
 export const ButtonWrapper2 = styled.div`

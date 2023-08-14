@@ -14,6 +14,7 @@ import GroupPage from "pages/groupPage/groupPage"
 import GroupDetailPage from "pages/groupPage/groupDetailPage"
 import StudentMatchPage from "pages/matchPage/studentMatchPage"
 import TeacherMatchPage from "pages/matchPage/teacherMatchPage"
+import GroupApplyPage from "pages/groupPage/groupApplyPage"
 
 
 
@@ -31,11 +32,12 @@ export default function App() {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/signin" element={<SigninPage />} />
                     <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/profile/:memberMail" element={<ProfilePage />} />
                     <Route path="/modifyuser" element={<UserEditPage />} />
                     <Route path="/findpassword" element={<FindPasswordPage />} />
                     <Route path="/group" element={<GroupPage />} />
                     <Route path="/groupdetail/:groupId" element={<GroupDetailPage />} />
+                    <Route path="/groupapply" element={<GroupApplyPage />} />
                     <Route path="/match/students" element={<StudentMatchPage />} />
                     <Route path="/match/teachers" element={<TeacherMatchPage />} />
                 </Routes>
