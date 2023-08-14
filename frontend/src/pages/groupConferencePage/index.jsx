@@ -49,7 +49,7 @@ export default function ChattingPage() {
             };
         }
 
-        socketRef.current = io.connect(process.env.REACT_APP_CHATTING_SERVER_HOME);
+        socketRef.current = io.connect(process.env.REACT_APP_CHATTING_SERVER);
 
         setSocketUpdated(true);
 
