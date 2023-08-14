@@ -1,6 +1,6 @@
 package com.talkids.backend.member.dto;
 
-import com.talkids.backend.member.entity.Language;
+import com.talkids.backend.language.entity.Language;
 import lombok.Builder;
 import lombok.Getter;
 

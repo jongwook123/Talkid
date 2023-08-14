@@ -1,6 +1,6 @@
-package com.talkids.backend.member.repository;
+package com.talkids.backend.language.repository;
 
-import com.talkids.backend.member.entity.Language;
+import com.talkids.backend.language.entity.Language;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

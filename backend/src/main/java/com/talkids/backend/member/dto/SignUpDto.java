@@ -1,5 +1,6 @@
 package com.talkids.backend.member.dto;
 
+import com.talkids.backend.language.entity.Language;
 import com.talkids.backend.member.entity.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

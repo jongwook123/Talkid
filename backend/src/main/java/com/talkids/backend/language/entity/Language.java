@@ -1,4 +1,4 @@
-package com.talkids.backend.member.entity;
+package com.talkids.backend.language.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
