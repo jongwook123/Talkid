@@ -3,7 +3,7 @@ import * as S from './style';
 import LongButton1 from "components/buttons/longbutton1";
 import { TryRegister } from 'apis/meetingPageAPIs';
 import { useSelector } from "react-redux";
-
+import CalendarModal from 'components/modals/calendarModal';
 
 export default function Head(props) {
   const { year, month, goToday, setMonth } = props;
@@ -20,15 +20,21 @@ export default function Head(props) {
   }
   const token = useSelector(state => state.user.token); // accessToken 가져오기
 
-  const todayButtonClickHandler = async (e) => {
+
+  const registerButtonClickHandler = async (e) => {
     e.preventDefault();
     try {
       const result = await TryRegister(token);
       console.log(result);
-      goToday()
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const todayButtonClickHandler = (e) => {
+    e.preventDefault();
+
+    goToday()
   }
 
   return (
@@ -37,11 +43,14 @@ export default function Head(props) {
         <S.Year>
           <p>{year}년 {month}월</p>
         </S.Year>
-        <S.ButtonWrapper>
-          <LongButton1 props={{ color: "green", text: "<", callback: prevButtonClickHandler }} />
-          <LongButton1 props={{ color: "blue", text: "오늘", callback: todayButtonClickHandler }} />
-          <LongButton1 props={{ color: "green", text: ">", callback: nextButtonClickHandler }} />
-        </S.ButtonWrapper>
+        <S.ButtonWrapper2>
+          <CalendarModal />
+          <S.ButtonWrapper>
+            <LongButton1 props={{ color: "green", text: "<", callback: prevButtonClickHandler }} />
+            <LongButton1 props={{ color: "blue", text: "오늘", callback: todayButtonClickHandler }} />
+            <LongButton1 props={{ color: "green", text: ">", callback: nextButtonClickHandler }} />
+          </S.ButtonWrapper>
+        </S.ButtonWrapper2>
       </S.Nav>
       <S.Days>
         {DAY.map((elm, idx) => {

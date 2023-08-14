@@ -1,7 +1,7 @@
 import FetchTemplate from "utils/FetchTemplate";
 // groupId, meetingStart, meetingEnd
 
-export const TryRegister = async (token) => {
+export const TryRegister = async (token, groupId, meetingStart, meetingEnd) => {
     try {
         const response = await FetchTemplate({
             path: process.env.REACT_APP_BASE_SERVER + '/meeting',
@@ -10,31 +10,24 @@ export const TryRegister = async (token) => {
                 Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-                // "groupId" : groupId,
-                // "meetingStart" : meetingStart,
-                // "meetingEnd" : meetingEnd,
-                "groupId" : 5,
-                "meetingStart":"2023-08-10T08:37:22.315862",
-                "meetingEnd": "2023-08-107T09:37:22.315862",
+                "groupId" : groupId,
+                "meetingStart" : meetingStart,
+                "meetingEnd" : meetingEnd,
             })
         });
 
         const result = await response.json();
-        console.log(result);
         return result
     } catch (e) {
         console.log(e);
     }
 }
 
-let DATE = new Date();
-const year = DATE.getFullYear();
-const month = DATE.getMonth() + 1;
 
-export const GetMeeting = async (token) => {
+export const GetMeeting = async (token, year, month) => {
     try {
         const response = await FetchTemplate({
-            path: process.env.REACT_APP_BASE_SERVER + `/meeting?year=${year}&month=${month}`,
+            path: process.env.REACT_APP_BASE_SERVER + `/meeting?year=2023&month=${month}`,
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -42,7 +35,28 @@ export const GetMeeting = async (token) => {
         });
 
         const result = await response.json();
-        console.log(result)
+        return result;
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const ApplyMeeting = async (token, meetingScheduleId, groupId) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + '/meeting/apply',
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                "meetingScheduleId" : meetingScheduleId,
+                "groupId" : groupId,
+            })
+        });
+
+        const result = await response.json();
         return result;
 
     } catch (e) {

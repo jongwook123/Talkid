@@ -18,7 +18,7 @@ function ImagePreview({ image, deleteFunc }) {
   );
 }
 
-function Modal() {
+function GroupModal() {
   const max = 10;
   const [isOpen, setIsOpen] = useState(false);
   const [inputs, setInputs] = useState({
@@ -102,10 +102,10 @@ function Modal() {
     setPreviewImages(imageJSXs);
   }, [uploadedImages]);
 
-    
-        
 
-  
+
+
+
   const buttonClickHandler = (e) => {
     e.preventDefault();
 
@@ -113,10 +113,10 @@ function Modal() {
       alert("그룹이름을 입력하세요.");
 
       return;
-    } 
+    }
     TryMakeGroup(2, inputs.groupName, inputs.groupImage);
   }
-  
+
   const openModalHandler = () => {
     setIsOpen(!isOpen)
   };
@@ -158,4 +158,4 @@ function Modal() {
   );
 };
 
-export default Modal
+export default GroupModal

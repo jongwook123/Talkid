@@ -6,8 +6,6 @@ export const MatchSection = styled.section`
 `;
 
 export const CalendarSection = styled.section`
-    /* border: 8px solid ${props => props.theme.colors.theme.green_light}; */
-    /* border-radius: ${props => props.theme.border_radius.lv2}; */
   margin:100px;
 `;
 export const ListSection = styled.section`
@@ -15,4 +13,5 @@ export const ListSection = styled.section`
   border-radius: ${props => props.theme.border_radius.lv2};
   padding:40px;
   margin: 100px 100px 100px 0;
+  height: 60%;
 `;

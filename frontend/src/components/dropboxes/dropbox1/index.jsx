@@ -11,7 +11,7 @@ export default function DropBox1({ props: { list, target, callback } }) {
     const onClickButton = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         setClicked(!clicked);
     }
 
@@ -23,7 +23,7 @@ export default function DropBox1({ props: { list, target, callback } }) {
     // 드랍 박스 리스트 버튼 클릭
     const onClickListButton = (e) => {
         e.preventDefault();
-        
+
         callback(e.currentTarget.querySelector('span').innerText);
     }
 
@@ -37,7 +37,11 @@ export default function DropBox1({ props: { list, target, callback } }) {
             <S.Button clicked={clicked} onClick={onClickButton} color={color}>
                 <span>{target}</span>
             </S.Button>
+<<<<<<< HEAD
             <S.List clicked={clicked} color={color} onClick={(e) => {e.stopPropagation();}}>
+=======
+            <S.List clicked={clicked} onClick={(e) => { e.stopPropagation(); }}>
+>>>>>>> feature/FE/teacherMatchPage
                 {
                     list.map(item => {
                         return (
