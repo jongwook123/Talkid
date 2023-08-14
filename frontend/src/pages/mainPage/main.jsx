@@ -15,7 +15,10 @@ import { Tree1 } from "./Tree1";
 import { Bookmark } from "./Bookmark";
 import { useEffect } from "react";
 
-const dummyExp = 100
+import { TryGetUser, TryGetExp } from "apis/GetUserAPIs";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+
 
 export default function MainPage() {
     const user = useSelector(state => state.user);
@@ -32,6 +35,24 @@ export default function MainPage() {
     return (
         <Wrapper>
             {/* <Canvas style={{ width: "100%", height: "100vh" }} camera={{ position: [0, 0, 150]}}>
+  
+  const token = useSelector(state => state.user.token);
+
+  const [exp, setExp] = useState(0)
+  
+  const handleFindUser = async () => {
+    const result = await TryGetUser(token);
+    const result2 = await TryGetExp(result.response.memberId)
+        setExp(result2.response);
+  };
+
+  useEffect(() => {
+    handleFindUser();
+  }, []);
+
+  return (
+    <Wrapper>
+      <Canvas style={{ width: "100%", height: "100vh" }} camera={{ position: [0, 0, 150]}}>
         <Sky azimuth={0.5} inclination={0.6} distance={1000} />
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
@@ -39,17 +60,17 @@ export default function MainPage() {
           <GrassWithFlowers />
           <Ground position={[0, -15, 0]}/>
 
-          {dummyExp >= 1 & dummyExp < 100 && (
-          <>
+          {exp >= 0 & exp < 100 && (
+            <>
             <Tree1 position={[0,0,50]} rotation={[0, 4, 0]} scale={[7, 8, 6]} />
           </>
           )}
-          {dummyExp >= 100 & dummyExp < 200 && (
+          {exp >= 100 & exp < 200 && (
           <>
              <Tree2 position={[0,0,50]} rotation={[0, 10, 0]} scale={[10, 10, 20]} />
           </>
           )}
-          {dummyExp >= 200 && (
+          {exp >= 200 && (
           <>
             <Tree3 position={[0, 0, 50]}  scale={[15, 15, 10]} />
           </>
@@ -63,10 +84,10 @@ export default function MainPage() {
           <DShapeStructure position={[15, 10, 80]} />
           <SShapeStructure position={[34, 7, 80]} rotation={[50,0,0]}/>
           <Cloud1 position={[100, 35, -25]}  scale={[10, 10, 12]} rotation={[0, 55, 0]} opacity={10}/>
-          <Cloud1 position={[50, 50, -25]}  scale={[7, 7, 12]} rotation={[0, -10, 0]}/>
           <Cloud1 position={[-98, 53, -25]}  scale={[7, 7, 12]} rotation={[0, -10, 0]}/>
           <Cloud1 position={[-110, 47, -25]}  scale={[10, 10, 14]}/>
-            
+          <Cloud1 position={[40, 53, -25]}  scale={[7, 7, 12]} rotation={[0, -30, 0]}/>
+          <Cloud1 position={[50, 47, -25]}  scale={[10, 10, 14]}/>
         </Suspense>
         <OrbitControls minPolarAngle={Math.PI / 2.5} maxPolarAngle={Math.PI / 2.5} enableZoom={true} />
       </Canvas> */}

@@ -51,3 +51,5 @@ export const Dealt = styled.div`
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 `;
+
+

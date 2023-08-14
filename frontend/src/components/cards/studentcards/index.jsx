@@ -1,9 +1,9 @@
 import * as S from './style';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
-function Card({ props: { studentName, badWords, img_src } }) {
-    const entireDealtValue = Math.floor((60 / 100) * 100);
-    const monthDealtValue = Math.floor((30 / 100) * 100);
+function Card({ props: { studentName, badWords, monthExp, totalExp } }) {
+    const entireDealtValue = totalExp;
+    const monthDealtValue = monthExp;
 
     return (
         <S.CardSection>

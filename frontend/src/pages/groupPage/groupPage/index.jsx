@@ -10,32 +10,50 @@ import { useSelector } from 'react-redux';
 
 export default function GroupPage() {
     const token = useSelector(state => state.user.token); // accessToken 가져오기
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> feature/FE/groupPage
     const [groups, setGroups] = useState([]);
 
 
     const handleFindGroups = async () => {
+<<<<<<< HEAD
+=======
+        console.log(`token : ${token}`)
+>>>>>>> feature/FE/groupPage
         const result = await TryGetGroup(token);
         console.log(result)
         setGroups([
             ...result.response
         ]);
+<<<<<<< HEAD
 
     };
 
 
+=======
+    
+    };
+    
+>>>>>>> feature/FE/groupPage
     useEffect(() => {
         handleFindGroups();
     }, []);
-
 
     const navigate = useNavigate();
 
     const onClickHandler = (groupId) => {
         navigate(`/groupdetail/${groupId}`);
     }
+<<<<<<< HEAD
 
 
+=======
+    
+    
+>>>>>>> feature/FE/groupPage
     return (
         <>
             <S.PageHeader>
@@ -45,10 +63,14 @@ export default function GroupPage() {
                 <S.CardList>
                     {groups.map((group, index) => (
                         <S.CardItem key={index} onClick={() => onClickHandler(group.groupId)}>
-                            <Card props={{ groupName: group.groupName, students: group.groupJoinMember.length, created_date: group.createdAt, }}></Card>
+                            <Card props={{ groupName: group.groupName, students: group.members.length, created_date: group.createdAt, }}></Card>
                         </S.CardItem>
                     ))}
+<<<<<<< HEAD
                     <GroupModal />
+=======
+                    <Modal/>
+>>>>>>> feature/FE/groupPage
                 </S.CardList>
             </main>
             <footer></footer>

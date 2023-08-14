@@ -25,6 +25,7 @@ import GroupPage from "pages/groupPage/groupPage"
 import GroupDetailPage from "pages/groupPage/groupDetailPage"
 import StudentMatchPage from "pages/matchPage/studentMatchPage"
 import TeacherMatchPage from "pages/matchPage/teacherMatchPage"
+import GroupApplyPage from "pages/groupPage/groupApplyPage"
 
 
 export default function App() {
@@ -41,7 +42,8 @@ export default function App() {
                     <Route path="/signup" element={<SignupPage />} />
                     <Route path="/findpassword" element={<FindPasswordPage />} />
                     <Route path="/modify" element={<UserEditPage />} />
-                    <Route path="/:user/profile" element={<ProfilePage />} />
+                    <Route path="/profile/:memberMail" element={<ProfilePage />} />
+                    {/* <Route path="/:user/profile" element={<ProfilePage />} /> */}
 
                     {/* 채팅, 화상 관련 */}
                     {/* <Route path="/chattingtest" element={<ChattingPages />} /> */}

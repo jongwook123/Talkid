@@ -4,7 +4,7 @@ export const TryGetUser = async (token) => {
     try {
         const response = await FetchTemplate({
             path: process.env.REACT_APP_BASE_SERVER + '/member',
-            method: "GET",      
+            method: "GET",	
             headers: {
                 Authorization: `Bearer ${token}`
             },
@@ -25,7 +25,7 @@ export const TryGetFollow = async (token, memberId) => {
             headers: {
                 Authorization: `Bearer ${token}`
             },
-            method: "GET",      
+            method: "GET",
         });
 
         const result = await response.json();
@@ -62,7 +62,7 @@ export const TryGetExp= async (memberId) => {
         const response = await FetchTemplate({
             path: process.env.REACT_APP_BASE_SERVER + `/member/exp/${memberId}`,
             headers: {},
-            method: "GET",      
+            method: "GET",
         });
 
         const result = await response.json();

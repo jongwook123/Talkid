@@ -57,3 +57,10 @@ export const CardItem = styled.li`
         width:100%;
     }
 `
+
+export const ButtonWrapper = styled.div`
+  width: 150px;
+  margin-left: auto;
+  padding-right: 30px;
+  padding-bottom: 10px;
+`

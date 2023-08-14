@@ -6,6 +6,9 @@ import LongInput1 from 'components/inputs/longinput1';
 import LongButton1 from 'components/buttons/longbutton1';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { TryMakeGroup } from 'apis/GroupPageAPIs';
+import { useSelector } from 'react-redux';
+import { TryGetUser } from 'apis/GetUserAPIs';
+import { useNavigate } from 'react-router';
 
 function ImagePreview({ image, deleteFunc }) {
   return (
@@ -18,13 +21,28 @@ function ImagePreview({ image, deleteFunc }) {
   );
 }
 
+<<<<<<< HEAD:frontend/src/components/modals/groupModal/index.jsx
 function GroupModal() {
+=======
+function Modal() {
+  
+>>>>>>> feature/FE/groupPage:frontend/src/components/modals/index.jsx
   const max = 10;
   const [isOpen, setIsOpen] = useState(false);
   const [inputs, setInputs] = useState({
     groupName: "",
     groupImage: "",
   });
+  const token = useSelector(state => state.user.token); // accessToken 가져오기
+
+  const handleGetUser = async () => {
+    const result = await TryGetUser(token);
+    console.log(result)
+}
+
+  useEffect(() => {
+      handleGetUser();
+  }, [isOpen]);
 
   const onChangeHandler = (e) => {
     setInputs({
@@ -32,7 +50,7 @@ function GroupModal() {
       [e.target.name]: e.target.value,
     });
   }
-
+  
   const [uploadedImages, setUploadedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const uploadBoxRef = useRef();
@@ -101,11 +119,16 @@ function GroupModal() {
     });
     setPreviewImages(imageJSXs);
   }, [uploadedImages]);
+<<<<<<< HEAD:frontend/src/components/modals/groupModal/index.jsx
 
 
 
 
 
+=======
+        
+  
+>>>>>>> feature/FE/groupPage:frontend/src/components/modals/index.jsx
   const buttonClickHandler = (e) => {
     e.preventDefault();
 
@@ -113,13 +136,28 @@ function GroupModal() {
       alert("그룹이름을 입력하세요.");
 
       return;
+<<<<<<< HEAD:frontend/src/components/modals/groupModal/index.jsx
     }
     TryMakeGroup(2, inputs.groupName, inputs.groupImage);
   }
+=======
+    } 
+    TryMakeGroup(inputs.groupName, inputs.groupImage, token);
+    refreshPage()
+
+  }
+  
+  const refreshPage = () => {
+    window.location.reload(); 
+  };
+>>>>>>> feature/FE/groupPage:frontend/src/components/modals/index.jsx
 
   const openModalHandler = () => {
     setIsOpen(!isOpen)
   };
+
+
+  
 
   return (
     <>
