@@ -1,14 +1,14 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
-import * as S from './style';
+import * as S from "./style";
 
-import LongInput1 from 'components/inputs/longinput1';
-import LongButton1 from 'components/buttons/longbutton1';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { TryMakeGroup } from 'apis/GroupPageAPIs';
-import { useSelector } from 'react-redux';
-import { TryGetUser } from 'apis/GetUserAPIs';
-import { useNavigate } from 'react-router';
+import LongInput1 from "components/inputs/longinput1";
+import LongButton1 from "components/buttons/longbutton1";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { TryMakeGroup } from "apis/GroupPageAPIs";
+import { useSelector } from "react-redux";
+import { TryGetUser } from "apis/GetUserAPIs";
+import { useNavigate } from "react-router";
 
 function ImagePreview({ image, deleteFunc }) {
   return (
@@ -21,27 +21,22 @@ function ImagePreview({ image, deleteFunc }) {
   );
 }
 
-<<<<<<< HEAD:frontend/src/components/modals/groupModal/index.jsx
 function GroupModal() {
-=======
-function Modal() {
-  
->>>>>>> feature/FE/groupPage:frontend/src/components/modals/index.jsx
   const max = 10;
   const [isOpen, setIsOpen] = useState(false);
   const [inputs, setInputs] = useState({
     groupName: "",
     groupImage: "",
   });
-  const token = useSelector(state => state.user.token); // accessToken 가져오기
+  const token = useSelector((state) => state.user.accessToken); // accessToken 가져오기
 
   const handleGetUser = async () => {
     const result = await TryGetUser(token);
-    console.log(result)
-}
+    console.log(result);
+  };
 
   useEffect(() => {
-      handleGetUser();
+    handleGetUser();
   }, [isOpen]);
 
   const onChangeHandler = (e) => {
@@ -49,8 +44,8 @@ function Modal() {
       ...inputs,
       [e.target.name]: e.target.value,
     });
-  }
-  
+  };
+
   const [uploadedImages, setUploadedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const uploadBoxRef = useRef();
@@ -119,16 +114,7 @@ function Modal() {
     });
     setPreviewImages(imageJSXs);
   }, [uploadedImages]);
-<<<<<<< HEAD:frontend/src/components/modals/groupModal/index.jsx
 
-
-
-
-
-=======
-        
-  
->>>>>>> feature/FE/groupPage:frontend/src/components/modals/index.jsx
   const buttonClickHandler = (e) => {
     e.preventDefault();
 
@@ -136,28 +122,18 @@ function Modal() {
       alert("그룹이름을 입력하세요.");
 
       return;
-<<<<<<< HEAD:frontend/src/components/modals/groupModal/index.jsx
     }
-    TryMakeGroup(2, inputs.groupName, inputs.groupImage);
-  }
-=======
-    } 
     TryMakeGroup(inputs.groupName, inputs.groupImage, token);
-    refreshPage()
-
-  }
-  
-  const refreshPage = () => {
-    window.location.reload(); 
+    refreshPage();
   };
->>>>>>> feature/FE/groupPage:frontend/src/components/modals/index.jsx
+
+  const refreshPage = () => {
+    window.location.reload();
+  };
 
   const openModalHandler = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   };
-
-
-  
 
   return (
     <>
@@ -165,35 +141,67 @@ function Modal() {
         <S.ModalBtn onClick={openModalHandler}>
           <AddCircleOutlineIcon />
         </S.ModalBtn>
-        {isOpen ?
+        {isOpen ? (
           <S.ModalBackdrop onClick={openModalHandler}>
             <S.ModalView onClick={(e) => e.stopPropagation()}>
-              <LongInput1 props={{ id: "groupName", desc: "Insert groupname", color: "orange", placeholder: "Group Name", type: "text", value: inputs.groupName, callback: onChangeHandler }} />
+              <LongInput1
+                props={{
+                  id: "groupName",
+                  desc: "Insert groupname",
+                  color: "orange",
+                  placeholder: "Group Name",
+                  type: "text",
+                  value: inputs.groupName,
+                  callback: onChangeHandler,
+                }}
+              />
               <S.StyledImageFieldset visible={true}>
                 <legend>이미지 입력 영역</legend>
-                <S.StyledImageUploadBox >
-                  <S.StyledImageUploadLabel htmlFor="imgInput" ref={uploadBoxRef}>
+                <S.StyledImageUploadBox>
+                  <S.StyledImageUploadLabel
+                    htmlFor="imgInput"
+                    ref={uploadBoxRef}
+                  >
                     <S.StyledImageUploadTextBox>
                       <p>Click or drag image into here to upload image</p>
                     </S.StyledImageUploadTextBox>
                   </S.StyledImageUploadLabel>
-                  <input type="file" multiple accept="image/*" id="imgInput" ref={inputRef} />
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    id="imgInput"
+                    ref={inputRef}
+                  />
                   <S.StyledPreviewWrapper exist={previewImages.length !== 0}>
-                    <S.StyledPreviewContainer>{previewImages}</S.StyledPreviewContainer>
+                    <S.StyledPreviewContainer>
+                      {previewImages}
+                    </S.StyledPreviewContainer>
                   </S.StyledPreviewWrapper>
                 </S.StyledImageUploadBox>
               </S.StyledImageFieldset>
               <S.ButtonWrapper>
-                <LongButton1 props={{ color: "green", text: "Sign in", callback: buttonClickHandler }} />
-                <LongButton1 props={{ color: "orange", text: "X", callback: openModalHandler }} />
+                <LongButton1
+                  props={{
+                    color: "green",
+                    text: "Sign in",
+                    callback: buttonClickHandler,
+                  }}
+                />
+                <LongButton1
+                  props={{
+                    color: "orange",
+                    text: "X",
+                    callback: openModalHandler,
+                  }}
+                />
               </S.ButtonWrapper>
             </S.ModalView>
           </S.ModalBackdrop>
-          : null
-        }
+        ) : null}
       </S.ModalContainer>
     </>
   );
-};
+}
 
-export default GroupModal
+export default GroupModal;
