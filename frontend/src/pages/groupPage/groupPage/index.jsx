@@ -1,35 +1,31 @@
-// import { useState } from 'react';
-
 import * as S from './style';
-
 import { TryGetGroup } from 'apis/GroupPageAPIs';
-import Modal from 'components/modals';
+import GroupModal from 'components/modals/groupModal';
 import Card from "components/cards/groupcards";
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 
 export default function GroupPage() {
-
-    
-    const memberId = 2
+    const token = useSelector(state => state.user.token); // accessToken 가져오기
 
     const [groups, setGroups] = useState([]);
 
 
-    const handleFindGroups = async (memberId) => {
-        const result = await TryGetGroup(memberId);
+    const handleFindGroups = async () => {
+        const result = await TryGetGroup(token);
+        console.log(result)
         setGroups([
             ...result.response
         ]);
-        
 
     };
- 
-    
-    
+
+
     useEffect(() => {
-        handleFindGroups(memberId);
+        handleFindGroups();
     }, []);
 
 
@@ -38,8 +34,8 @@ export default function GroupPage() {
     const onClickHandler = (groupId) => {
         navigate(`/groupdetail/${groupId}`);
     }
-    
-    console.log(groups)
+
+
     return (
         <>
             <S.PageHeader>
@@ -52,7 +48,7 @@ export default function GroupPage() {
                             <Card props={{ groupName: group.groupName, students: group.groupJoinMember.length, created_date: group.createdAt, }}></Card>
                         </S.CardItem>
                     ))}
-                    <Modal />
+                    <GroupModal />
                 </S.CardList>
             </main>
             <footer></footer>

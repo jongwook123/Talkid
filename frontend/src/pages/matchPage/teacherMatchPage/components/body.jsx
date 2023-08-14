@@ -3,13 +3,14 @@ import Dates from './dates';
 import * as S from './style';
 
 export default function Body(props) {
-  const { totalDate, today, month, year } = props;
+  const { totalDate, today, month, year, mySchedules, schedules, meetings } = props;
   const lastDate = totalDate.indexOf(1);
   const firstDate = totalDate.indexOf(1, 7);
 
   //today
   const findToday = totalDate.indexOf(today);
   const getMonth = new Date().getMonth() + 1;
+
 
 
   return (
@@ -23,8 +24,10 @@ export default function Body(props) {
             firstDate={firstDate}
             elm={elm}
             findToday={findToday === idx && month === getMonth && findToday}
-            month={month}
-            year={year}
+            mySchedules={mySchedules[elm]}
+            schedules={schedules[elm]}
+            meetings={meetings[elm]}
+            setClickedData={props.setClickedData}
           ></Dates>
         );
       })}
