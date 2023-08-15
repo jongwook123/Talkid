@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
 
 export const Button = styled.button`
     width: 100%;
-    height: 32px;
+    height: 48px;
     text-align: left;
     padding: 0 12px;
     position: relative;
@@ -26,7 +26,7 @@ export const Button = styled.button`
         height: 8px;
         position: absolute;
         right: 14px;
-        top: 8px;
+        top: 16px;
         transition: all 0.2s;
         transform: ${props => props.clicked ? "translate(5px, -1px) rotate(225deg);" : "translate(0, -1px) rotate(225deg)" };
         border-top: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : `${props.theme.colors.border.light_black2}`};
@@ -39,7 +39,7 @@ export const Button = styled.button`
         height: 8px;
         position: absolute;
         right: 15px;
-        top: 8px;
+        top: 16px;
         transition: all 0.2s;
         transform: ${props => props.clicked ? "translate(-3px, -1px) rotate(135deg);" : "translate(1px, -1px) rotate(135deg)" };
         border-top: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green_dark}` : `${props.theme.colors.theme.blue_dark}` : `${props.theme.colors.border.light_black2}`};
@@ -47,7 +47,7 @@ export const Button = styled.button`
 `
 
 export const Content = styled.p`
-    padding: 8px 12px;
+    padding: 16px 12px;
     margin-top: -1px;
     font-family: 'Righteous', sans-serif;
     display: ${props => props.clicked ? "block" : "none"};

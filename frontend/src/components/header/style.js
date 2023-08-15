@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import IROnly from "styles/IROnly";
 
 export const Header = styled.header`
     width: 100vw;
@@ -131,6 +132,49 @@ export const AlarmModalButton = styled.button`
     &:focus {
         outline: none;
     }
+`
+
+export const FollowModal = styled.section`
+    width: 480px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: ${props => props.theme.colors.background_color.white};
+    border-radius: ${props => props.theme.border_radius.lv4};
+
+    & > h2 {
+        ${IROnly}
+    }
+`
+
+export const FollowTabWrapper = styled.div`
+    display: flex;
+`
+
+export const FollowTabButton = styled.button`
+    width: 100%;
+    font-family: 'Righteous', sans-serif;
+    text-align: center;
+    border: none;
+    padding: 8px 0;
+    transition: all 0.3s;
+    background-color: ${props => !props.selected ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : 'inherit'};
+    color: ${props => props.selected ? props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : props.theme.colors.font.white};
+    font-size: ${props => props.theme.font_size.lv5};
+
+    &:focus {
+        outline: none;
+    }
+`
+
+export const FollowList = styled.ul`
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
 `
 
 export const ButtonList = styled.ul`

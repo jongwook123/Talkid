@@ -72,7 +72,7 @@ export default function Header() {
         //         ]);
         //     }
         // };
-    }, [user]);
+    }, [user, navigate]);
 
     // 사용자 타입 확인
     const [type, setType] = useState("");
@@ -95,12 +95,14 @@ export default function Header() {
     const [selectUser, setSelectUser] = useState(false);
     const [selectGroup, setSelectGroup] = useState(false);
     const [selectNotify, setSelectNotify] = useState(false);
+    const [selectFollow, setSelectFollow] = useState(false);
 
     // 윈도우 클릭
     const onClickWindow = useCallback(() => {
         setSelectUser(false);
         setSelectGroup(false);
         setSelectNotify(false);
+        setSelectFollow(false);
     }, []);
 
     // 유저 버튼 클릭
@@ -123,11 +125,22 @@ export default function Header() {
         setSelectUser(false);
         setSelectGroup(false);
         setSelectNotify(true);
+        setSelectFollow(false);
+    }
+
+    // 팔로워 버튼 클릭
+    const onClickFollower = (e) => {
+        e.stopPropagation();
+        setSelectUser(false);
+        setSelectGroup(false);
+        setSelectNotify(false);
+        setSelectFollow(true);
     }
 
     // 알람 wrapper 클릭
-    const onClickNodifyWrapper = (e) => {
+    const onClickWrapper = (e) => {
         setSelectNotify(false);
+        setSelectFollow(false);
     }
 
     // modal body 클릭
@@ -138,6 +151,7 @@ export default function Header() {
     // modal close button 클릭
     const onClickModalClose = (e) => {
         setSelectNotify(false);
+        setSelectFollow(false);
     }
 
     // 헤더 링크 클릭
@@ -145,6 +159,7 @@ export default function Header() {
         setSelectUser(false);
         setSelectGroup(false);
         setSelectNotify(false);
+        setSelectFollow(false);
     }
 
     useEffect(() => {
@@ -154,6 +169,17 @@ export default function Header() {
             window.removeEventListener('click', onClickWindow);
         }
     }, [onClickWindow]);
+
+    // 팔로워 모달
+    const [followTab, setFollowTab] = useState("followers");
+    
+    const onClickFollowerButton = () => {
+        setFollowTab("followers");
+    }
+
+    const onClickFollowingButton = () => {
+        setFollowTab("following");
+    }
 
     // 로그아웃
     const onClickSignout = () => {
@@ -174,33 +200,33 @@ export default function Header() {
                         <S.NavButton onClick={onClickNotify} color={color1}>
                             <NotificationsActiveIcon />
                         </S.NavButton>
-                        <S.ModalWrapper onClick={onClickNodifyWrapper} visible={selectNotify}>
+                        <S.ModalWrapper onClick={onClickWrapper} visible={selectNotify}>
                             <S.AlarmModal onClick={onClickBody}>
                                 <S.AlarmModalHeader color={color1}>Alarms</S.AlarmModalHeader>
                                 <S.AlarmModalList color={color1}>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                     <li>
-                                        <DropBox2 props={{title: "alarm list", content: "alarm content", color: color1}} />
+                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
                                     </li>
                                 </S.AlarmModalList>
                                 <S.AlarmModalButton onClick={onClickModalClose} color={color1}>close</S.AlarmModalButton>
@@ -248,7 +274,7 @@ export default function Header() {
                                 </S.ButtinListLink>
                             </li>
                             <li>
-                                <S.ButtinListButton color={color4}>
+                                <S.ButtinListButton color={color4} onClick={onClickFollower}>
                                     <Diversity3Icon />
                                     <span>followers</span>
                                 </S.ButtinListButton>
@@ -260,6 +286,18 @@ export default function Header() {
                                 </S.ButtinListButton>
                             </li>
                         </S.ButtonList>
+                        <S.ModalWrapper onClick={onClickWrapper} visible={selectFollow}>
+                            <S.FollowModal onClick={onClickBody}>
+                                <h2>follower tab</h2>
+                                <S.FollowTabWrapper>
+                                    <S.FollowTabButton onClick={onClickFollowerButton} selected={followTab === "followers"} color={color4}>Followers</S.FollowTabButton>
+                                    <S.FollowTabButton onClick={onClickFollowingButton} selected={followTab === "following"} color={color4}>Following</S.FollowTabButton>
+                                </S.FollowTabWrapper>
+                                <S.FollowList>
+                                    
+                                </S.FollowList>
+                            </S.FollowModal>
+                        </S.ModalWrapper>
                     </S.NavListItem>
                 </S.NavList>
             </S.HeaderNav>
