@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 
 import * as S from './style'
 
-import { GetList, GetUserInfo, TryModifyUser, DeleteAccount } from "apis/UserAPIs";
+import { GetList, GetUserInfo, TryModifyUser, TryDeleteUser } from "apis/UserAPIs";
 
 import TALKIDS from 'assets/images/TALKIDS.png';
 import LongInput1 from "components/inputs/longinput1";
@@ -12,6 +12,7 @@ import LongButton1 from "components/buttons/longbutton1";
 import DropBox1 from "components/dropboxes/dropbox1";
 import LongInput2 from "components/inputs/longinput2";
 import InputBox from "components/inputs/inputbox";
+import { Link } from "react-router-dom";
 
 export default function UserEditPage() {
     const user = useSelector(state => state.user);
@@ -48,14 +49,6 @@ export default function UserEditPage() {
         fetchCountryList();
     }, []);
 
-    useEffect(() => {
-        if (countryList.length === 0) {
-            return;
-        }
-
-        setSelectedCountry("Select your country!");
-    }, [countryList]);
-
     // 언어 관련
     const [languageInfo, setLanguageInfo] = useState([]);
     const [languageList, setLanguageList] = useState([]);
@@ -70,14 +63,6 @@ export default function UserEditPage() {
 
         fetchLanguageList();
     }, []);
-
-    useEffect(() => {
-        if (languageList.length === 0) {
-            return;
-        }
-
-        setSelectedLanguage("Select your language!");
-    }, [languageList]);
 
 
     // 확인 버튼 클릭
@@ -142,7 +127,7 @@ export default function UserEditPage() {
         e.preventDefault();
 
         try {
-            const result = await DeleteAccount(user.accessToken);
+            const result = await TryDeleteUser(user.accessToken);
 
             if (!result.success) {
                 alert(result.error.message);
@@ -159,6 +144,8 @@ export default function UserEditPage() {
         const getUserInfo = async (token) => {
             const result = await GetUserInfo(token);
 
+            console.log(result.response);
+
             if (result.success) {
                 setInputs({
                     name: result.response.memberName,
@@ -167,6 +154,8 @@ export default function UserEditPage() {
                     password_confirm: "",
                     userinfo: result.response.memberIntroduce,
                 });
+                setSelectedCountry(result.response.country.countryName);
+                setSelectedLanguage(result.response.language.languageEng);
             } else {
                 alert("사용자 정보를 불러오는데 실패했습니다.");
                 navigate("/signin");
@@ -185,8 +174,10 @@ export default function UserEditPage() {
                 <S.SectionWrapper>
                     <S.SigninSection>
                         <S.SigninSectionHeader>
-                            <h2>로그인 영역</h2>
-                            <img src={TALKIDS} alt="" />
+                            <Link to='/'>
+                                <h2>로그인 영역</h2>
+                                <img src={TALKIDS} alt="" />
+                            </Link>
                         </S.SigninSectionHeader>
                         <S.SigninForm action="">
                             <LongInput2 props={{ id: "name", desc: "Insert your name", color: "green", placeholder: "Your Name", type: "text", value: inputs.name }} disabled ></LongInput2>

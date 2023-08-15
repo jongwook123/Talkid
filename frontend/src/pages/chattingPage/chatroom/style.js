@@ -2,7 +2,8 @@ import styled from "styled-components";
 import IROnly from "styles/IROnly";
 
 export const SectionChat = styled.section`
-    height: 100vh;
+    height: calc(100vh - 80px);
+    margin-top: 80px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;

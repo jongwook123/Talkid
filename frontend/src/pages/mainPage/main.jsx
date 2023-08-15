@@ -30,7 +30,7 @@ export default function MainPage() {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-  console.log(user);
+    // console.log(user);
 
   useEffect(() => {
     if (!user.accessToken) {

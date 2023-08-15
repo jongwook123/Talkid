@@ -38,11 +38,11 @@ export const SigninSectionHeader = styled.header`
     transform: translate(-50%, calc(-50% - 4px));
     background-color: ${props => props.theme.colors.background_color.white};
 
-    & > h2 {
+    & > a > h2 {
         ${IROnly}
     }
 
-    & > img {
+    & > a > img {
         width: 400px;
         display: block;
         margin: 0 auto;
