@@ -8,8 +8,8 @@ export const TryGetGroup = async (memberId) => {
         });
 
         const result = await response.json();
-        return result
-        // console.log(result);
+        
+        return result;
     } catch (e) {
         console.log(e);
     }

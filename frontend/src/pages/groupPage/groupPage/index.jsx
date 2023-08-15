@@ -19,6 +19,9 @@ export default function GroupPage() {
 
     const handleFindGroups = async (memberId) => {
         const result = await TryGetGroup(memberId);
+
+        console.log(result);
+
         setGroups([
             ...result.response
         ]);

@@ -61,7 +61,7 @@ export default function App() {
                         {/* 매칭 관련 */}
                         {/* 아직 안됨 */}
                         <Route path="/matching" element={<TeacherMatchPage />} />
-                        <Route path="/match/students" element={<StudentMatchPage />} />
+                        <Route path="/finduser" element={<StudentMatchPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

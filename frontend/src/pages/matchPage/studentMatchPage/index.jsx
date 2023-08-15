@@ -33,8 +33,11 @@ export default function StudentMatchPage() {
     useEffect(() => {
         const fetchCountryList = async () => {
             const response = await GetList('country');
-            setCountryInfo(response.response);
-            setCountryList(response.response.map(country => country['countryName']));
+
+            console.log(response);
+
+            // setCountryInfo(response.response);
+            // setCountryList(response.response.map(country => country['countryName']));
         };
 
         fetchCountryList();
@@ -68,8 +71,8 @@ export default function StudentMatchPage() {
     useEffect(() => {
         const fetchLanguageList = async () => {
             const result = await GetList('language');
-            setLanguageInfo(result.response);
-            setLanguageList(result.response.map(language => language['languageEng']));
+            // setLanguageInfo(result.response);
+            // setLanguageList(result.response.map(language => language['languageEng']));
         };
 
         fetchLanguageList();

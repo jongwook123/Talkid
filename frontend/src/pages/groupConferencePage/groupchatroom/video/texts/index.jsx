@@ -61,7 +61,7 @@ export default function Texts({ props: { setPropagate } }) {
             prev.setPrevText("");
         } else {
             const translate = async () => {
-                const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER_HOME + '/ko/en/' + transcript);
+                const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + '/ko/en/' + transcript);
                 const result = await response.json();
 
                 setTranslate(result.translated);

@@ -10,13 +10,14 @@ export const Header = styled.header`
     position: fixed;
     top: 0;
     justify-content: space-between;
+    z-index: 2000;
     box-shadow: 0 0 22px -10px ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};;
 
-    & > h3 {
+    & > h1 {
         width: 200px;
     }
 
-    & > h3 > a > img {
+    & > h1 > a > img {
         width: 100%;
     }
 `
@@ -29,14 +30,11 @@ export const NavList = styled.ul`
     display: flex;
     align-items: center;
     gap: 15px;
-
-    & > li {
-        position: relative;
-    }
 `
 
 export const NavListItem = styled.li`
     display: ${props => props.visible ? "block" : "none"};
+    position: relative;
 `
 
 export const NavLink = styled(Link)`
@@ -49,6 +47,86 @@ export const NavButton = styled.button`
     border: none;
     background-color: inherit;
     color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+
+    &:focus {
+        outline: none;
+    }
+`
+
+export const ModalWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    background-color: ${props => props.theme.colors.background_color.modal_wrapper};
+    display: ${props => props.visible ? "block" : "none"};
+`
+
+export const AlarmModal = styled.section`
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    background-color: ${props => props.theme.colors.background_color.white};
+    border-radius: ${props => props.theme.border_radius.lv4};
+`
+
+export const AlarmModalHeader = styled.h2`
+    font-family: 'Righteous', sans-serif;
+    text-align: center;
+    font-size: ${props => props.theme.font_size.lv5};
+    color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+`
+
+export const AlarmModalList = styled.ul`
+    margin: 35px 0;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 200px;
+    overflow-y: scroll;
+    gap: 5px;
+
+    & > li {
+        width: 100%;
+        position: relative;
+    }
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        background-color: ${props => props.theme.colors.background_color.white};
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green_light}` : `${props.theme.colors.theme.blue_light}`};
+        border-radius: 10px;
+        background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+    }
+`
+
+export const AlarmModalButton = styled.button`
+    border: none;
+    padding: 6px 25px;
+    margin-left: auto;
+    background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+    color: ${props => props.theme.colors.font.white};
+    font-size: ${props => props.theme.font_size.lv3_1};
+    border-radius: ${props => props.theme.border_radius.lv2};
 
     &:focus {
         outline: none;
