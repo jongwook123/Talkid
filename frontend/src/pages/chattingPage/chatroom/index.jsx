@@ -17,10 +17,10 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
     const [dictionaryClicked, setDictionaryClicked] = useState(false);
     const videoTextRef = useRef(null);
 
-    useEffect(() => {
-        setVideoClicked(false);
-        setVideoStart(false);
-    }, [room])
+    // useEffect(() => {
+    //     setVideoClicked(false);
+    //     setVideoStart(false);
+    // }, [room])
 
     const getTimeString = (createdAt) => {
         const isCreated = new Date(createdAt);
