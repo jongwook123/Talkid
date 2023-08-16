@@ -6,6 +6,7 @@ import com.talkids.backend.group.entity.GroupJoinMember;
 import com.talkids.backend.group.repository.GroupRepository;
 import com.talkids.backend.group.service.GroupService;
 import com.talkids.backend.member.entity.Member;
+import com.talkids.backend.notify.entity.NotifyContent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
