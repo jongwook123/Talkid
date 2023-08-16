@@ -13,6 +13,7 @@ import com.talkids.backend.meeting.entity.SmallGroup;
 import com.talkids.backend.meeting.service.MeetingService;
 import com.talkids.backend.meeting.service.SmallGroupService;
 import com.talkids.backend.member.entity.Member;
+import com.talkids.backend.member.entity.TimeZone;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,18 +55,22 @@ public class MeetingController {
         List<MeetingWithMineDto> meetingDtos = new ArrayList<>(meetings.size());
         List<MeetingScheduleWithMineDto> meetingScheduleDtos = new ArrayList<>(meetingSchedules.size());
 
+
+        TimeZone timeZone = member.getSchool().getTimeZone();
         boolean isMine = false;
         for(Meeting meeting: meetings){
             isMine = myGroups.contains(meeting.getGroupReq().getGroupId()) || myGroups.contains(meeting.getGroupRes().getGroupId());
             if(isMine){
                 //성사된 일정에 대해서는 내꺼만 보여주자
-                meetingDtos.add(MeetingWithMineDto.fromEntity(meeting, isMine));
+                if(myGroups.contains(meeting.getGroupReq().getGroupId())){
+                    meetingDtos.add(MeetingWithMineDto.fromEntity(meeting, isMine, timeZone));
+                }
             }
         }
 
         for(MeetingSchedule meetingSchedule: meetingSchedules){
             isMine = myGroups.contains(meetingSchedule.getGroup().getGroupId());
-            meetingScheduleDtos.add(MeetingScheduleWithMineDto.fromEntity(meetingSchedule, isMine));
+            meetingScheduleDtos.add(MeetingScheduleWithMineDto.fromEntity(meetingSchedule, isMine, timeZone));
         }
 
         GetMyMeetingDto.Response response = GetMyMeetingDto.Response.builder()
@@ -115,9 +120,11 @@ public class MeetingController {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
 
+        TimeZone timeZone  = member.getSchool().getTimeZone();
+
         List<MeetingJoinReq> reqs = meetingService.getReceivedRequest(member);
 
-        return ApiUtils.success(MyReceiveDto.Response.fromEntity(reqs));
+        return ApiUtils.success(MyReceiveDto.Response.fromEntity(reqs, timeZone));
     }
 
     //미팅 신청 한 것 가져오기
@@ -126,9 +133,10 @@ public class MeetingController {
         if(member == null) return ApiUtils.error("로그인 정보가 올바르지 않습니다", HttpStatus.UNAUTHORIZED);
         if(member.getMemberType().getMemberTypeId() != 1) return ApiUtils.error("선생님만 요청을 처리할 수 있습니다", HttpStatus.BAD_REQUEST);
 
+        TimeZone timeZone  = member.getSchool().getTimeZone();
         List<MeetingJoinReq> sends = meetingService.getSendRequest(member);
 
-        return ApiUtils.success(MyReceiveDto.Response.fromEntity(sends));
+        return ApiUtils.success(MyReceiveDto.Response.fromEntity(sends, timeZone));
     }
 
     //미팅 신청 수락하기

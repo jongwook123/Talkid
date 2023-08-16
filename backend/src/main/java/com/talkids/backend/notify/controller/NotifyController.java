@@ -4,13 +4,16 @@ import com.talkids.backend.common.annotation.LoginUser;
 import com.talkids.backend.common.utils.ApiUtils;
 import com.talkids.backend.common.utils.ApiUtils.ApiResult;
 import com.talkids.backend.member.entity.Member;
+import com.talkids.backend.notify.dto.Test;
 import com.talkids.backend.notify.service.NotifyService;
 import lombok.AllArgsConstructor;
 import org.hibernate.type.descriptor.DateTimeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/notify")
@@ -36,11 +39,5 @@ public class NotifyController {
     } catch(Exception e){
       return ApiUtils.error(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-  }
-
-  @GetMapping("/test")
-  public String test(){
-    LocalDateTime now = LocalDateTime.now();
-    return now.toString();
   }
 }

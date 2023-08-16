@@ -2,6 +2,7 @@ package com.talkids.backend.meeting.dto;
 
 import com.talkids.backend.group.dto.GroupDto;
 import com.talkids.backend.meeting.entity.MeetingJoinReq;
+import com.talkids.backend.member.entity.TimeZone;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,15 +18,17 @@ public class MyReceiveDto {
     public static class Response{
         private List<MyRecieve> receives = new ArrayList<>();
 
-        public static Response fromEntity(List<MeetingJoinReq> reqs){
+        public static Response fromEntity(List<MeetingJoinReq> reqs, TimeZone timeZone){
             Response response = new Response();
+            int hour = timeZone.getHour();
+            int minute = timeZone.getMinute();
 
             for(MeetingJoinReq req: reqs){
                 //각각의 요청에 대해
                 GroupDto receiver = GroupDto.fromEntity(req.getMeetingSchedule().getGroup());
                 GroupDto sender = GroupDto.fromEntity(req.getGroup());
-                LocalDateTime start = req.getMeetingSchedule().getMeetingScheduleStart();
-                LocalDateTime end = req.getMeetingSchedule().getMeetingScheduleEnd();
+                LocalDateTime start = req.getMeetingSchedule().getMeetingScheduleStart().plusHours(hour).plusMinutes(minute);
+                LocalDateTime end = req.getMeetingSchedule().getMeetingScheduleEnd().plusHours(hour).plusMinutes(minute);
 
                 //dto로 변경해서 넣어주고
                 MyRecieve dto = MyRecieve.builder()
