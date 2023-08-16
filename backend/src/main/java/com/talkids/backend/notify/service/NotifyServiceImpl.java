@@ -4,19 +4,25 @@ import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.common.service.SocketService;
 import com.talkids.backend.common.service.SocketService.Success;
 import com.talkids.backend.common.service.SocketService.Fail;
+import com.talkids.backend.common.utils.TimeUtils;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
+import com.talkids.backend.meeting.entity.Meeting;
+import com.talkids.backend.meeting.repository.MeetingRepository;
 import com.talkids.backend.member.entity.Member;
+import com.talkids.backend.member.entity.TimeZone;
 import com.talkids.backend.notify.dto.CreateNotifyDto;
 import com.talkids.backend.notify.dto.NotifyDto;
 import com.talkids.backend.notify.entity.NotifyContent;
 import com.talkids.backend.notify.entity.NotifyReceiver;
+import com.talkids.backend.notify.entity.NotifyType;
 import com.talkids.backend.notify.repository.NotifyContentRepository;
 import com.talkids.backend.notify.repository.NotifyReceiverRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,10 @@ public class NotifyServiceImpl implements NotifyService{
   private final NotifyReceiverRepository notifyReceiverRepository;
   private final SocketService socketService;
   private final GroupService groupService;
+
+  private final MeetingRepository meetingRepository;
+
+  private final TimeUtils timeUtils;
   
   @Override
   public void notifyGroup(Group group, CreateNotifyDto.Request body) {
@@ -41,6 +51,7 @@ public class NotifyServiceImpl implements NotifyService{
     NotifyContent notifyContent = NotifyContent.builder()
         .notifyHeader(body.getNotifyHeader()) //알림 제목
         .notifyBody(body.getNotifyBody())     //알림 내용
+        .notifyType(body.getNotifyType())     //알림 타입
         .member(sender)                       //알림을 보낸사람
         .build();
     
@@ -76,6 +87,7 @@ public class NotifyServiceImpl implements NotifyService{
     NotifyContent notifyContent = NotifyContent.builder()
         .notifyHeader(body.getNotifyHeader()) //알림 제목
         .notifyBody(body.getNotifyBody())     //알림 내용
+        .notifyType(body.getNotifyType())     //알림 타입
         .member(sender)                       //알림을 보낸사람
         .build();
 
@@ -110,6 +122,7 @@ public class NotifyServiceImpl implements NotifyService{
     NotifyContent notifyContent = NotifyContent.builder()
         .notifyHeader(body.getNotifyHeader()) //알림 제목
         .notifyBody(body.getNotifyBody())     //알림 내용
+        .notifyType(body.getNotifyType())     //알림 타입
         .member(sender)                       //알림을 보낸사람
         .build();
 
@@ -151,5 +164,46 @@ public class NotifyServiceImpl implements NotifyService{
     }
     
     notifyReceiver.setNotifyReceiverChecked(true);  //읽었다고 표시하기
+  }
+
+  @Transactional
+  @Override
+  public void notifyStartMeetings(Long minute) {
+    //10분안에 시작하는 미팅들에 대해
+    List<Meeting> meetings = meetingRepository.findByMinute(minute);
+
+    for(Meeting meeting: meetings){
+      //각각에 미팅들을 가져와서
+      Group groupReq = meeting.getGroupReq();
+      Group groupRes = meeting.getGroupRes();
+
+      Member groupReqTeacher = groupService.getGroupTeacher(groupReq);
+      Member groupResTeacher = groupService.getGroupTeacher(groupRes);
+
+      TimeZone groupReqTimeZone = groupReqTeacher.getSchool().getTimeZone();
+      TimeZone groupResTimeZone = groupResTeacher.getSchool().getTimeZone();
+
+      LocalDateTime start = meeting.getMeetingStart();
+      LocalDateTime end = meeting.getMeetingEnd();
+      String meetingId = groupReq.getGroupId() + "_" + groupRes.getGroupId();
+
+
+      CreateNotifyDto.Request bodyReq = CreateNotifyDto.Request.builder()
+          .notifyHeader(timeUtils.timeFormat(timeUtils.localize(start, groupReqTimeZone)) + " start meeting")
+          .notifyBody(meetingId)
+          .notifyType(NotifyType.MEETING_START)
+          .build();
+
+
+
+      CreateNotifyDto.Request bodyRes = CreateNotifyDto.Request.builder()
+          .notifyHeader(timeUtils.timeFormat(timeUtils.localize(end, groupResTimeZone)) + " start meeting")
+          .notifyBody(meetingId)
+          .notifyType(NotifyType.MEETING_START)
+          .build();
+
+      notifyGroup(groupReqTeacher, groupReq, bodyReq);
+      notifyGroup(groupResTeacher, groupRes, bodyRes);
+    }
   }
 }
