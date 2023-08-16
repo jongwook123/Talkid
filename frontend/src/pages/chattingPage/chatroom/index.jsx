@@ -17,10 +17,14 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
     const [dictionaryClicked, setDictionaryClicked] = useState(false);
     const videoTextRef = useRef(null);
 
-    // useEffect(() => {
-    //     setVideoClicked(false);
-    //     setVideoStart(false);
-    // }, [room])
+    useEffect(() => {
+        if (!room.dmRoomId) {
+            return;
+        }
+
+        setVideoClicked(false);
+        setVideoStart(false)
+    }, [room.dmRoomId]);
 
     const getTimeString = (createdAt) => {
         const isCreated = new Date(createdAt);
@@ -34,18 +38,12 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
 
         return timeValue;
     }
-
-    useEffect(() => {
-        setVideoClicked(false);
-        setVideoStart(false);
-    }, [room]);
-
     const updateChatList = useCallback((data, roomId) => {
         setChatRooms(chatRooms => {
             const targetRoom = chatRooms.filter(chatRoom => chatRoom.dmRoomId === data.roomId)[0];
             let restRooms = [];
 
-            if (targetRoom.dmRoomId) {
+            if (targetRoom) {
                 restRooms = chatRooms.filter(chatRoom => chatRoom.dmRoomId !== data.roomId);
 
                 if (targetRoom.dmRoomId === roomId) {
@@ -68,7 +66,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
 
                 restRooms.unshift({
                     dmRoomId: data.roomId,
-                    memberName: data.receiver,
+                    memberName: data.senderName,
                     lastMessage: data.messageContent,
                     uncheckMessage: 1,
                 });
@@ -107,15 +105,21 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
     }, [videoTextRef, setVideoClicked, setVideoStart]);
 
     const responseVideo = useCallback((data) => {
+        console.log(data);
+
         if (!videoTextRef.current) {
             return;
         }
+
+        console.log(videoTextRef.current);
 
         setSelectedRoom(chatRooms.filter(chatRoom => chatRoom.dmRoomId === data.roomId)[0]);
         videoTextRef.current.innerText = data.sender_name + "(으)로 부터 온 전화";
 
         setVideoClicked(true);
     }, [videoTextRef, setVideoClicked, setSelectedRoom, chatRooms]);
+
+    console.log(videoClicked);
 
     const responseVideoAccept = useCallback((data) => {
         setVideoClicked(false);
@@ -198,15 +202,6 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         })
     }, [room, setChatRooms]);
 
-    // useEffect(() => {
-    //     if (!room.dmRoomId) {
-    //         return;
-    //     }
-
-    //     setVideoClicked(false);
-    //     setVideoStart(false)
-    // }, [room]);
-
     const sendMessage = async (e) => {
         e.preventDefault();
 
@@ -216,6 +211,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         socket.emit('requestMessage', {
             "roomId": room.dmRoomId,
             "sender": user.memberMail,
+            "senderName": user.memberName,
             "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
             "messageContent": newChat,
             "readCheck": false,
@@ -232,6 +228,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         socket.emit('requestMessage', {
             "roomId": room.dmRoomId,
             "sender": user.memberMail,
+            "senderName": user.memberName,
             "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
             "messageContent": user.memberName + '으로 부터의 영상 통화',
             "readCheck": false,

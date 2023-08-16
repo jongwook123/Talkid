@@ -6,7 +6,7 @@ export const Section = styled.section`
     flex-direction: row-reverse;
     align-items: center;
     background-color: ${props => props.theme.colors.theme.blue_light4};
-    display: ${props => props.videoClicked ? 'flex' : 'none'};
+    display: ${props => props.videoStart ? 'flex' : 'none'};
 `
 
 export const SectionHeader = styled.header`

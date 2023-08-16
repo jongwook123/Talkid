@@ -12,6 +12,7 @@ export const VideoWrapper = styled.li`
 
 export const Translated = styled.p`
     padding: 14px;
+    max-width: 200px;
     position: absolute;
     top: 225px;
     left: 50%;
@@ -19,6 +20,7 @@ export const Translated = styled.p`
     background-color: ${props => props.theme.colors.background_color.white};
     border-radius: ${props => props.theme.border_radius.lv3};
     border: 1px solid ${props => props.theme.colors.border.light_gray};
+    display: ${props => props.visible ? 'block' : 'none'};
 
     &::after {
         content: '';

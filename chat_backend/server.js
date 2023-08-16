@@ -141,7 +141,7 @@ io.on('connection', socket => {
                     ConnectedUserSocket[data.receiver].join(data.roomId);
                 }
 
-                io.sockets.to(data.roomId).emit('responseMessage', { roomId: data.roomId, ...result.response, receiver: data.receiver });
+                io.sockets.to(data.roomId).emit('responseMessage', { roomId: data.roomId, ...result.response, receiver: data.receiver, senderName: data.senderName });
             }
         } catch (e) {
             console.log(e);
