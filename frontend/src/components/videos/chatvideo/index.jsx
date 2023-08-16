@@ -19,7 +19,7 @@ const ChatVideo = ({ stream, muted, translated, translateOn }) => {
         <S.VideoWrapper>
             <video ref={ref} muted={isMuted} autoPlay />
             {
-                translateOn && <S.Translated>{translated}</S.Translated>
+                translateOn && <S.Translated visible={translated !== ''}>{translated}</S.Translated>
             }
         </S.VideoWrapper>
     );

@@ -11,12 +11,19 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import TranslateIcon from '@mui/icons-material/Translate';
 import PhoneDisabledIcon from '@mui/icons-material/PhoneDisabled';
+import { useEffect } from 'react';
 
 export default function Video({ props: { videoStart, setVideoStart, room, user } }) {
     const [headsetOn, setHeadsetOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
     const [translateOn, setTranslateOn] = useState(false);
     const [propagate, setPropagate] = useState("");
+
+    useEffect(() => {
+        setVideoStart(false);
+        setVideoOn(false);
+        setTranslateOn(false);
+    }, []);
     
     const onClickHeadset = () => {
         setHeadsetOn(headset => !headset);

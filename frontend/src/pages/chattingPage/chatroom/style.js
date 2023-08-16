@@ -99,7 +99,7 @@ export const VideoRejectButton = styled(VideoButton)`
 `
 
 export const DictionaryWrapper = styled.div`
-    height: calc(100vh - 48px);
+    height: calc(100vh - 128px);
     display: flex;
 `
 

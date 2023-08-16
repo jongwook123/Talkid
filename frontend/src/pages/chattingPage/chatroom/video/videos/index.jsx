@@ -21,6 +21,8 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 	const [users, setUsers] = useState([]);
 	const [translated, setTranslated] = useState({});
 
+	console.log(room, nowUser);
+
 	const getLocalStream = useCallback(async () => {
 		try {
 			const localStream = await navigator.mediaDevices.getUserMedia({
@@ -117,6 +119,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 
 	useEffect(() => {
 		socketRef.current = io.connect(process.env.REACT_APP_VIDEO_SERVER);
+		// socketRef.current = io.connect('http://192.168.100.159:8090');
 
 		getLocalStream();
 
@@ -275,7 +278,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 
 	useEffect(() => {
 		socketRef.current.emit('translate', {
-			translateSendEmail: 'offerSendSample@sample.com',
+			translateSendEmail: nowUser.memberMail,
 			translatedText: propagate,
 		});
 	}, [propagate]);
@@ -304,7 +307,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 				/>
 			</S.VideoListItem>
 			{users.map((user, index) => (
-				<ChatVideo key={index} email={user.email} stream={user.stream} translated={translated[user.email]} translateOn />
+				<ChatVideo key={index} email={user.email} stream={user.stream} translated={translated[user.email]} translateOn={translateOn} />
 			))}
 		</S.VideoList>
 	);
