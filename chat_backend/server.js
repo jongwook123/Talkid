@@ -42,11 +42,13 @@ io.on('connection', socket => {
         ConnectedUsers.splice(ConnectedUsers.indexOf(data.userMail), 1);
 
         // 08.12 추가
-        ConnectedUserRooms[data.userMail].forEach(room => {
-            socket.leave(room);
-        })
-
-        delete ConnectedUserSocket[data.userMail];
+        if (ConnectedUserRooms[data.userMail]) {
+            ConnectedUserRooms[data.userMail].forEach(room => {
+                socket.leave(room);
+            })
+    
+            delete ConnectedUserSocket[data.userMail];
+        }
         // 08.12 추가
 
         delete ConnectedUserRooms[data.userMail];
@@ -75,8 +77,6 @@ io.on('connection', socket => {
                     socket.join(userRoom.dmRoomId);
                 }
             });
-
-            console.log(data.userMail + " get chat rooms : " + [...userRooms]);
 
             if (data.newRoom) {
                 io.sockets.to(socket.id).emit('responseNewRooms', { rooms: userRooms });
@@ -150,9 +150,10 @@ io.on('connection', socket => {
 
     // 비디오 관련
     socket.on('requestVideo', async data => {
-        console.log(data);
+        console.log('request', data);
+        console.log(Object.keys(ConnectedUserSocket));
 
-        if (!ConnectedUsers.includes(data.receiver)) {
+        if (!Object.keys(ConnectedUserSocket).includes(data.receiver)) {
             io.sockets.to(socket.id).emit('receiverNotExist');
         } else {
             io.sockets.to(ConnectedUserSocket[data.receiver].id).emit('responseVideo', data = {...data});
@@ -160,7 +161,10 @@ io.on('connection', socket => {
     });
 
     socket.on('requestVideoReject', async data => {
-        if (!ConnectedUsers.includes(data.receiver)) {
+        console.log("reject", data);
+        console.log(Object.keys(ConnectedUserSocket));
+
+        if (!Object.keys(ConnectedUserSocket).includes(data.receiver)) {
             io.sockets.to(socket.id).emit('receiverNotExist');
         } else {
             io.sockets.to(ConnectedUserSocket[data.receiver].id).emit('responseVideoReject');
@@ -168,7 +172,10 @@ io.on('connection', socket => {
     });
 
     socket.on('requestVideoAccept', async data => {
-        if (!ConnectedUsers.includes(data.receiver)) {
+        console.log("accept", data);
+        console.log(Object.keys(ConnectedUserSocket));
+
+        if (!Object.keys(ConnectedUserSocket).includes(data.receiver)) {
             io.sockets.to(socket.id).emit('receiverNotExist');
         } else {
             io.sockets.to(ConnectedUserSocket[data.receiver].id).emit('responseVideoAccept', data = {...data});
