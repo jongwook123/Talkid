@@ -8,84 +8,71 @@ import { TryFindPassword } from "apis/UserAPIs";
 import TALKIDS from "assets/images/TALKIDS.png";
 import LongInput1 from "components/inputs/longinput1";
 import LongButton1 from "components/buttons/longbutton1";
+import { Link } from "react-router-dom";
 
 export default function FindPasswordPage() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const [inputs, setInputs] = useState({
-    email: "",
-  });
-
-  const onChangeHandler = (e) => {
-    setInputs({
-      ...inputs,
-      [e.target.name]: e.target.value,
+    const [inputs, setInputs] = useState({
+        email: "",
     });
-  };
 
-  const buttonClickHandler = async (e) => {
-    e.preventDefault();
+    const onChangeHandler = (e) => {
+        setInputs({
+            ...inputs,
+            [e.target.name]: e.target.value,
+        });
+    };
 
-    if (!inputs.email) {
-      alert("E-mail를 입력하세요.");
+    const buttonClickHandler = async (e) => {
+        e.preventDefault();
 
-      return;
-    }
+        if (!inputs.email) {
+            alert("E-mail를 입력하세요.");
 
-    const regex = new RegExp(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/);
+            return;
+        }
 
-    if (!regex.test(inputs.email)) {
-      alert("이메일 형식이 유효하지 않습니다.");
+        const regex = new RegExp(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/);
 
-      return;
-    }
+        if (!regex.test(inputs.email)) {
+            alert("이메일 형식이 유효하지 않습니다.");
 
-    const result = await TryFindPassword(inputs.email);
+            return;
+        }
 
-    if (!result.success) {
-      alert("비밀번호 발급 실패, 다시 확인해주세요.");
-    } else {
-      alert("비밀번호 발급 성공!");
-      navigate("/signin");
-    }
-  };
+        const result = await TryFindPassword(inputs.email);
 
-  return (
-    <>
-      <S.PageHeader>
-        <h1>TALKIDS</h1>
-      </S.PageHeader>
-      <main>
-        <S.FindPasswordSection>
-          <S.FindPasswordSectionHeader>
-            <h2>비밀번호찾기 영역</h2>
-            <img src={TALKIDS} alt="" />
-          </S.FindPasswordSectionHeader>
-          <S.FindPasswordForm action="">
-            <LongInput1
-              props={{
-                id: "email",
-                desc: "Insert your email",
-                color: "orange",
-                placeholder: "Your E-mail",
-                type: "text",
-                value: inputs.email,
-                callback: onChangeHandler,
-              }}
-            />
-            <S.ButtonWrapper>
-              <LongButton1
-                props={{
-                  color: "green",
-                  text: "Send New Password",
-                  callback: buttonClickHandler,
-                }}
-              />
-            </S.ButtonWrapper>
-          </S.FindPasswordForm>
-        </S.FindPasswordSection>
-      </main>
-      <footer></footer>
-    </>
-  );
+        if (!result.success) {
+            alert("비밀번호 발급 실패, 다시 확인해주세요.");
+        } else {
+            alert("비밀번호 발급 성공!");
+            navigate("/signin");
+        }
+    };
+
+    return (
+        <>
+            <S.PageHeader>
+                <h1>TALKIDS</h1>
+            </S.PageHeader>
+            <main>
+                <S.FindPasswordSection>
+                    <S.FindPasswordSectionHeader>
+                        <Link to='/'>
+                            <h2>비밀번호찾기 영역</h2>
+                            <img src={TALKIDS} alt="" />
+                        </Link>
+                    </S.FindPasswordSectionHeader>
+                    <S.FindPasswordForm action="">
+                        <LongInput1 props={{ id: "email", desc: "Insert your email", color: "orange", placeholder: "Your E-mail", type: "text", value: inputs.email, callback: onChangeHandler }} />
+                        <S.ButtonWrapper>
+                            <LongButton1 props={{ color: "green", text: "Send New Password", callback: buttonClickHandler }} />
+                        </S.ButtonWrapper>
+                    </S.FindPasswordForm>
+                </S.FindPasswordSection>
+            </main>
+            <footer></footer>
+        </>
+    )
 }

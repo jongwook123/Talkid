@@ -4,6 +4,7 @@ export const GetList = async (category) => {
     try {
         const response = await FetchTemplate({
             path: process.env.REACT_APP_BASE_SERVER + `/member/${category}`,
+            headers: {},
             method: "GET",
         });
 

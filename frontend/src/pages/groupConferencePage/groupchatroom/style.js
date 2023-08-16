@@ -3,10 +3,11 @@ import IROnly from "styles/IROnly";
 
 export const SectionWrapper = styled.div`
     display: flex;
+    margin-top: 80px;
 `
 
 export const SectionRoom = styled.section`
-    height: 100vh;
+    height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
     background-color: ${props => props.theme.colors.theme.blue};
@@ -128,7 +129,7 @@ export const RoomButton = styled.button`
 `
 
 export const SectionChat = styled.section`
-    height: 100vh;
+    height: calc(100vh -80px);
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -224,7 +225,7 @@ export const VideoRejectButton = styled(VideoButton)`
 `
 
 export const DictionaryWrapper = styled.div`
-    height: calc(100vh - 48px);
+    height: calc(100vh - 128px);
     display: flex;
 `
 

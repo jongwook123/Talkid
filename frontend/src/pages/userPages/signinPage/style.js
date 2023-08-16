@@ -35,11 +35,11 @@ export const SigninSectionHeader = styled.header`
     transform: translate(-50%, calc(-50% - 4px));
     background-color: ${props => props.theme.colors.background_color.white};
 
-    & > h2 {
+    & > a > h2 {
         ${IROnly}
     }
 
-    & > img {
+    & > a > img {
         width: 400px;
         display: block;
         margin: 0 auto;
@@ -63,4 +63,22 @@ export const ButtonWrapper = styled.div`
     left: 50%;
     transform: translate(-50%, calc(50% + 4px));
     background-color: ${props => props.theme.colors.background_color.white};
+`
+
+export const TextWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+
+    & > p {
+        font-family: 'Righteous', sans-serif;
+        color: ${props => props.theme.colors.font.light_gray2};
+        font-size: ${props => props.theme.font_size.lv3};
+    }
+
+    & > a {
+        font-family: 'Righteous', sans-serif;
+        margin: 0 10px;
+        color: ${props => props.theme.colors.theme.blue_light};
+    }
 `
