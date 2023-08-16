@@ -2,6 +2,8 @@ package com.talkids.backend.notify.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
 import com.talkids.backend.common.service.SocketService;
+import com.talkids.backend.common.service.SocketService.Success;
+import com.talkids.backend.common.service.SocketService.Fail;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.service.GroupService;
 import com.talkids.backend.member.entity.Member;
@@ -70,37 +72,57 @@ public class NotifyServiceImpl implements NotifyService{
   }
   
   @Override
-  public void notifyMember(Member sender, Member receiver, CreateNotifyDto.Request body) {
+  public NotifyContent notifyMember(Member sender, Member receiver, CreateNotifyDto.Request body) {
     NotifyContent notifyContent = NotifyContent.builder()
         .notifyHeader(body.getNotifyHeader()) //알림 제목
         .notifyBody(body.getNotifyBody())     //알림 내용
         .member(sender)                       //알림을 보낸사람
         .build();
-    
+
     NotifyContent savedNotifyContent = notifyContentRepository.save(notifyContent);
-    
+
     Map<String, Object> content = body.toMap(); //보내는 내용
     content.put("notifyContentId", savedNotifyContent.getNotifyContentId());  //알림의 id도 알려주자
     content.put("command", "newNotify");    //새로운 알람이 온 것이라고 표시
     content.put("checked", false);          //읽지 않은 알림이라고 표시
-    
-    socketService.memberSend(receiver, content,
-        (m) -> {  //소켓으로 보내는 것이 성공 했을 때
-          NotifyReceiver notifyReceiver = NotifyReceiver.builder()
-              .notifyContent(savedNotifyContent)  //알림의 내용
-              .member(m)                          //수신자
-              .notifyReceiverChecked(false)         //읽지 않은 내용으로 넣기
-              .build();
-          notifyReceiverRepository.save(notifyReceiver);  //내용은 저장
-        },
-        (m) -> {  //소켓으로 보내는 것에 실패 했을 때
-          NotifyReceiver notifyReceiver = NotifyReceiver.builder()
-              .notifyContent(savedNotifyContent)  //알림의 내용
-              .member(m)                          //수신자
-              .notifyReceiverChecked(false)        //읽지 않은 내용으로 넣기
-              .build();
-          notifyReceiverRepository.save(notifyReceiver);  //내용은 저장
-        });
+
+    return this.notifyMember(sender, receiver, body, (m) -> {//소켓으로 보내는 것이 성공 했을 때
+      NotifyReceiver notifyReceiver = NotifyReceiver.builder()
+          .notifyContent(savedNotifyContent)  //알림의 내용
+          .member(m)                          //수신자
+          .notifyReceiverChecked(false)         //읽지 않은 내용으로 넣기
+          .build();
+      notifyReceiverRepository.save(notifyReceiver);  //내용은 저장
+
+    }, (m) -> {  //소켓으로 보내는 것에 실패 했을 때
+      NotifyReceiver notifyReceiver = NotifyReceiver.builder()
+          .notifyContent(savedNotifyContent)  //알림의 내용
+          .member(m)                          //수신자
+          .notifyReceiverChecked(false)        //읽지 않은 내용으로 넣기
+          .build();
+      notifyReceiverRepository.save(notifyReceiver);  //내용은 저장
+
+    });
+  }
+
+  @Override
+  public NotifyContent notifyMember(Member sender, Member receiver, CreateNotifyDto.Request body, Success success, Fail fail){
+    NotifyContent notifyContent = NotifyContent.builder()
+        .notifyHeader(body.getNotifyHeader()) //알림 제목
+        .notifyBody(body.getNotifyBody())     //알림 내용
+        .member(sender)                       //알림을 보낸사람
+        .build();
+
+    NotifyContent savedNotifyContent = notifyContentRepository.save(notifyContent);
+
+    Map<String, Object> content = body.toMap(); //보내는 내용
+    content.put("notifyContentId", savedNotifyContent.getNotifyContentId());  //알림의 id도 알려주자
+    content.put("command", "newNotify");    //새로운 알람이 온 것이라고 표시
+    content.put("checked", false);          //읽지 않은 알림이라고 표시
+
+    socketService.memberSend(receiver, content, success, fail);
+
+    return savedNotifyContent;
   }
   
   @Override

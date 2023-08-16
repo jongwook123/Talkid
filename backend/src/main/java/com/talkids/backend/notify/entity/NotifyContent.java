@@ -26,6 +26,10 @@ public class NotifyContent {
   
   @Column(name="notifyBody", nullable = false, length=100)
   private String notifyBody;
+
+  @Column(name="notifyType", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private NotifyType notifyType;
   
   /* ---------------------------------- */
   

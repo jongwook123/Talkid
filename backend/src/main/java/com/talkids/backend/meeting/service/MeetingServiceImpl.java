@@ -1,6 +1,7 @@
 package com.talkids.backend.meeting.service;
 
 import com.talkids.backend.common.exception.NotFoundException;
+import com.talkids.backend.common.utils.TimeUtils;
 import com.talkids.backend.group.entity.Group;
 import com.talkids.backend.group.entity.GroupJoinMember;
 import com.talkids.backend.group.repository.GroupJoinMemberRepository;
@@ -15,6 +16,7 @@ import com.talkids.backend.meeting.repository.MeetingRepository;
 import com.talkids.backend.meeting.repository.MeetingScheduleRepository;
 import com.talkids.backend.member.entity.Member;
 import com.talkids.backend.notify.dto.CreateNotifyDto;
+import com.talkids.backend.notify.entity.NotifyType;
 import com.talkids.backend.notify.service.NotifyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,7 @@ public class MeetingServiceImpl implements MeetingService{
     private final MeetingJoinReqRepository meetingJoinReqRepository;
     
     private final NotifyService notifyService;
+    private final TimeUtils timeUtils;
 
 
     @Override
@@ -82,19 +85,18 @@ public class MeetingServiceImpl implements MeetingService{
             .build();
 
         meetingScheduleRepository.save(meetingSchedule);
-        
-        
+
+        //각각의 시간에 대해 포맷팅 하기
+        String startTime = timeUtils.dateTimeFormat(start);
+        String endTime = timeUtils.dateTimeFormat(end);
+
         StringBuilder headBuilder = new StringBuilder("");
-        headBuilder.append(start.getMonthValue()).append(".").append(start.getDayOfMonth())
-            .append(" ").append(start.getHour()).append(":").append(start.getMinute())
-            .append(" ~ ")
-            .append(end.getMonthValue()).append(".").append(end.getDayOfMonth())
-            .append(" ").append(end.getHour()).append(":").append(end.getMinute())
-            .append("빈 미팅을 등록하였습니다");
+        headBuilder.append(startTime).append(" ~" ).append(endTime).append(" Schedule registered");
         
         CreateNotifyDto.Request notifyBody = CreateNotifyDto.Request.builder()
             .notifyHeader(headBuilder.toString())
             .notifyBody("무엇인가 보낼 본문")
+            .notifyType(NotifyType.MATCHING)
             .build();
         
         notifyService.notifyMember(member, member, notifyBody);
@@ -136,6 +138,25 @@ public class MeetingServiceImpl implements MeetingService{
 
         meetingJoinReqRepository.save(meetingJoinReq);
 
+        //정상적으로 요청을 했으면 이에 대해 알림을 주자
+        Group targetGroup = meetingSchedule.getGroup();
+        Member targetTeacher = groupService.getGroupTeacher(targetGroup);  //해당 그룹의 장을 가지고 와서
+        
+        LocalDateTime start = meetingSchedule.getMeetingScheduleStart();
+        LocalDateTime end = meetingSchedule.getMeetingScheduleEnd();
+
+        String startTime = timeUtils.dateTimeFormat(start);
+        String endTime = timeUtils.dateTimeFormat(end);
+
+        StringBuilder sb = new StringBuilder("");
+        sb.append(startTime).append(" ~ ").append(endTime).append(" new meeting request received");
+
+        CreateNotifyDto.Request notifyRequest = CreateNotifyDto.Request.builder()
+                .notifyHeader("New meeting request")
+                .notifyBody(sb.toString())
+                .notifyType(NotifyType.MATCHING)
+                .build();
+        notifyService.notifyMember(member, targetTeacher, notifyRequest);
     }
 
     //매칭 성사 요청 받은 목록 반환
@@ -202,24 +223,24 @@ public class MeetingServiceImpl implements MeetingService{
         
         //빈 일정 목록에 있던 것은 지워주자
         meetingScheduleRepository.delete(meetingSchedule);
-        
+
+        String startTime = timeUtils.dateTimeFormat(meetingStart);
+        String endTime = timeUtils.dateTimeFormat(meetingEnd);
+
         StringBuilder headBuilder = new StringBuilder("");
-        headBuilder.append(meetingStart.getMonthValue()).append(".").append(meetingStart.getDayOfMonth())
-            .append(" ").append(meetingStart.getHour()).append(":").append(meetingStart.getMinute())
-            .append(" ~ ")
-            .append(meetingEnd.getMonthValue()).append(".").append(meetingEnd.getDayOfMonth())
-            .append(" ").append(meetingEnd.getHour()).append(":").append(meetingEnd.getMinute())
-            .append("미팅이 있습니다");
+        headBuilder.append(startTime).append(" ~ ").append(endTime).append(" Meeting matched");
         
         CreateNotifyDto.Request body = CreateNotifyDto.Request.builder()
                                         .notifyHeader(headBuilder.toString())
                                         .notifyBody("무엇인가 보낼 본문")
+                                        .notifyType(NotifyType.MATCHING)
                                         .build();
         notifyService.notifyGroup(groupRes, body);
         notifyService.notifyGroup(groupReq, body);
         
     }
 
+    //요청에 대해 거절하기
     @Override
     public void rejectRequest(Member member, Integer meetingJoinReqId) throws Exception {
         MeetingJoinReq meetingJoinReq = meetingJoinReqRepository.findById(meetingJoinReqId).orElseThrow(() -> {
@@ -235,6 +256,27 @@ public class MeetingServiceImpl implements MeetingService{
         
         //거절 한다는 뜻은 해당 요청을 삭제 한다는 뜻이다
         meetingJoinReqRepository.delete(meetingJoinReq);
+
+        //거절당한 그룹에게 알림을 주자
+        Member ownerTeacher = groupService.getGroupTeacher(ownerGroup);
+        Group requestGroup = meetingJoinReq.getGroup();
+        Member requestTeacher = groupService.getGroupTeacher(requestGroup);
+
+        LocalDateTime start = meetingJoinReq.getMeetingSchedule().getMeetingScheduleStart();
+        LocalDateTime end = meetingJoinReq.getMeetingSchedule().getMeetingScheduleEnd();
+
+        String formattedStart = timeUtils.dateTimeFormat(start);
+        String formattedEnd = timeUtils.dateTimeFormat(end);
+
+        StringBuilder sb = new StringBuilder("");
+        sb.append(formattedStart).append(" ~ ").append(formattedEnd).append(" meeting request rejected");
+
+        CreateNotifyDto.Request body = CreateNotifyDto.Request.builder()
+                                        .notifyHeader("Matching rejected")
+                                        .notifyBody(sb.toString())
+                                        .notifyType(NotifyType.MATCHING)
+                                        .build();
+        notifyService.notifyMember(ownerTeacher, requestTeacher, body);
     }
 
     @Override
