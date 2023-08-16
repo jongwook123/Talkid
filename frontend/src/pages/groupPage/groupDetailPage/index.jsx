@@ -13,7 +13,7 @@ import { useEffect } from "react";
 export default function GroupDetailPage() {
   const params = useParams();
   const groupIdFromUrl = params.groupId;
-  const token = useSelector((state) => state.user.token); // accessToken 가져오기
+  const token = useSelector((state) => state.user.accessToken); // accessToken 가져오기
 
   const [isOpen, setIsOpen] = useState(false);
   const open = () => {

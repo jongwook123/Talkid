@@ -62,9 +62,7 @@ public class MeetingController {
             isMine = myGroups.contains(meeting.getGroupReq().getGroupId()) || myGroups.contains(meeting.getGroupRes().getGroupId());
             if(isMine){
                 //성사된 일정에 대해서는 내꺼만 보여주자
-                if(myGroups.contains(meeting.getGroupReq().getGroupId())){
-                    meetingDtos.add(MeetingWithMineDto.fromEntity(meeting, isMine, timeZone));
-                }
+                meetingDtos.add(MeetingWithMineDto.fromEntity(meeting, isMine, timeZone));
             }
         }
 

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function GroupPage() {
-  const token = useSelector((state) => state.user.token); // accessToken 가져오기
+  const token = useSelector((state) => state.user.accessToken); // accessToken 가져오기
   const [groups, setGroups] = useState([]);
 
   const handleFindGroups = async () => {
