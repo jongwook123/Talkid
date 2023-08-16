@@ -29,7 +29,8 @@ export default function ChattingPage() {
             return;
         }
 
-        socketRef.current = io.connect(process.env.REACT_APP_CHATTING_SERVER);
+        // socketRef.current = io.connect(process.env.REACT_APP_CHATTING_SERVER);
+        socketRef.current = io.connect('http://192.168.100.159:8092');
 
         socketRef.current.emit('connectUser', {
             userMail: user.memberMail,

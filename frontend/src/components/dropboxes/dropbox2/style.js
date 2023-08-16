@@ -13,7 +13,7 @@ export const Button = styled.button`
     position: relative;
     background-color: ${props => props.theme.colors.background_color.white};
     font-size: ${props => props.theme.font_size.lv3};
-    border: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : `${props.theme.colors.border.light_gray}`};
+    border: 2px solid ${(props) => props.clicked ? props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}` : 'white'};
     border-bottom: ${props => props.clicked ? "none" : ""};
     padding-bottom: ${props => props.clicked ? "2px" : ""};
     border-radius: ${props => props.clicked ? `${props.theme.border_radius.lv2} ${props.theme.border_radius.lv2} 0 0` : props.theme.border_radius.lv2};

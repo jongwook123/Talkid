@@ -23,7 +23,7 @@ export const Button = styled.button`
         width: 8px;
         height: 8px;
         position: absolute;
-        right: 14px;
+        right: 15px;
         top: 8px;
         transition: all 0.2s;
         transform: ${props => props.clicked ? "translate(5px, -1px) rotate(225deg);" : "translate(0, -1px) rotate(225deg)" };

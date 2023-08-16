@@ -78,7 +78,12 @@ io.on('connection', socket => {
 
             console.log(data.userMail + " get chat rooms : " + [...userRooms]);
 
-            io.sockets.to(socket.id).emit('responseRooms', { rooms: userRooms });
+            if (data.newRoom) {
+                io.sockets.to(socket.id).emit('responseNewRooms', { rooms: userRooms });
+            } else {
+                io.sockets.to(socket.id).emit('responseRooms', { rooms: userRooms });
+            }
+
         } catch (e) {
             console.log(e);
         }
@@ -103,7 +108,12 @@ io.on('connection', socket => {
             });
             const result = await response.json();
 
-            io.sockets.to(socket.id).emit('responseChatting', { chats: result.response });
+            if (data.newRoom) {
+                io.sockets.to(socket.id).emit('updateRoom');
+            } else {
+                io.sockets.to(socket.id).emit('responseChatting', { chats: result.response });
+            }
+
         } catch (e) {
             console.log(e);
         }

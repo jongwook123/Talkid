@@ -47,31 +47,31 @@ export default function Header() {
             return;
         }
 
-        // 서버에 웹 소켓 올리면 하기
-        // socketRef.current = new WebSocket("ws://" + process.env.REACT_APP_BASE_SERVER + "/ws");
+        // // 서버에 웹 소켓 올리면 하기
+        socketRef.current = new WebSocket("ws://" + process.env.REACT_APP_BASE_SERVER.replace("http://", "") + "/ws");
 
-        // socketRef.current.onopen = () => {
-        //     socketRef.current.send(
-        //         JSON.stringify({
-        //             command: "Authorization",
-        //             Authorization: `Bearer ${user.accessToken}`,
-        //         })
-        //     );
-        // };
+        socketRef.current.onopen = () => {
+            socketRef.current.send(
+                JSON.stringify({
+                    command: "Authorization",
+                    Authorization: `Bearer ${user.accessToken}`,
+                })
+            );
+        };
 
-        // socketRef.current.onmessage = (e) => {
-        //     const data = JSON.parse(e.data);
-        //     console.log(data);
+        socketRef.current.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            console.log(data);
 
-        //     if (data.command === "newNotify") {
-        //         const { notifyContentId, notifyHeader, notifyBody, checked } = data;
+            if (data.command === "newNotify") {
+                const { notifyContentId, notifyHeader, notifyBody, checked } = data;
 
-        //         setNotifys((prev) => [
-        //             ...prev,
-        //             { notifyContentId, notifyHeader, notifyBody, checked },
-        //         ]);
-        //     }
-        // };
+                setNotifys((prev) => [
+                    ...prev,
+                    { notifyContentId, notifyHeader, notifyBody, checked },
+                ]);
+            }
+        };
     }, [user, navigate]);
 
     // 사용자 타입 확인
@@ -172,7 +172,7 @@ export default function Header() {
 
     // 팔로워 모달
     const [followTab, setFollowTab] = useState("followers");
-    
+
     const onClickFollowerButton = () => {
         setFollowTab("followers");
     }
@@ -204,30 +204,15 @@ export default function Header() {
                             <S.AlarmModal onClick={onClickBody}>
                                 <S.AlarmModalHeader color={color1}>Alarms</S.AlarmModalHeader>
                                 <S.AlarmModalList color={color1}>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
-                                    <li>
-                                        <DropBox2 props={{ title: "alarm list", content: "alarm content", color: color1 }} />
-                                    </li>
+                                    {
+                                        notifys.map(notify => {
+                                            return (
+                                                <li key={notify.notifyContentId}>
+                                                    <DropBox2 props={{ title: notify.notifyHeader, content: notify.notifyBody, color: color1 }} />
+                                                </li>
+                                            )
+                                        })
+                                    }
                                 </S.AlarmModalList>
                                 <S.AlarmModalButton onClick={onClickModalClose} color={color1}>close</S.AlarmModalButton>
                             </S.AlarmModal>
@@ -294,7 +279,7 @@ export default function Header() {
                                     <S.FollowTabButton onClick={onClickFollowingButton} selected={followTab === "following"} color={color4}>Following</S.FollowTabButton>
                                 </S.FollowTabWrapper>
                                 <S.FollowList>
-                                    
+
                                 </S.FollowList>
                             </S.FollowModal>
                         </S.ModalWrapper>

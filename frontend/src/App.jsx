@@ -22,7 +22,7 @@ import ChattingPage from "pages/chattingPage"
 // video reference pates
 import GroupConferencePage from "pages/groupConferencePage"
 
-import ProfilePage from "pages/userPages/profilePage"
+// import ProfilePage from "pages/userPages/profilePage"
 import GroupPage from "pages/groupPage/groupPage"
 import GroupDetailPage from "pages/groupPage/groupDetailPage"
 import StudentMatchPage from "pages/matchPage/studentMatchPage"
@@ -48,7 +48,7 @@ export default function App() {
 
                         {/* 사용자 정보 수정 */}
                         {/* 아직 안됨 */}
-                        <Route path="/:user/profile" element={<ProfilePage />} /> 
+                        {/* <Route path="/:user/profile" element={<ProfilePage />} />  */}
 
                         {/* 채팅, 화상 관련 */}
                         <Route path="/chatting" element={<ChattingPage />} />

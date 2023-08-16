@@ -139,3 +139,59 @@ export const TryDeleteUser = async (accessToken) => {
         console.log(e);
     }
 }
+
+export const FindMembers = async (category, keyword) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + `/member/findmember?searchBy=${category}&keyword=${keyword}`,
+            headers: {},
+            method: "GET",
+        });
+
+        const result = await response.json();
+        return result;
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const TryFollow = async (accessToken, memberId) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + `/member/follow/${memberId}`,
+            method: "POST",
+            headers: {
+                "Authorization" : `Bearer ${accessToken}`
+            }
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const GetFollow = async (accessToken) => {
+    try {
+        const user_response = await GetUserInfo(accessToken);
+        
+        if (!user_response.success) {
+            return [];
+        }
+
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + `/member/follow/${user_response.response.memberId}`,
+            method: "GET",
+            headers: {},
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
