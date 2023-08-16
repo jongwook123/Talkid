@@ -9,12 +9,14 @@ import MatchApplyModal from "components/modals/matchapplymodal";
 export default function List(props) {
   const clickedData = props.clickedData;
   const clickedDate = props.clickedData.today;
-  const token = useSelector((state) => state.user.token);
+
+  const token = useSelector((state) => state.user.accessToken);
 
   const [groups, setGroups] = useState([]);
 
   const handleFindGroups = async () => {
     const result = await TryGetGroup(token);
+    console.log(result);
     setGroups([...result.response]);
   };
 
@@ -27,7 +29,14 @@ export default function List(props) {
       <S.Listheader>
         {clickedDate && (
           <>
-            {clickedDate}일's <p>{clickedData && clickedData.type}</p>
+            {clickedDate} 's{" "}
+            <p>
+              {clickedData && clickedData.type === "mySchedules"
+                ? "My Unmatched"
+                : clickedData.type === "schedules"
+                ? "Unmatched"
+                : "My Matched"}
+            </p>
           </>
         )}
       </S.Listheader>
@@ -49,10 +58,8 @@ export default function List(props) {
               ) : (
                 <>
                   <p>{item.group.groupName}</p>
-                  <p>
-                    {item.group.teacher.school.schoolName}{" "}
-                    {item.group.teacher.memberName} 선생님
-                  </p>
+                  <p>{item.group.teacher.school.schoolName}</p>
+                  <p>{item.group.teacher.memberName}</p>
                   <p>
                     {item.meetingScheduleStart.slice(11, 16)} ~{" "}
                     {item.meetingScheduleEnd.slice(11, 16)}

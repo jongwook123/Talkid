@@ -6,19 +6,27 @@ import { useSelector } from "react-redux";
 import CalendarModal from "components/modals/calendarModal";
 
 export default function Head(props) {
-  const { year, month, goToday, setMonth } = props;
-  const DAY = ["일", "월", "화", "수", "목", "금", "토"];
+  const { year, month, goToday, setYear, setMonth } = props;
+  const DAY = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   const prevButtonClickHandler = (e) => {
     e.preventDefault();
-    setMonth(month - 1);
+    const prev = year * 12 + month - 2;
+    const prevYear = Math.floor(prev / 12);
+    const prevMonth = prev % 12;
+    setYear(prevYear);
+    setMonth(prevMonth + 1);
   };
 
   const nextButtonClickHandler = (e) => {
     e.preventDefault();
-    setMonth(month + 1);
+    const next = year * 12 + month;
+    const prevYear = Math.floor(next / 12);
+    const prevMonth = next % 12;
+    setYear(prevYear);
+    setMonth(prevMonth + 1);
   };
-  const token = useSelector((state) => state.user.token); // accessToken 가져오기
+  const token = useSelector((state) => state.user.accessToken); // accessToken 가져오기
 
   const registerButtonClickHandler = async (e) => {
     e.preventDefault();
@@ -32,7 +40,6 @@ export default function Head(props) {
 
   const todayButtonClickHandler = (e) => {
     e.preventDefault();
-
     goToday();
   };
 
@@ -41,7 +48,7 @@ export default function Head(props) {
       <S.Nav>
         <S.Year>
           <p>
-            {year}년 {month}월
+            {year}. {month}.
           </p>
         </S.Year>
         <S.ButtonWrapper2>
@@ -57,7 +64,7 @@ export default function Head(props) {
             <LongButton1
               props={{
                 color: "blue",
-                text: "오늘",
+                text: "Today",
                 callback: todayButtonClickHandler,
               }}
             />

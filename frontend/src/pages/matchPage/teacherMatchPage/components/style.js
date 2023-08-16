@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const HeadForm = styled.section`
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid ${props => props.theme.colors.theme.green_light};
+  border-bottom: 1px solid ${(props) => props.theme.colors.theme.green_light};
 `;
 
 export const BodyForm = styled.div`
@@ -12,47 +12,47 @@ export const BodyForm = styled.div`
 `;
 
 export const Nav = styled.section`
- display: grid;
- grid-template-columns: 3fr 1fr;
- justify-items: stretch;
- margin:30px;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  justify-items: stretch;
+  margin: 30px;
 `;
 export const Year = styled.div`
   font-size: 2rem;
   font-weight: 700;
-  padding:2%;
+  padding: 2%;
 `;
 export const ButtonWrapper = styled.div`
-    display: grid;
-    justify-items: center;
-    align-items: end;
-    grid-template-columns: 1fr 1.5fr 1fr;
-    & > button {
-        width: 95%;
-        height:100%;
-    }
-`
+  display: grid;
+  justify-items: center;
+  align-items: end;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  & > button {
+    width: 95%;
+    height: 100%;
+  }
+`;
 export const ButtonWrapper2 = styled.div`
-    & > button {
-        width: 100%;
-        height:50%;
-        margin-bottom:5px;
-    }
-`
+  & > button {
+    width: 100%;
+    height: 50%;
+    margin-bottom: 5px;
+  }
+`;
 
 export const ButtonWrapper3 = styled.div`
-    display: grid;
-    justify-items: right;
-    & > button {
-        width: 20%;
-        height:130%;
-    }
-`
+  display: grid;
+  justify-items: right;
+  & > button {
+    width: 20%;
+    height: 130%;
+  }
+`;
 
 export const Days = styled.div`
   display: flex;
   margin-bottom: 0.5vw;
-  font-weight:700;
+  font-weight: 700;
 `;
 export const Day = styled.li`
   width: calc(100% / 7);
@@ -60,7 +60,7 @@ export const Day = styled.li`
 
   :nth-child(1),
   :nth-child(7) {
-    color: ${props => props.theme.colors.theme.orange_dark};
+    color: ${(props) => props.theme.colors.theme.orange_dark};
   }
 `;
 
@@ -69,17 +69,17 @@ export const DatesForm = styled.li`
   width: calc(100% / 7);
   height: 6vw;
   /* text-align: center; */
-  /* border: 1px solid ${props => props.theme.colors.theme.green_light}; */
-  font-weight:700;
+  /* border: 1px solid ${(props) => props.theme.colors.theme.green_light}; */
+  font-weight: 700;
   :nth-child(7n + 1),
   :nth-child(7n) {
-    color: ${props => props.theme.colors.theme.orange_dark};
-    /* background-color: ${props => props.theme.colors.background_color.gray}; */
+    color: ${(props) => props.theme.colors.theme.orange_dark};
+    /* background-color: ${(props) =>
+      props.theme.colors.background_color.gray}; */
   }
 `;
 
 export const DateNum = styled.div`
-  padding: 1vw;
   ${(props) => props.idx < props.lastDate && `color: #969696;`};
 
   ${(props) =>
@@ -91,7 +91,8 @@ export const DateNum = styled.div`
 `;
 
 export const TodayCSS = styled.span`
-  background-color: ${props => props.findToday ? props.theme.colors.theme.blue : "inherit"}; 
+  background-color: ${(props) =>
+    props.findToday ? props.theme.colors.theme.blue : "inherit"};
   ${(props) =>
     props.findToday &&
     ` position: relative;
@@ -101,7 +102,6 @@ export const TodayCSS = styled.span`
     font-weight: 700;
     color: #FFFFFF;
     `}
-
 `;
 
 export const Lists = styled.div`
@@ -118,17 +118,16 @@ export const List = styled.span`
 `;
 
 export const ListMySchedules = styled(List)`
-background-color: #f7ced9; /* 배경색 설정 */
+  background-color: #f7ced9; /* 배경색 설정 */
 `;
 
 export const ListSchedules = styled(List)`
-background-color: #b6e2d8; /* 배경색 설정 */
+  background-color: #b6e2d8; /* 배경색 설정 */
 `;
 
 export const ListMeetings = styled(List)`
-background-color: #f4b284; /* 배경색 설정 */
+  background-color: #f4b284; /* 배경색 설정 */
 `;
-
 
 export const ModalForm = styled.div`
   position: absolute;
@@ -193,7 +192,7 @@ export const Close = styled.div`
 `;
 
 export const ScheduleList = styled.ul`
-  max-height: 85%;
+  max-height: 75%;
   overflow-y: scroll;
   font-weight: 600;
   & > li {
@@ -202,19 +201,41 @@ export const ScheduleList = styled.ul`
     border-bottom: 2px solid;
   }
   & > li > p {
-    margin-bottom:10px;
+    margin-bottom: 10px;
   }
   &::-webkit-scrollbar {
-        display: none;
-        width: 8px;
-        background-color: ${props => props.theme.colors.theme.blue};
+    width: 8px;
+    background-color: ${(props) =>
+      props.color === "orange"
+        ? `${props.theme.colors.theme.orange_light}`
+        : props.color === "green"
+        ? `${props.theme.colors.theme.green_light}`
+        : `${props.theme.colors.theme.blue_light}`};
   }
-  
-`
 
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${(props) =>
+      props.color === "orange"
+        ? `${props.theme.colors.theme.orange_dark}`
+        : props.color === "green"
+        ? `${props.theme.colors.theme.green_dark}`
+        : `${props.theme.colors.theme.blue_dark}`};
+    border-radius: 10px;
+    background-clip: padding-box;
+  }
+
+  &::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+  }
+`;
 
 export const Listheader = styled.header`
-  font-size : 30px;
+  font-size: 30px;
   margin-bottom: 30px;
   text-align: center;
-`
+`;

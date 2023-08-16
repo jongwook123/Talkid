@@ -30,7 +30,7 @@ export default function MainPage() {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-    // console.log(user);
+  // console.log(user);
 
   useEffect(() => {
     if (!user.accessToken) {
@@ -42,7 +42,7 @@ export default function MainPage() {
     <Wrapper>
       {/* <Canvas style={{ width: "100%", height: "100vh" }} camera={{ position: [0, 0, 150]}}>
   
-  const token = useSelector(state => state.user.token);
+  const token = useSelector(state => state.user.accessToken);
 
   const [exp, setExp] = useState(0)
   
