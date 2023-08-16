@@ -62,4 +62,6 @@ public interface NotifyService {
    * @param notifyContentId 어떤 알람인지
    */
   void checkNotify(Member member, Integer notifyContentId) throws Exception;
+
+  void notifyStartMeetings(Long minute);
 }

@@ -15,6 +15,7 @@ import com.talkids.backend.meeting.repository.MeetingJoinReqRepository;
 import com.talkids.backend.meeting.repository.MeetingRepository;
 import com.talkids.backend.meeting.repository.MeetingScheduleRepository;
 import com.talkids.backend.member.entity.Member;
+import com.talkids.backend.member.entity.TimeZone;
 import com.talkids.backend.notify.dto.CreateNotifyDto;
 import com.talkids.backend.notify.entity.NotifyType;
 import com.talkids.backend.notify.service.NotifyService;
