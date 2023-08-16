@@ -31,13 +31,13 @@ export default function Dates(props) {
           <S.ListMySchedules
             onClick={() => clickHandler("mySchedules", mySchedules)}
           >
-            {mySchedules[0] && mySchedules.length}
+            {mySchedules.length !== 0 && mySchedules.length}
           </S.ListMySchedules>
           <S.ListSchedules onClick={() => clickHandler("schedules", schedules)}>
-            {schedules[0] && schedules.length}
+            {schedules.length !== 0 && schedules.length}
           </S.ListSchedules>
           <S.ListMeetings onClick={() => clickHandler("meetings", meetings)}>
-            {meetings[0] && meetings.length}
+            {meetings.length !== 0 && meetings.length}
           </S.ListMeetings>
         </S.Lists>
       </S.DatesForm>

@@ -18,7 +18,7 @@ export default function TeacherMatchPage() {
   const [totalDate, setTotalDate] = useState([]);
 
   // 정보 조회
-  const token = useSelector((state) => state.user.token);
+  const token = useSelector((state) => state.user.accessToken);
 
   // 내 빈 일정
   const [mySchedules, setMySchedules] = useState(
@@ -42,7 +42,7 @@ export default function TeacherMatchPage() {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       try {
         const result = await GetMeeting(token, year, month);
 
@@ -100,9 +100,7 @@ export default function TeacherMatchPage() {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };
-
-    fetchData();
+    })();
   }, [year, month, token]);
 
   const changeDate = (month) => {
@@ -161,6 +159,7 @@ export default function TeacherMatchPage() {
           <Head
             year={year}
             month={month}
+            setYear={setYear}
             setMonth={setMonth}
             goToday={goToday}
           />
@@ -175,10 +174,17 @@ export default function TeacherMatchPage() {
             setClickedData={setClickedData}
           />
         </S.CalendarSection>
+
         <S.ListSection>
           <List clickedData={clickedData} />
         </S.ListSection>
       </S.MatchSection>
+
+      <S.Center>
+        <S.Label color="#f7ced9" /> My Unmatched
+        <S.Label color="#b6e2d8" /> Unmatched
+        <S.Label color="#f4b284" /> My Matched
+      </S.Center>
     </>
   );
 }

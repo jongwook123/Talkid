@@ -9,7 +9,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { TryApplyGroup, TrySearchGroup } from "apis/GroupPageAPIs";
 
 export default function AlarmModal() {
-  const token = useSelector(state => state.user.token);
+  const token = useSelector(state => state.user.accessToken);
 
   const [groups, setGroups] = useState([]);
 

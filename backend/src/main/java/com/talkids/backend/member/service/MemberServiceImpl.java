@@ -222,7 +222,7 @@ public class MemberServiceImpl implements MemberService {
 
         if(searchBy.equals("all")){
             // 회원 이메일로 검색
-            if(keyword!=""){
+            if(keyword.length() != 0){
                 if(memberRepository.findByMemberMail(keyword).isEmpty())
                     throw new NotFoundException("회원 정보가 없습니다.");
 

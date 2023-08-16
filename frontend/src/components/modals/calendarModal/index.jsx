@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import * as S from './style';
+import * as S from "./style";
 
-import LongInput1 from 'components/inputs/longinput1';
-import LongButton1 from 'components/buttons/longbutton1';
-import { TryRegister } from 'apis/meetingPageAPIs';
-import { TryGetGroup } from 'apis/GroupPageAPIs';
-import Calendar from 'components/calendar';
-import { useSelector } from 'react-redux';
-
+import LongInput1 from "components/inputs/longinput1";
+import LongButton1 from "components/buttons/longbutton1";
+import { TryRegister } from "apis/meetingPageAPIs";
+import { TryGetGroup } from "apis/GroupPageAPIs";
+import Calendar from "components/calendar";
+import { useSelector } from "react-redux";
 
 function CalendarModal() {
-  const token = useSelector(state => state.user.token);
+  const token = useSelector((state) => state.user.accessToken);
 
   const [isOpen, setIsOpen] = useState(false);
   const [inputs, setInputs] = useState({
@@ -27,7 +26,7 @@ function CalendarModal() {
       ...inputs,
       [e.target.name]: e.target.value,
     });
-  }
+  };
 
   const refreshPage = () => {
     window.location.reload();
@@ -43,7 +42,9 @@ function CalendarModal() {
 
     try {
       const response = await TryGetGroup(token);
-      const matchingGroup = response.response.find(group => group.groupName === inputs.groupName);
+      const matchingGroup = response.response.find(
+        (group) => group.groupName === inputs.groupName
+      );
 
       if (matchingGroup) {
         const groupId = matchingGroup.groupId;
@@ -63,32 +64,61 @@ function CalendarModal() {
   };
 
   const openModalHandler = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   };
 
   return (
     <>
       <S.ModalContainer>
-        <LongButton1 props={{ color: "orange", text: "일정 등록", callback: openModalHandler }} />
-        {isOpen ?
+        <LongButton1
+          props={{
+            color: "orange",
+            text: "Register Schedule",
+            callback: openModalHandler,
+          }}
+        />
+        {isOpen ? (
           <S.ModalBackdrop onClick={openModalHandler}>
             <S.ModalView onClick={(e) => e.stopPropagation()}>
-              <LongInput1 props={{ id: "groupName", desc: "Insert groupname", color: "orange", placeholder: "Group Name", type: "text", value: inputs.groupName, callback: onChangeHandler }} />
-              <Calendar selectedMeetingStart={meetingStart}
+              <LongInput1
+                props={{
+                  id: "groupName",
+                  desc: "Insert groupname",
+                  color: "orange",
+                  placeholder: "Group Name",
+                  type: "text",
+                  value: inputs.groupName,
+                  callback: onChangeHandler,
+                }}
+              />
+              <Calendar
+                selectedMeetingStart={meetingStart}
                 setSelectedMeetingStart={setMeetingStart}
                 selectedMeetingEnd={meetingEnd}
-                setSelectedMeetingEnd={setMeetingEnd} />
+                setSelectedMeetingEnd={setMeetingEnd}
+              />
               <S.ButtonWrapper>
-                <LongButton1 props={{ color: "green", text: "Register", callback: buttonClickHandler }} />
-                <LongButton1 props={{ color: "orange", text: "X", callback: openModalHandler }} />
+                <LongButton1
+                  props={{
+                    color: "green",
+                    text: "Register",
+                    callback: buttonClickHandler,
+                  }}
+                />
+                <LongButton1
+                  props={{
+                    color: "orange",
+                    text: "X",
+                    callback: openModalHandler,
+                  }}
+                />
               </S.ButtonWrapper>
             </S.ModalView>
           </S.ModalBackdrop>
-          : null
-        }
+        ) : null}
       </S.ModalContainer>
     </>
   );
-};
+}
 
-export default CalendarModal
+export default CalendarModal;

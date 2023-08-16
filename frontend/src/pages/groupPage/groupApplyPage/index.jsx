@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import { TrySearchGroup } from "apis/GroupPageAPIs";
 
 export default function GroupApplyPage() {
-  const token = useSelector((state) => state.user.token);
+  const token = useSelector((state) => state.user.accessToken);
 
   const [groups, setGroups] = useState([]);
   const [input, setInput] = useState("");
