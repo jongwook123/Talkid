@@ -21,6 +21,6 @@ public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
         Optional<Meeting> findOneByMeetingStartBetween(LocalDateTime start, LocalDateTime end);
         Optional<Meeting> findOneByMeetingEndBetween(LocalDateTime start, LocalDateTime end);
 
-        @Query(value = "SELECT * from Meeting m WHERE m.meeting_start >= DATE_SUB(NOW(), INTERVAL :minute minute) AND m.meeting_start > NOW()", nativeQuery = true)
+        @Query(value = "SELECT * from Meeting m WHERE m.meeting_start <= DATE_ADD(NOW(), INTERVAL :minute minute) AND m.meeting_start > NOW()", nativeQuery = true)
         List<Meeting> findByMinute(Long minute);
 }
