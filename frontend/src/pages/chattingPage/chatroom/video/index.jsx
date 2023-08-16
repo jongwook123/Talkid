@@ -82,7 +82,7 @@ export default function Video({ props: { videoStart, setVideoStart, room, user }
                 videoStart &&
                 <>
                     <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn, translateOn }} />
-                    <Texts props={{ setPropagate }} />
+                    <Texts props={{ setPropagate, nowUser: user }} />
                 </>
             }
         </S.Section>

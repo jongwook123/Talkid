@@ -32,7 +32,7 @@ function GroupModal() {
 
   const handleGetUser = async () => {
     const result = await TryGetUser(token);
-    console.log(result);
+    // console.log(result);
   };
 
   useEffect(() => {

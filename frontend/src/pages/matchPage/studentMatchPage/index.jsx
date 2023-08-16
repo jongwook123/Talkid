@@ -17,7 +17,7 @@ const colors = ['orange', 'green', 'blue'];
 export default function StudentMatchPage() {
     const [selectedCategory, setSelectedCategory] = useState("Email");
     const user = useSelector(state => state.user);
-    const naviage = useNavigate();
+    const navigate = useNavigate();
     const color = colors[Math.floor(Math.random() * 3)];
 
     // ID로 조회
@@ -40,9 +40,9 @@ export default function StudentMatchPage() {
     useEffect(() => {
         const fetchCountryList = async () => {
             const response = await GetList("country");
-            setCountryInfo(response.response);
+            setCountryInfo(response.response.filter(country => country.countryCode === 'USA' || country.countryCode === 'KOR'));
             setCountryList(
-                response.response.map((country) => country["countryName"])
+                response.response.filter(country => country.countryCode === 'USA' || country.countryCode === 'KOR').map((country) => country["countryName"])
             );
         };
 
@@ -77,9 +77,9 @@ export default function StudentMatchPage() {
     useEffect(() => {
         const fetchLanguageList = async () => {
             const result = await GetList("language");
-            setLanguageInfo(result.response);
+            setLanguageInfo(result.response.filter(language => language.languageCode === 'en' || language.languageCode === 'ko'));
             setLanguageList(
-                result.response.map((language) => language["languageEng"])
+                result.response.filter(language => language.languageCode === 'en' || language.languageCode === 'ko').map((language) => language["languageEng"])
             );
         };
 
@@ -113,11 +113,10 @@ export default function StudentMatchPage() {
 
     const handleFindMembers = async (category, keyword) => {
         const result = await FindMembers(category, keyword);
+        const result_user = await GetUserInfo(user.accessToken);
 
-        if (result.response && Array.isArray(result.response)) {
-            const filteredMembers = result.response.filter(
-                (member) => member.memberType.memberTypeId === 2
-            );
+        if (result.response && Array.isArray(result.response) && result_user.response) {
+            const filteredMembers = result.response.filter(member => member.memberId !== result_user.response.memberId);
 
             setMembers([...filteredMembers]);
         }
@@ -156,7 +155,7 @@ export default function StudentMatchPage() {
     const onClickMessage = async () => {
         const result = await GetUserInfo(user.accessToken);
 
-        naviage("/chatting", {
+        navigate("/chatting", {
             state: {
                 sender: result.response.memberMail,
                 receiver: selectedStudent.memberMail,
@@ -186,7 +185,7 @@ export default function StudentMatchPage() {
         }
 
         getFollow();
-    }, [user]);
+    }, [user, selectedStudent]);
 
     return (
         <>
@@ -248,8 +247,9 @@ export default function StudentMatchPage() {
                 <S.MatchSection isDetailOpen={isDetailOpen}>
                     <S.CardList isDetailOpen={isDetailOpen} color={color}>
                         {
-                            members.map((student, index) => (
-                                <S.CardItem
+                            members.map((student, index) => {
+                                return (
+                                    <S.CardItem
                                     key={index}
                                     onClick={() => handleCardItemClick(student)}
                                 >
@@ -263,7 +263,8 @@ export default function StudentMatchPage() {
                                         }}
                                     ></Card>
                                 </S.CardItem>
-                            ))
+                                )
+                            })
                         }
                     </S.CardList>
                     <S.DetailSection isDetailOpen={isDetailOpen}>

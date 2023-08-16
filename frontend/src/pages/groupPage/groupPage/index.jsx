@@ -8,50 +8,53 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function GroupPage() {
-  const token = useSelector((state) => state.user.token); // accessToken 가져오기
-  const [groups, setGroups] = useState([]);
+    const token = useSelector((state) => state.user.accessToken); // accessToken 가져오기
+    const [groups, setGroups] = useState([]);
 
-  const handleFindGroups = async () => {
-    const result = await TryGetGroup(token);
-    console.log(result);
-    setGroups([...result.response]);
-  };
+    const handleFindGroups = async () => {
+        const result = await TryGetGroup(token);
 
-  useEffect(() => {
-    handleFindGroups();
-  }, []);
+        if (!result.success) {
+            return;
+        }
 
-  const navigate = useNavigate();
+        console.log(result);
+        
+        setGroups([...result.response]);
+    };
 
-  const onClickHandler = (groupId) => {
-    navigate(`/groupdetail/${groupId}`);
-  };
+    useEffect(() => {
+        handleFindGroups();
+    }, []);
 
-  return (
-    <>
-      <S.PageHeader>
-        <h1>TALKIDS</h1>
-      </S.PageHeader>
-      <main>
-        <S.CardList>
-          {groups.map((group, index) => (
-            <S.CardItem
-              key={index}
-              onClick={() => onClickHandler(group.groupId)}
-            >
-              <Card
-                props={{
-                  groupName: group.groupName,
-                  students: group.members.length,
-                  created_date: group.createdAt,
-                }}
-              ></Card>
-            </S.CardItem>
-          ))}
-          <GroupModal />
-        </S.CardList>
-      </main>
-      <footer></footer>
-    </>
-  );
+    const navigate = useNavigate();
+
+    const onClickHandler = (groupId) => {
+        navigate(`/groupdetail/${groupId}`);
+    };
+
+    return (
+        <>
+            <S.PageMain>
+                <S.CardList>
+                    {groups.map((group, index) => (
+                        <S.CardItem
+                            key={index}
+                            onClick={() => onClickHandler(group.groupId)}
+                        >
+                            <Card
+                                props={{
+                                    groupName: group.groupName,
+                                    students: group.members.length,
+                                    created_date: group.createdAt,
+                                }}
+                            ></Card>
+                        </S.CardItem>
+                    ))}
+                    <GroupModal />
+                </S.CardList>
+            </S.PageMain>
+            <footer></footer>
+        </>
+    );
 }

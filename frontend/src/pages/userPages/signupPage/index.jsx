@@ -117,8 +117,8 @@ export default function SignupPage({ max = 3 }) {
     useEffect(() => {
         const fetchCountryList = async () => {
             const response = await GetList('country');
-            setCountryInfo(response.response);
-            setCountryList(response.response.map(country => country['countryName']));
+            setCountryInfo(response.response.filter(country => country.countryCode === 'USA' || country.countryCode === 'KOR'));
+            setCountryList(response.response.filter(country => country.countryCode === 'USA' || country.countryCode === 'KOR').map(country => country['countryName']));
         };
 
         fetchCountryList();
@@ -141,8 +141,8 @@ export default function SignupPage({ max = 3 }) {
     useEffect(() => {
         const fetchLanguageList = async () => {
             const result = await GetList('language');
-            setLanguageInfo(result.response);
-            setLanguageList(result.response.map(language => language['languageEng']));
+            setLanguageInfo(result.response.filter(language => language.languageCode === 'en' || language.languageCode === 'ko'));
+            setLanguageList(result.response.filter(language => language.languageCode === 'en' || language.languageCode === 'ko').map(language => language['languageEng']));
         };
 
         fetchLanguageList();
