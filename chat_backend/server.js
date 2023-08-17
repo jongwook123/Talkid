@@ -203,6 +203,10 @@ io.on('connection', socket => {
         console.log(data.userMail + " joined " + data.roomId);
     });
 
+    socket.on("requestNewSubRoom", data => {
+        io.sockets.to(data.roomId).emit('responseNewSubRoom', { ...data });
+    });
+
     socket.on('exitGroupConference', data => {
         if (!GroupConference[data.roomId].includes(data.userMail)) {
             console.log("user " + data.userMail + " is already exited");
