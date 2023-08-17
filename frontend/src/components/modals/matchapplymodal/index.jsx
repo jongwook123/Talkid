@@ -73,14 +73,14 @@ function MatchApplyModal({ token, groups, meetingScheduleId }) {
         <LongButton1
           props={{
             color: "green",
-            text: "미팅 신청",
+            text: "Meeting Request",
             callback: openModalHandler,
           }}
         />
         {isOpen ? (
           <S.ModalBackdrop onClick={openModalHandler}>
             <S.ModalView onClick={(e) => e.stopPropagation()}>
-              <S.ModalTitle>미팅 신청</S.ModalTitle>
+              <S.ModalTitle>Meeting Request</S.ModalTitle>
               {groupList.length > 0 ? (
                 <>
                   <S.DropboxFieldset>

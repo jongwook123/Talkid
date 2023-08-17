@@ -96,7 +96,9 @@ export default function TeacherMatchPage() {
         setMySchedules({ ...mySchedulesCopy });
         setSchedules({ ...schedulesCopy });
         setMeetings({ ...meetingsCopy });
-        console.log(mySchedulesCopy, schedulesCopy, meetingsCopy);
+        console.log(`My UnMatched`, mySchedulesCopy);
+        console.log(`Unmatched`, schedulesCopy);
+        console.log(`My Matched`, meetingsCopy);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
