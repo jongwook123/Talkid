@@ -16,16 +16,17 @@ function Calendar({ selectedMeetingStart, setSelectedMeetingStart, selectedMeeti
     };
 
     return (
-        <S.DateSection>
+<S.DateSection>
             <S.DateBox1>
                 <ScheduleIcon />
                 <S.StyledDatePicker
                     selected={selectedMeetingStart}
                     onChange={handleMeetingStartChange}
                     showTimeSelect
-                    minTime={setHours(setMinutes(new Date(), 0), 1)}
-                    maxTime={setHours(setMinutes(new Date(), 5), 23)}
+                    minTime={setMinutes(setHours(new Date(), 0), 0)}
+                    maxTime={setMinutes(setHours(new Date(), 23), 55)} 
                     dateFormat="MMMM d, yyyy h:mm aa"
+                    timeIntervals={5}
                 />
             </S.DateBox1>
             <HorizontalRuleIcon />
@@ -34,12 +35,12 @@ function Calendar({ selectedMeetingStart, setSelectedMeetingStart, selectedMeeti
                     selected={selectedMeetingEnd}
                     onChange={handleMeetingEndChange}
                     showTimeSelect
-                    minTime={setHours(setMinutes(new Date(), 0), 1)}
-                    maxTime={setHours(setMinutes(new Date(), 5), 23)}
+                    minTime={setMinutes(setHours(new Date(), 0), 0)}
+                    maxTime={setMinutes(setHours(new Date(), 23), 55)}
                     dateFormat="MMMM d, yyyy h:mm aa"
+                    timeIntervals={5}
                 />
             </S.DateBox2>
-
         </S.DateSection>
     );
 }
