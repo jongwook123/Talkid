@@ -28,7 +28,7 @@ function useInterval(callback, delay) {
     }, [delay]);
 }
 
-export default function Texts({ props: { setPropagate } }) {
+export default function Texts({ props: { setPropagate, nowUser } }) {
     const {
         transcript,
         // listening,
@@ -61,7 +61,7 @@ export default function Texts({ props: { setPropagate } }) {
             prev.setPrevText("");
         } else {
             const translate = async () => {
-                const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + '/ko/en/' + transcript);
+                const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + nowUser.language.languageCode === 'ko' ? '/ko/en/' : '/en/ko/' + transcript);
                 const result = await response.json();
 
                 setTranslate(result.translated);
@@ -77,7 +77,7 @@ export default function Texts({ props: { setPropagate } }) {
     }, [translate, setPropagate]);
 
     useEffect(() => {
-        SpeechRecognition.startListening({ continuous: true, language: 'ko' });
+        SpeechRecognition.startListening({ continuous: true, language: nowUser.language.languageCode === 'ko' ? 'ko' : 'en' });
 
         return (() => {
             SpeechRecognition.stopListening();

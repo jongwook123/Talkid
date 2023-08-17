@@ -1,18 +1,10 @@
 import styled from "styled-components";
 import IROnly from "styles/IROnly";
 
-export const PageHeader = styled.header`
-    & > h1 {
-        ${IROnly}
-    }
-`
-
 export const PageMain = styled.main`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
+    height: calc(100vh - 80px);
+    margin-top: 80px;
 `
 
 export const CardList = styled.ul`

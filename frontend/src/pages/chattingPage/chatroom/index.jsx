@@ -119,8 +119,6 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         setVideoClicked(true);
     }, [videoTextRef, setVideoClicked, setSelectedRoom, chatRooms]);
 
-    console.log(videoClicked);
-
     const responseVideoAccept = useCallback((data) => {
         setVideoClicked(false);
         setVideoStart(true);

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signoutUser } from 'redux/slice/userSlice';
 
-import { GetUserInfo } from 'apis/UserAPIs';
+import { GetUserInfo, GetFollow, TryFollow } from 'apis/UserAPIs';
 
 import * as S from './style';
 
@@ -172,6 +172,8 @@ export default function Header() {
 
     // 팔로워 모달
     const [followTab, setFollowTab] = useState("followers");
+    const [following, setFollowing] = useState([]);
+    const [followers, setFollowers] = useState([]);
 
     const onClickFollowerButton = () => {
         setFollowTab("followers");
@@ -179,6 +181,39 @@ export default function Header() {
 
     const onClickFollowingButton = () => {
         setFollowTab("following");
+    }
+
+    useEffect(() => {
+        const getUserFollow = async (token) => {
+            const result = await GetFollow(token);
+
+            if (result.success) {
+                setFollowing(result.response.Following);
+                setFollowers(result.response.Follower);
+            } else {
+                navigate("/signin");
+            }
+        }
+
+        getUserFollow(user.accessToken);
+    }, [user, navigate]);
+
+    const onClickUnfollow = async (memberId) => {
+        const result = await TryFollow(user.accessToken, memberId);
+
+        setFollowing(following.filter(follow => follow.followMemberId != memberId));
+    }
+
+    const onClickFollowChat = async (followMail) => {
+        const result = await GetUserInfo(user.accessToken);
+
+        setSelectFollow(false);
+        navigate("/chatting", {
+            state: {
+                sender: result.response.memberMail,
+                receiver: followMail,
+            }
+        });
     }
 
     // 로그아웃
@@ -234,7 +269,7 @@ export default function Header() {
                         </S.NavButton>
                         <S.ButtonList onClick={onClickBody} visible={selectGroup}>
                             <li>
-                                <S.ButtinListLink to='/modify' onClick={onClickLink} color={color5}>
+                                <S.ButtinListLink to='/group' onClick={onClickLink} color={color5}>
                                     <GroupsIcon />
                                     <span>Group</span>
                                 </S.ButtinListLink>
@@ -278,9 +313,43 @@ export default function Header() {
                                     <S.FollowTabButton onClick={onClickFollowerButton} selected={followTab === "followers"} color={color4}>Followers</S.FollowTabButton>
                                     <S.FollowTabButton onClick={onClickFollowingButton} selected={followTab === "following"} color={color4}>Following</S.FollowTabButton>
                                 </S.FollowTabWrapper>
-                                <S.FollowList>
-
-                                </S.FollowList>
+                                <S.FollowListWrapper>
+                                    <S.FollowList selected={followTab==="followers"}>
+                                        {
+                                            followers.map((follow) => {
+                                                return (
+                                                    <S.FollowListItem key={follow.followMemberName}>
+                                                        <S.TextWrapper color={color4}>
+                                                            <p>{follow.followMemberMail}</p>
+                                                            <p>{follow.followMemberName}</p>
+                                                        </S.TextWrapper>
+                                                        <S.ChatButton onClick={() => {onClickFollowChat(follow.followMemberName)}} color={color4}>
+                                                            <ChatIcon />
+                                                        </S.ChatButton>
+                                                    </S.FollowListItem>
+                                                )
+                                            })
+                                        }
+                                    </S.FollowList>
+                                    <S.FollowList selected={followTab==="following"}>
+                                        {
+                                            following.map((follow) => {
+                                                return (
+                                                    <S.FollowListItem key={follow.followMemberName}>
+                                                        <S.TextWrapper color={color4}>
+                                                            <p>{follow.followMemberMail}</p>
+                                                            <p>{follow.followMemberName}</p>
+                                                        </S.TextWrapper>
+                                                        <S.ChatButton onClick={() => {onClickFollowChat(follow.followMemberName)}} color={color4}>
+                                                            <ChatIcon />
+                                                        </S.ChatButton>
+                                                        <S.UnfollowButton onClick={() => {onClickUnfollow(follow.followMemberId)}} color={color4}>unfollow</S.UnfollowButton>
+                                                    </S.FollowListItem>
+                                                )
+                                            })
+                                        }
+                                    </S.FollowList>
+                                </S.FollowListWrapper>
                             </S.FollowModal>
                         </S.ModalWrapper>
                     </S.NavListItem>

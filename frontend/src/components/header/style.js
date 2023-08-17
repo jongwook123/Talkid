@@ -171,10 +171,70 @@ export const FollowTabButton = styled.button`
     }
 `
 
-export const FollowList = styled.ul`
+export const FollowListWrapper = styled.div`
     display: flex;
+    width: 100%;
+    flex-grow: 1;
+`
+
+export const FollowList = styled.ul`
+    width: 100%;
+    display: ${props => props.selected ? 'flex' : 'none' };
     flex-direction: column;
     padding: 30px;
+`
+
+export const FollowListItem = styled.li`
+    display: flex;
+    align-items: center;
+    padding: 10px;
+
+    & > button:nth-child(2) {
+        margin-left: auto;
+    }
+
+    & > button:nth-child(3) {
+        margin-left: 12px;
+    }
+`
+
+export const TextWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    & > p:first-child {
+        font-size: ${props => props.theme.font_size.lv4};
+        color: ${props => props.theme.colors.font.light_black};
+    }
+
+    & > p:last-child {
+        font-size: ${props => props.theme.font_size.lv3};
+        color: ${props => props.theme.colors.font.light_gray};
+    }
+`
+
+export const UnfollowButton = styled.button`
+    border: none;
+    padding: 6px 12px;
+    border-radius: ${props => props.theme.border_radius.lv2};
+    color: ${props => props.theme.colors.font.white};
+    font-size: ${props => props.theme.font_size.lv2};
+    background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+
+    &:focus {
+        outline: none;
+    }
+`
+
+export const ChatButton = styled.button`
+    background-color: inherit;
+    border: none;
+    color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+
+    &:focus {
+        outline: none;
+    }
 `
 
 export const ButtonList = styled.ul`
