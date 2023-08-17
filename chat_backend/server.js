@@ -21,7 +21,7 @@ const ConnectedUserRooms = {};
 const ConnectedUserSocket = {};
 const GroupConference = {};
 
-const backendServer = 'https://i9d106.p.ssafy.io/api';
+const backendServer = 'http://i9d106.p.ssafy.io/api';
 
 app.use(cors());
 
