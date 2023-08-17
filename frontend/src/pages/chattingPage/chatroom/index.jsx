@@ -376,7 +376,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
                                         }
 
                                         const Translate = async () => {
-                                            const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + '/ko/en/' + chat.messageContent);
+                                            const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + (user.language.languageCode === 'ko' ? '/ko/en/' : '/en/ko/') + chat.messageContent);
                                             const result = await response.json();
 
                                             setChats(chats => chats.map(c => {
