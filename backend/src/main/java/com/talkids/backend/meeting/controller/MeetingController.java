@@ -46,11 +46,16 @@ public class MeetingController {
         //해당 년, 월에 해당하는 일정들을 가져오고
         List<Meeting> meetings = meetingService.getMeetingsByYearAndMonth(year, month);
         List<MeetingSchedule> meetingSchedules = meetingService.getMeetingSchedulesByYearAndMonth(year, month);
+
+        //내가 신청했던 미팅 참여 요청을 받아오고
+        List<MeetingJoinReq> reqs = meetingService.getSendRequest(member);
+        Set<Integer> reqIds = new HashSet<>(reqs.stream().map((r) -> r.getMeetingJoinReqId()).toList());
         
         //내가 속한 그룹을 가져오고
         List<Group> groups = groupService.getGroupList(member);
         Set<Integer> myGroups = new HashSet<>();
         for(Group group: groups) myGroups.add(group.getGroupId());
+
 
         List<MeetingWithMineDto> meetingDtos = new ArrayList<>(meetings.size());
         List<MeetingScheduleWithMineDto> meetingScheduleDtos = new ArrayList<>(meetingSchedules.size());
@@ -66,9 +71,19 @@ public class MeetingController {
             }
         }
 
+        boolean sended;
         for(MeetingSchedule meetingSchedule: meetingSchedules){
+            sended = false;
             isMine = myGroups.contains(meetingSchedule.getGroup().getGroupId());
-            meetingScheduleDtos.add(MeetingScheduleWithMineDto.fromEntity(meetingSchedule, isMine, timeZone));
+            List<Integer> reqList = meetingSchedule.getMeetingJoinReqs().stream().map((m) -> m.getMeetingJoinReqId()).toList();
+            for(int reqId: reqList){
+                //만약 내가 요청한 적이 있는 거면은
+                if(reqIds.contains(reqId)){
+                    sended = true;
+                    break;
+                }
+            }
+            meetingScheduleDtos.add(MeetingScheduleWithMineDto.fromEntity(meetingSchedule, isMine, sended, timeZone));
         }
 
         GetMyMeetingDto.Response response = GetMyMeetingDto.Response.builder()
