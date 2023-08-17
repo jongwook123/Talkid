@@ -142,12 +142,13 @@ public class MeetingServiceImpl implements MeetingService{
         //정상적으로 요청을 했으면 이에 대해 알림을 주자
         Group targetGroup = meetingSchedule.getGroup();
         Member targetTeacher = groupService.getGroupTeacher(targetGroup);  //해당 그룹의 장을 가지고 와서
+        TimeZone timeZone = member.getSchool().getTimeZone();
         
         LocalDateTime start = meetingSchedule.getMeetingScheduleStart();
         LocalDateTime end = meetingSchedule.getMeetingScheduleEnd();
 
-        String startTime = timeUtils.dateTimeFormat(start);
-        String endTime = timeUtils.dateTimeFormat(end);
+        String startTime = timeUtils.dateTimeFormat(timeUtils.localize(start, timeZone));
+        String endTime = timeUtils.dateTimeFormat(timeUtils.localize(end, timeZone));
 
         StringBuilder sb = new StringBuilder("");
         sb.append(startTime).append(" ~ ").append(endTime).append(" new meeting request received");
