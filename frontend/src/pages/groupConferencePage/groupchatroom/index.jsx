@@ -1,10 +1,12 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useSelector } from "react-redux";
 
 import * as S from './style';
 
 import Video from './video';
 import Dictionary from './dictionary';
 import BookIcon from '@mui/icons-material/Book';
+import { RegisterBookmark } from 'apis/UserAPIs';
 
 export default function GroupChatRoom({ props: { socketUpdated, socket, user, groupId } }) {
     const [selectedRoom, setSelectedRoom] = useState(groupId);
@@ -14,6 +16,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
     const [newChat, setNewChat] = useState("");
     const messageEndRef = useRef(null);
     const [dictionaryClicked, setDictionaryClicked] = useState(false);
+    const token = useSelector(state => state.user.accessToken);
 
     const responseMessage = useCallback((data) => {
         setArrivalChat({ memberName: data.sender, messageContent: data.messageContent, createdAt: data.createdAt, translate: "" });
@@ -112,6 +115,17 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
         setNewChat('');
     }
 
+    const sendSpeech = (message) => {
+        socket.emit('requestMessage', {
+            "roomId": room.dmRoomId,
+            "sender": user.memberMail,
+            "senderName": user.memberName,
+            "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
+            "messageContent": message,
+            "readCheck": false,
+        });
+    }
+
     const onChangeInput = (e) => {
         setNewChat(e.target.value);
     }
@@ -169,7 +183,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
                 <S.DictionaryWrapper>
                     {
                         <S.VideoWrapper>
-                            <Video props={{ room: selectedRoom, user, groupId }} />
+                            <Video props={{ room: selectedRoom, user, groupId, sendSpeech }} />
                             <S.ListChat>
                                 {
                                     chats.map((chat, index) => {
@@ -189,16 +203,25 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
                                             const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + (user.language.languageCode === 'ko' ? '/en/ko/' : '/ko/en/') + chat.messageContent);
                                             const result = await response.json();
 
-                                            setChats(chats => chats.map(c => {
-                                                if (c.memberName === chat.memberName && c.messageContent === chat.messageContent && c.createdAt === chat.createdAt) {
-                                                    return {
-                                                        ...c,
-                                                        translate: result.translated,
-                                                    }
-                                                } else {
-                                                    return c;
-                                                }
-                                            }))
+                                            // setChats(chats => chats.map(c => {
+                                            //     if (c.memberName === chat.memberName && c.messageContent === chat.messageContent && c.createdAt === chat.createdAt) {
+                                            //         return {
+                                            //             ...c,
+                                            //             translate: result.translated,
+                                            //         }
+                                            //     } else {
+                                            //         return c;
+                                            //     }
+                                            // }))
+
+                                            await RegisterBookmark(token, chat.messageContent, result.translated);
+
+                                            setChats(chats => {
+                                                const temp = [...chats];
+                                                temp[index].translate = result.translated;
+
+                                                return temp;
+                                            })
                                         }
 
                                         return (

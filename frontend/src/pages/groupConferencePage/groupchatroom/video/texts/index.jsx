@@ -28,7 +28,7 @@ function useInterval(callback, delay) {
     }, [delay]);
 }
 
-export default function Texts({ props: { setPropagate, nowUser } }) {
+export default function Texts({ props: { setPropagate, nowUser, sendSpeech } }) {
     const {
         transcript,
         // listening,
@@ -55,6 +55,7 @@ export default function Texts({ props: { setPropagate, nowUser } }) {
                 return;
             }
 
+            sendSpeech(transcript);
             resetTranscript();
             setTranslate("");
             setEmptyCount(0);

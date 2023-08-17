@@ -13,7 +13,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import PhoneDisabledIcon from '@mui/icons-material/PhoneDisabled';
 import { useEffect } from 'react';
 
-export default function Video({ props: { videoStart, setVideoStart, room, user } }) {
+export default function Video({ props: { videoStart, setVideoStart, room, user, sendSpeech } }) {
     const [headsetOn, setHeadsetOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
     const [translateOn, setTranslateOn] = useState(false);
@@ -82,7 +82,7 @@ export default function Video({ props: { videoStart, setVideoStart, room, user }
                 videoStart &&
                 <>
                     <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn, translateOn }} />
-                    <Texts props={{ setPropagate, nowUser: user }} />
+                    <Texts props={{ setPropagate, nowUser: user, sendSpeech }} />
                 </>
             }
         </S.Section>

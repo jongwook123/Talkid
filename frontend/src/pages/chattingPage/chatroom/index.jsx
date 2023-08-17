@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 
 import * as S from './style';
 
@@ -6,6 +7,7 @@ import Video from "./video";
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import Dictionary from "./dictionary";
 import BookIcon from '@mui/icons-material/Book';
+import { RegisterBookmark } from "apis/UserAPIs";
 
 export default function ChatRoom({ props: { socket, room, setChatRooms, user, chatRooms, setSelectedRoom } }) {
     const [arrivalChat, setArrivalChat] = useState({});
@@ -16,6 +18,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
     const [videoStart, setVideoStart] = useState(false);
     const [dictionaryClicked, setDictionaryClicked] = useState(false);
     const videoTextRef = useRef(null);
+    const token = useSelector(state => state.user.accessToken);
 
     useEffect(() => {
         if (!room.dmRoomId) {
@@ -195,7 +198,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         })
     }, [room, setChatRooms]);
 
-    const sendMessage = async (e) => {
+    const sendMessage = (e) => {
         e.preventDefault();
 
         if (!newChat)
@@ -211,6 +214,17 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         });
 
         setNewChat('');
+    }
+
+    const sendSpeech = (message) => {
+        socket.emit('requestMessage', {
+            "roomId": room.dmRoomId,
+            "sender": user.memberMail,
+            "senderName": user.memberName,
+            "receiver": room.dmRoomId.split('_')[1 - room.dmRoomId.split('_').indexOf(user.memberMail)],
+            "messageContent": message,
+            "readCheck": false,
+        });
     }
 
     const onChangeInput = useCallback((e) => {
@@ -323,7 +337,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
                 <S.DictionaryWrapper>
                     {
                         room.dmRoomId && <S.VideoWrapper>
-                            <Video props={{ videoStart, setVideoStart, room, user, socket }} />
+                            <Video props={{ videoStart, setVideoStart, room, user, socket, sendSpeech }} />
                             <S.ListChat>
                                 {
                                     chats.map((chat, index) => {
@@ -379,16 +393,25 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
                                             const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + (user.language.languageCode === 'ko' ? '/en/ko/' : '/ko/en/') + chat.messageContent);
                                             const result = await response.json();
 
-                                            setChats(chats => chats.map(c => {
-                                                if (c.memberName === chat.memberName && c.messageContent === chat.messageContent && c.createdAt === chat.createdAt) {
-                                                    return {
-                                                        ...c,
-                                                        translate: result.translated,
-                                                    }
-                                                } else {
-                                                    return c;
-                                                }
-                                            }))
+                                            // setChats(chats => chats.map(c => {
+                                            //     if (c.memberName === chat.memberName && c.messageContent === chat.messageContent && c.createdAt === chat.createdAt) {
+                                            //         return {
+                                            //             ...c,
+                                            //             translate: result.translated,
+                                            //         }
+                                            //     } else {
+                                            //         return c;
+                                            //     }
+                                            // }))
+
+                                            await RegisterBookmark(token, chat.messageContent, result.translated);
+
+                                            setChats(chats => {
+                                                const temp = [...chats];
+                                                temp[index].translate = result.translated;
+
+                                                return temp;
+                                            })
                                         }
 
                                         return (
