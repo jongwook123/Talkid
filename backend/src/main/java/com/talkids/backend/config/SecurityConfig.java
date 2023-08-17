@@ -38,8 +38,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-            .csrf().disable()
+        http.csrf().disable()
             //.csrf(Customizer.withDefaults()) // 서버에 인증정보를 저장하지 않기 때문에(stateless, rest api) csrf를 추가할 필요 X
             .formLogin(Customizer.withDefaults())
             .httpBasic(Customizer.withDefaults()) // 기본 인증 로그인 사용하지 않음. (rest api)
@@ -51,6 +50,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
+
+
         return http.build();
     }
 
