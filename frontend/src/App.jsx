@@ -27,7 +27,7 @@ import GroupPage from "pages/groupPage/groupPage"
 import GroupDetailPage from "pages/groupPage/groupDetailPage"
 import StudentMatchPage from "pages/matchPage/studentMatchPage"
 import TeacherMatchPage from "pages/matchPage/teacherMatchPage"
-import GroupApplyPage from "pages/groupPage/groupApplyPage"
+
 
 
 export default function App() {
