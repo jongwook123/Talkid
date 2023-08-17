@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/group")
+@RequestMapping("/api/group")
 public class GroupController {
 
     private final GroupService groupService;
