@@ -23,7 +23,7 @@ public class MeetingJoinReq {
 
     /* ---------------------------------- */
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "meetingScheduleId")
     private MeetingSchedule meetingSchedule;
 
