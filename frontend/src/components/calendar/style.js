@@ -7,6 +7,7 @@ export const DateSection = styled.section`
     width: 100%;
     grid-template-columns: 6fr 1fr 5fr;
     align-items: center;
+    margin-top: 30px;
 
 `
 
