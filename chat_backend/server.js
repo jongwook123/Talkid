@@ -25,25 +25,6 @@ const backendServer = 'https://i9d106.p.ssafy.io/api';
 
 app.use(cors());
 
-const test = async () => {
-    const response = await fetch(backendServer + '/member/signin' , {
-        headers: {
-            "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-            "memberMail" : 'yys@naver.com',
-            "memberPassword" : '1234',
-        })
-    })
-
-    const result = await response.json();
-
-    console.log(result);
-}
-
-test();
-
 io.on('connection', socket => {
     // 사용자 연결
     socket.on('connectUser', data => {
