@@ -17,10 +17,15 @@ export const CardItem = styled.li`
     display: flex;
     justify-content: center;
 
-    &:hover {
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        transform: scale(1.05);
-  }
+        &:hover {
+            ${props => props.memberTypeId === 1 && 
+            `
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+                transform: scale(1.05);
+                cursor: pointer;
+                
+            `}
+        }
 `
 
 export const ButtonWrapper = styled.div`

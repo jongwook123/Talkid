@@ -13,9 +13,9 @@ function Card({ props: { groupName, created_date, students, img_src } }) {
       />
       <S.TextContainer>
         <h2>{groupName}</h2>
-        <S.Progress>
+        {/* <S.Progress>
           <S.Dealt dealt={dealtValue} />
-        </S.Progress>
+        </S.Progress> */}
         <h3>
           <PeopleIcon />
           {students} | {formattedDate}

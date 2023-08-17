@@ -50,7 +50,11 @@ export default function GroupPage() {
           {groups.map((group, index) => (
             <S.CardItem
               key={index}
-              onClick={() => onClickHandler(group.groupId)}
+              onClick={() => {
+                if (user?.memberType?.memberTypeId === 1) { onClickHandler(group.groupId) }
+                else return
+              }}
+              memberTypeId={user?.memberType?.memberTypeId}
             >
               <Card
                 props={{
