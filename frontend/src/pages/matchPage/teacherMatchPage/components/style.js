@@ -119,14 +119,23 @@ export const List = styled.span`
 
 export const ListMySchedules = styled(List)`
   background-color: #f7ced9; /* 배경색 설정 */
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ListSchedules = styled(List)`
   background-color: #b6e2d8; /* 배경색 설정 */
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ListMeetings = styled(List)`
   background-color: #f4b284; /* 배경색 설정 */
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ModalForm = styled.div`

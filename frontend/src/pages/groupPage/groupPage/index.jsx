@@ -8,53 +8,53 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function GroupPage() {
-    const token = useSelector((state) => state.user.accessToken); // accessToken 가져오기
-    const [groups, setGroups] = useState([]);
+  const token = useSelector((state) => state.user.accessToken); // accessToken 가져오기
+  const [groups, setGroups] = useState([]);
 
-    const handleFindGroups = async () => {
-        const result = await TryGetGroup(token);
+  const handleFindGroups = async () => {
+    const result = await TryGetGroup(token);
 
-        if (!result.success) {
-            return;
-        }
+    if (!result.success) {
+      return;
+    }
 
-        console.log(result);
-        
-        setGroups([...result.response]);
-    };
+    console.log(result);
 
-    useEffect(() => {
-        handleFindGroups();
-    }, []);
+    setGroups([...result.response]);
+  };
 
-    const navigate = useNavigate();
+  useEffect(() => {
+    handleFindGroups();
+  }, []);
 
-    const onClickHandler = (groupId) => {
-        navigate(`/groupdetail/${groupId}`);
-    };
+  const navigate = useNavigate();
 
-    return (
-        <>
-            <S.PageMain>
-                <S.CardList>
-                    {groups.map((group, index) => (
-                        <S.CardItem
-                            key={index}
-                            onClick={() => onClickHandler(group.groupId)}
-                        >
-                            <Card
-                                props={{
-                                    groupName: group.groupName,
-                                    students: group.members.length,
-                                    created_date: group.createdAt,
-                                }}
-                            ></Card>
-                        </S.CardItem>
-                    ))}
-                    <GroupModal />
-                </S.CardList>
-            </S.PageMain>
-            <footer></footer>
-        </>
-    );
+  const onClickHandler = (groupId) => {
+    navigate(`/groupdetail/${groupId}`);
+  };
+
+  return (
+    <>
+      <S.PageMain>
+        <S.CardList>
+          {groups.map((group, index) => (
+            <S.CardItem
+              key={index}
+              onClick={() => onClickHandler(group.groupId)}
+            >
+              <Card
+                props={{
+                  groupName: group.groupName,
+                  students: group.members.length - 1,
+                  created_date: group.createdAt,
+                }}
+              ></Card>
+            </S.CardItem>
+          ))}
+          <GroupModal />
+        </S.CardList>
+      </S.PageMain>
+      <footer></footer>
+    </>
+  );
 }

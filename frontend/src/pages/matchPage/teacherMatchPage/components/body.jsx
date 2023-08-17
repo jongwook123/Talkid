@@ -3,8 +3,16 @@ import Dates from "./dates";
 import * as S from "./style";
 
 export default function Body(props) {
-  const { totalDate, today, month, year, mySchedules, schedules, meetings } =
-    props;
+  const {
+    totalDate,
+    today,
+    month,
+    year,
+    mySchedules,
+    schedules,
+    meetings,
+    setClickedData,
+  } = props;
   const lastDate = totalDate.indexOf(1);
   const firstDate = totalDate.indexOf(1, 7);
 
@@ -26,7 +34,7 @@ export default function Body(props) {
             mySchedules={mySchedules[elm]}
             schedules={schedules[elm]}
             meetings={meetings[elm]}
-            setClickedData={props.setClickedData}
+            setClickedData={setClickedData}
           ></Dates>
         );
       })}
