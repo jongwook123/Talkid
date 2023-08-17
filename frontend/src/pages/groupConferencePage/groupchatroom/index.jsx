@@ -6,6 +6,7 @@ import * as S from './style';
 import Video from './video';
 import Dictionary from './dictionary';
 import BookIcon from '@mui/icons-material/Book';
+import { RegisterBookmark } from 'apis/UserAPIs';
 
 export default function GroupChatRoom({ props: { socketUpdated, socket, user, groupId } }) {
     const [selectedRoom, setSelectedRoom] = useState(groupId);
