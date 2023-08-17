@@ -21,7 +21,7 @@ const ChatVideo = ({ stream, muted, translated, translateOn }) => {
         <S.VideoWrapper>
             <video ref={ref} muted={isMuted} autoPlay />
             {
-                translateOn && <S.Translated visible={translated}>{translated}</S.Translated>
+                translateOn && translated && <S.Translated visible={translated}>{translated}</S.Translated>
             }
         </S.VideoWrapper>
     );
