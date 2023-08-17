@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -19,6 +21,8 @@ public class MeetingScheduleWithMineDto{
     private LocalDateTime meetingScheduleStart;
     private LocalDateTime meetingScheduleEnd;
     private GroupDto group;
+    
+    private List<MeetingJoinReqDto> reqs;       //해당 일정에 대해 요청 받은 목록
 
     private Boolean isMine;
     private Boolean sended;
@@ -38,12 +42,21 @@ public class MeetingScheduleWithMineDto{
         start = start.plusHours(timeZone.getHour()).plusMinutes(timeZone.getMinute());
         LocalDateTime end = meetingSchedule.getMeetingScheduleEnd();
         end = end.plusHours(timeZone.getHour()).plusMinutes(timeZone.getMinute());
+        
+        List<MeetingJoinReqDto> reqs = new ArrayList<>();
+        
+        
+        if(isMine){
+            //만약 나의 빈 일정이면 -> 요청 받은 목록들을 반환해주자
+            reqs = meetingSchedule.getMeetingJoinReqs().stream().map(MeetingJoinReqDto::fromEntity).toList();
+        }
 
         return MeetingScheduleWithMineDto.builder()
             .meetingScheduleId(meetingSchedule.getMeetingScheduleId())
             .meetingScheduleStart(start)
             .meetingScheduleEnd(end)
             .group(GroupDto.fromEntity(meetingSchedule.getGroup()))
+            .reqs(reqs)
             .isMine(isMine)
             .sended(sended)
             .build();
