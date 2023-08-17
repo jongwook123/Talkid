@@ -21,8 +21,6 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 	const [users, setUsers] = useState([]);
 	const [translated, setTranslated] = useState({});
 
-	console.log(room, nowUser);
-
 	const getLocalStream = useCallback(async () => {
 		try {
 			const localStream = await navigator.mediaDevices.getUserMedia({

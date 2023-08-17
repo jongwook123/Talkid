@@ -20,7 +20,7 @@ export const Translated = styled.p`
     background-color: ${props => props.theme.colors.background_color.white};
     border-radius: ${props => props.theme.border_radius.lv3};
     border: 1px solid ${props => props.theme.colors.border.light_gray};
-    display: ${props => props.visible ? 'block' : 'none'};
+    /* display: ${props => props.visible ? 'block' : 'none'}; */
 
     &::after {
         content: '';

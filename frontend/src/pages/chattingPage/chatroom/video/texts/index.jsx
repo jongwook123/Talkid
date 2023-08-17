@@ -36,6 +36,10 @@ export default function Texts({ props: { setPropagate, nowUser } }) {
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
 
+    // console.log(process.env.REACT_APP_TRANSLATION_SERVER);
+    // console.log(process.env.REACT_APP_TRANSLATION_SERVER + nowUser.language.languageCode === 'ko' ? '/ko/en/' : '/en/ko/' + transcript);
+    // console.log(nowUser.language.languageCode === 'ko' ? 'ko' : 'en');
+
     const [translate, setTranslate] = useState("");
 
     const [prevText, setPrevText] = useState("");
@@ -61,7 +65,12 @@ export default function Texts({ props: { setPropagate, nowUser } }) {
             prev.setPrevText("");
         } else {
             const translate = async () => {
-                const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + nowUser.language.languageCode === 'ko' ? '/ko/en/' : '/en/ko/' + transcript);
+                const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + (nowUser.language.languageCode === 'ko' ? '/ko/en/' : '/en/ko/') + transcript, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                });
+
                 const result = await response.json();
 
                 setTranslate(result.translated);

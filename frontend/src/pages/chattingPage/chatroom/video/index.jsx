@@ -20,10 +20,10 @@ export default function Video({ props: { videoStart, setVideoStart, room, user }
     const [propagate, setPropagate] = useState("");
 
     useEffect(() => {
-        setVideoStart(false);
         setVideoOn(false);
         setTranslateOn(false);
-    }, []);
+        setHeadsetOn(false);
+    }, [videoStart]);
     
     const onClickHeadset = () => {
         setHeadsetOn(headset => !headset);

@@ -21,8 +21,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
         if (!room.dmRoomId) {
             return;
         }
-
-        setVideoClicked(false);
+        
         setVideoStart(false)
     }, [room.dmRoomId]);
 
@@ -105,13 +104,9 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
     }, [videoTextRef, setVideoClicked, setVideoStart]);
 
     const responseVideo = useCallback((data) => {
-        console.log(data);
-
         if (!videoTextRef.current) {
             return;
         }
-
-        console.log(videoTextRef.current);
 
         setSelectedRoom(chatRooms.filter(chatRoom => chatRoom.dmRoomId === data.roomId)[0]);
         videoTextRef.current.innerText = data.sender_name + "(으)로 부터 온 전화";

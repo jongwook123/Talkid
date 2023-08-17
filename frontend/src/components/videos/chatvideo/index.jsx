@@ -15,11 +15,13 @@ const ChatVideo = ({ stream, muted, translated, translateOn }) => {
         }
     }, [stream, muted]);
 
+    console.log(translated, translateOn);
+
     return (
         <S.VideoWrapper>
             <video ref={ref} muted={isMuted} autoPlay />
             {
-                translateOn && <S.Translated visible={translated !== ''}>{translated}</S.Translated>
+                translateOn && <S.Translated visible={translated}>{translated}</S.Translated>
             }
         </S.VideoWrapper>
     );
