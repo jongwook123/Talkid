@@ -70,7 +70,7 @@ export const Carousel = (props) => {
             position={[40,8,50]}
             />
           )}
-          {props.exp >= 100  && (
+          {props.exp >= 200  && (
           <>
             <Float speed={-1} floatIntensity={0.01}>
                 <Witch
@@ -87,7 +87,7 @@ export const Carousel = (props) => {
             
           </>
           )}
-          {props.exp >= 200 && (
+          {props.exp >= 350 && (
           <>
             <Podium position={[-44, 8, 80]} rotation-y={Math.PI / 2} />
           </>

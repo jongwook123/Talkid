@@ -1,10 +1,8 @@
 import * as S from './style';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 function Card({ props: { studentName, badWords, monthExp, totalExp } }) {
     const entireDealtValue = totalExp;
     const monthDealtValue = monthExp;
-
     return (
         <S.CardSection>
             <S.TextContainer>
@@ -18,7 +16,6 @@ function Card({ props: { studentName, badWords, monthExp, totalExp } }) {
                     </S.Progress>
                 </S.ProgressWrapper>
                 <h3>{badWords}</h3>
-                <PersonRemoveIcon />
             </S.TextContainer>
         </S.CardSection>
     )

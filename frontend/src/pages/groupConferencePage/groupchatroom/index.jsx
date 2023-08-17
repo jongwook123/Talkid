@@ -19,6 +19,10 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
         setArrivalChat({ memberName: data.sender, messageContent: data.messageContent, createdAt: data.createdAt, translate: "" });
     }, [setArrivalChat]);
 
+    const updateNewRoom = useCallback((data) => {
+        setSubRooms(subrooms => [...subrooms, data.newRoom]);
+    }, [setSubRooms]);
+
     useEffect(() => {
         if (!groupId) {
             return;
@@ -35,6 +39,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
         if (!selectedRoom || !user.memberMail) {
             return () => {
                 socket.off('responseGroupMessage', responseMessage);
+                socket.off('responseNewSubRoom', updateNewRoom);
                 socket.emit("exitGroupConference", {
                     roomId: selectedRoom,
                     userMail: user.memberMail,
@@ -43,6 +48,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
         }
 
         socket.on('responseGroupMessage', responseMessage);
+        socket.on('responseNewSubRoom', updateNewRoom);
 
         socket.emit("joinGroupConference", {
             roomId: selectedRoom,
@@ -51,6 +57,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
 
         return () => {
             socket.off('responseGroupMessage', responseMessage);
+            socket.off('responseNewSubRoom', updateNewRoom);
             socket.emit("exitGroupConference", {
                 roomId: selectedRoom,
                 userMail: user.memberMail,
@@ -114,7 +121,15 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
     }
 
     const onClickAddSubRoom = () => {
-        setSubRooms([...subRooms, groupId + " sub room " + (subRooms.length + 1)]);
+        const newRoom = groupId + " sub room " + (subRooms.length + 1);
+        const rooms = [groupId, ...subRooms];
+
+        rooms.forEach(room => {
+            socket.emit('requestNewSubRoom', {
+                "roomId": room,
+                "newRoom": newRoom,
+            });
+        });
     }
 
     return (

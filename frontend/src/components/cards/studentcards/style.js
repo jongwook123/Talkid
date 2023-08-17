@@ -5,7 +5,7 @@ export const CardSection = styled.section`
     padding: 0 15px;
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 5fr;
+    /* grid-template-columns: 1fr 5fr; */
     border-radius: ${props => props.theme.border_radius.lv2};
     font-size: ${props => props.theme.font_size.lv4};
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
@@ -21,9 +21,11 @@ export const TextContainer = styled.div`
     display: grid;
     grid-template-columns: 2fr 3fr 1fr 1fr;
     align-items: center;
+    text-align: center;
     & > h2 {
         font-size: ${props => props.theme.font_size.lv5};
         font-weight: 700
+    
     }
 
     & > h3 {
@@ -52,7 +54,7 @@ export const Progress = styled.div`
 `;
 
 export const Dealt = styled.div`
-background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};  width: ${(props) => props.dealt + "%"};
+background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};  width: ${(props) => props.dealt*0.2 + "%"};
   height: 100%;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;

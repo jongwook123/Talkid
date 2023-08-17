@@ -45,12 +45,14 @@ export const TryDeleteGroup = async (groupId, token) => {
             path: process.env.REACT_APP_BASE_SERVER + `/group/${groupId}`,
             method: "DELETE",
             headers: {
-                Authorization: `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 "groupId": groupId,
             })
         });
+
+        console.log(response)
 
         const result = await response.json();
         
