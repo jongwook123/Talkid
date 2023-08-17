@@ -36,7 +36,7 @@ export default function Video({ props: { room, user, groupId } }) {
     return (
         <S.Section videoStart={true}>
             <S.SectionHeader>
-                <h3>화상 회의 영역</h3>
+                <h3>Video Section</h3>
                 <S.HeaderList>
                     <li>
                         <S.ListButtonNormal onClick={onClickHeadset} visible={headsetOn}>

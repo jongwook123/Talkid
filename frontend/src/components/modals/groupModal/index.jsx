@@ -119,7 +119,7 @@ function GroupModal() {
     e.preventDefault();
 
     if (!inputs.groupName) {
-      alert("그룹이름을 입력하세요.");
+      alert("Insert a Group Name");
 
       return;
     }
@@ -138,9 +138,13 @@ function GroupModal() {
   return (
     <>
       <S.ModalContainer>
-        <S.ModalBtn onClick={openModalHandler}>
-          <AddCircleOutlineIcon />
-        </S.ModalBtn>
+        <LongButton1
+          props={{
+            color: "green",
+            text: "Make a Group",
+            callback: openModalHandler,
+          }}
+        />
         {isOpen ? (
           <S.ModalBackdrop onClick={openModalHandler}>
             <S.ModalView onClick={(e) => e.stopPropagation()}>

@@ -7,7 +7,7 @@ export default function LongInput3({ props: { id, desc, placeholder, type, value
 
     return (
         <S.FieldSet color={color} isFill={!!value}>
-            <legend>{desc} 입력 영역</legend>
+            <legend>{desc} insert Field</legend>
             <label htmlFor={id}>{placeholder}</label>
             <S.Input type={type} id={id} name={id} color={color} value={value} onChange={callback} isFill={!!value} placeholder={placeholder} />
         </S.FieldSet>

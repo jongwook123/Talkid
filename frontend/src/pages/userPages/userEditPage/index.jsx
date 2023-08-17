@@ -70,25 +70,25 @@ export default function UserEditPage() {
         e.preventDefault();
 
         if (!inputs.password) {
-            alert("Password를 입력하세요.");
+            alert("Insert Your Password.");
 
             return;
         }
 
         if (inputs.password !== inputs.password_confirm) {
-            alert("비밀번호를 다시 확인해주세요.");
+            alert("Check Your Password.");
 
             return;
         }
 
         if (!selectedCountry) {
-            alert("국가를 다시 확인해주세요.");
+            alert("Check Your Country.");
 
             return;
         }
 
         if (!selectedLanguage) {
-            alert("언어를 다시 확인해주세요.");
+            alert("Check Your Language.");
 
             return;
         }
@@ -115,7 +115,7 @@ export default function UserEditPage() {
             if (!result.success) {
                 alert(result.error.message);
             } else {
-                alert("회원 정보 수정 성공!");
+                alert("Success!");
                 navigate("/");
             }
         } catch (e) {
@@ -132,7 +132,7 @@ export default function UserEditPage() {
             if (!result.success) {
                 alert(result.error.message);
             } else {
-                alert("회원 정보 삭제 성공!");
+                alert("Success!");
                 navigate("/signin");
             }
         } catch (e) {
@@ -157,7 +157,7 @@ export default function UserEditPage() {
                 setSelectedCountry(result.response.country.countryName);
                 setSelectedLanguage(result.response.language.languageEng);
             } else {
-                alert("사용자 정보를 불러오는데 실패했습니다.");
+                alert("Failed to Get User Information.");
                 navigate("/signin");
             }
         }
@@ -175,7 +175,7 @@ export default function UserEditPage() {
                     <S.SigninSection>
                         <S.SigninSectionHeader>
                             <Link to='/'>
-                                <h2>로그인 영역</h2>
+                                <h2>Signin Section</h2>
                                 <img src={TALKIDS} alt="" />
                             </Link>
                         </S.SigninSectionHeader>

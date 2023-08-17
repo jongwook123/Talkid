@@ -73,7 +73,7 @@ export const ModalView = styled.dialog`
 
 export const InputSection = styled.section`
     display: grid;
-    grid-template-columns: 5fr 1fr;
+    grid-template-columns: 4fr 1fr;
 `
 
 export const GroupApplySection = styled.section`
