@@ -28,6 +28,8 @@ export default function MainPage() {
   useEffect(() => {
     if (!user.accessToken) {
       navigate("/signin");
+
+      return;
     }
   }, []);
   const token = useSelector(state => state.user.accessToken);
@@ -41,6 +43,12 @@ export default function MainPage() {
   };
 
   useEffect(() => {
+    if (!user.accessToken) {
+      navigate("/signin");
+
+      return;
+    }
+
     handleFindUser();
   }, []);
 

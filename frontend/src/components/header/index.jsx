@@ -78,6 +78,12 @@ export default function Header() {
     const [type, setType] = useState("");
 
     useEffect(() => {
+        if (!user.accessToken) {
+            navigate('/signin');
+
+            return;
+        }
+
         const getUserInfo = async (token) => {
             const result = await GetUserInfo(token);
 
@@ -128,15 +134,6 @@ export default function Header() {
         setSelectFollow(false);
     }
 
-    // 팔로워 버튼 클릭
-    const onClickFollower = (e) => {
-        e.stopPropagation();
-        setSelectUser(false);
-        setSelectGroup(false);
-        setSelectNotify(false);
-        setSelectFollow(true);
-    }
-
     // 알람 wrapper 클릭
     const onClickWrapper = (e) => {
         setSelectNotify(false);
@@ -182,24 +179,41 @@ export default function Header() {
     const onClickFollowingButton = () => {
         setFollowTab("following");
     }
+        
+    const getUserFollow = async () => {
+        if (!user.accessToken) {
+            navigate('/signin');
 
-    useEffect(() => {
-        const getUserFollow = async (token) => {
-            const result = await GetFollow(token);
-
-            if (result.success) {
-                setFollowing(result.response.Following);
-                setFollowers(result.response.Follower);
-            } else {
-                navigate("/signin");
-            }
+            return;
         }
 
+        const result = await GetFollow(user.accessToken);
+
+        if (result.success) {
+            setFollowing(result.response.Following);
+            setFollowers(result.response.Follower);
+        } else {
+            navigate("/signin");
+        }
+    }
+
+    useEffect(() => {
         getUserFollow(user.accessToken);
     }, [user, navigate]);
 
+    // 팔로워 버튼 클릭
+    const onClickFollower = (e) => {
+        e.stopPropagation();
+        setSelectUser(false);
+        setSelectGroup(false);
+        setSelectNotify(false);
+        setSelectFollow(true);
+
+        getUserFollow();
+    }
+
     const onClickUnfollow = async (memberId) => {
-        const result = await TryFollow(user.accessToken, memberId);
+        await TryFollow(user.accessToken, memberId);
 
         setFollowing(following.filter(follow => follow.followMemberId != memberId));
     }
