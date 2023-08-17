@@ -22,6 +22,7 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import LogoutIcon from "@mui/icons-material/Logout";
+import { GetNotifys } from "apis/NotifyAPIs";
 
 const colors = ["orange", "green", "blue"];
 
@@ -48,7 +49,16 @@ export default function Header() {
             return;
         }
 
-        // // 서버에 웹 소켓 올리면 하기
+        const getNotifys = async () => {
+            const result = await GetNotifys(user.accessToken);
+
+            if (result.success) {
+                setNotifys(result.response);
+            }
+        }
+
+        getNotifys();
+
         socketRef.current = new WebSocket(
             "ws://" +
             process.env.REACT_APP_BASE_SERVER.replace("https://", "").replace(
@@ -75,8 +85,8 @@ export default function Header() {
                 const { notifyContentId, notifyHeader, notifyBody, checked } = data;
 
                 setNotifys((prev) => [
-                    ...prev,
                     { notifyContentId, notifyHeader, notifyBody, checked },
+                    ...prev,
                 ]);
             }
         };
@@ -480,7 +490,7 @@ export default function Header() {
                         </S.ModalWrapper>
                         <S.ModalWrapper onClick={onClickWrapper} visible={selectBookmark}>
                             <S.BookmarkModal onClick={onClickBody}>
-                                <S.BookmarkModalHeader color={color4}>Alarms</S.BookmarkModalHeader>
+                                <S.BookmarkModalHeader color={color4}>Bookmarks</S.BookmarkModalHeader>
                                 <S.BookmarkModalList>
                                     {
                                         bookmarks.map(bookmark => {

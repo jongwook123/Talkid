@@ -278,10 +278,16 @@ export const BookmarkTextWrapper = styled.div`
 export const BookmarkListButton = styled.button`
     width: 80px;
     height: 48px;
+    padding: 0 12px;
+    border: none;
     font-size: ${props => props.theme.font_size.lv3};
     color: ${props => props.theme.colors.font.white};
     background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
-    padding: 0 12px;
+    border-radius: ${props => props.theme.border_radius.lv2};
+
+    &:focus {
+        outline: none;
+    }
 `
 
 export const BookmarkModalButton = styled.button`

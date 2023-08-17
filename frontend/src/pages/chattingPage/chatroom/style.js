@@ -196,6 +196,7 @@ export const Chat = styled.p`
 
 export const MyChat = styled(Chat)`
     background-color: ${props => props.theme.colors.theme.orange_dark};
+    margin-left: auto;
 
     &::after {
         content: '';
@@ -211,6 +212,7 @@ export const MyChat = styled(Chat)`
 
 export const OppositeChat = styled(Chat)`
     background-color: ${props => props.theme.colors.theme.green};
+    margin-right: auto;
 
     &::after {
         content: '';
