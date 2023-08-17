@@ -5,7 +5,7 @@ export const CaruoselWrapper = styled.div`
     flex-grow: 1;
     height: 100%;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
     display: flex;
 `
 

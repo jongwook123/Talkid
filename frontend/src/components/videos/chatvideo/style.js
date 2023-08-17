@@ -14,7 +14,7 @@ export const Translated = styled.p`
     padding: 14px;
     max-width: 200px;
     position: absolute;
-    top: 225px;
+    top: 25px;
     left: 50%;
     transform: translate(-50%);
     background-color: ${props => props.theme.colors.background_color.white};
