@@ -21,6 +21,7 @@ public class MeetingScheduleWithMineDto{
     private GroupDto group;
 
     private Boolean isMine;
+    private Boolean sended;
 
     public static MeetingScheduleWithMineDto fromEntity(MeetingSchedule meetingSchedule, boolean isMine){
         return MeetingScheduleWithMineDto.builder()
@@ -32,7 +33,7 @@ public class MeetingScheduleWithMineDto{
             .build();
     }
 
-    public static MeetingScheduleWithMineDto fromEntity(MeetingSchedule meetingSchedule, boolean isMine, TimeZone timeZone){
+    public static MeetingScheduleWithMineDto fromEntity(MeetingSchedule meetingSchedule, boolean isMine, boolean sended, TimeZone timeZone){
         LocalDateTime start = meetingSchedule.getMeetingScheduleStart();
         start = start.plusHours(timeZone.getHour()).plusMinutes(timeZone.getMinute());
         LocalDateTime end = meetingSchedule.getMeetingScheduleEnd();
@@ -44,6 +45,7 @@ public class MeetingScheduleWithMineDto{
             .meetingScheduleEnd(end)
             .group(GroupDto.fromEntity(meetingSchedule.getGroup()))
             .isMine(isMine)
+            .sended(sended)
             .build();
     }
 }
