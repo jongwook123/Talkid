@@ -71,6 +71,7 @@ public class MeetingController {
             }
         }
 
+        //성사 안된 미팅
         boolean sended;
         for(MeetingSchedule meetingSchedule: meetingSchedules){
             sended = false;
