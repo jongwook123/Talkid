@@ -6,6 +6,7 @@ import { TryGetGroup } from "apis/GroupPageAPIs";
 import { useEffect } from "react";
 import MatchApplyModal from "components/modals/matchapplymodal";
 import LongButton1 from "components/buttons/longbutton1";
+import { AcceptMeeting, RejectMeeting } from "apis/meetingPageAPIs";
 
 export default function List(props) {
   const clickedData = props.clickedData;
@@ -22,6 +23,20 @@ export default function List(props) {
     })();
   }, []);
 
+  const acceptButtonClickHandler = (meetingJoinReqId) => {
+    // e.preventDefault();
+
+    AcceptMeeting(token, meetingJoinReqId)
+  }
+
+  const rejectButtonClickHandler = (meetingJoinReqId) => {
+    // e.preventDefault();
+
+    RejectMeeting(token, meetingJoinReqId)
+  }
+
+
+
   return (
     <>
       <S.Listheader>
@@ -32,8 +47,8 @@ export default function List(props) {
               {clickedData && clickedData.type === "mySchedules"
                 ? "My Unmatched"
                 : clickedData.type === "schedules"
-                ? "Unmatched"
-                : "My Matched"}
+                  ? "Unmatched"
+                  : "My Matched"}
             </p>
           </>
         )}
@@ -80,6 +95,28 @@ export default function List(props) {
                         />
                       </S.ButtonWrapper3>
                     ))}
+                  {clickedData.type === "mySchedules" &&
+                    item.reqs &&
+                    item.reqs.map((req, reqIndex) => (
+                      <>
+                        <S.ButtonWrapper3 key={reqIndex}>
+                          <p>{req.group.groupName} - teacher: {req.group.teacher.memberName}</p>
+                          <LongButton1
+                            props={{
+                              text: "Accept",
+                              callback: () => acceptButtonClickHandler(req.meetingJoinReqId),
+                            }}
+                          />
+                          <LongButton1
+                            props={{
+                              text: "Reject",
+                              callback: () => rejectButtonClickHandler(req.meetingJoinReqId),
+                            }}
+                          />
+                        </S.ButtonWrapper3>
+                      </>
+                    )
+                    )}
                 </>
               )}
             </li>
