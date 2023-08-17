@@ -280,7 +280,7 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 
 	useEffect(() => {
 		socketRef.current.emit('translate', {
-			translateSendEmail: 'offerSendSample@sample.com',
+			translateSendEmail: nowUser.memberMail,
 			translatedText: propagate,
 		});
 	}, [propagate]);

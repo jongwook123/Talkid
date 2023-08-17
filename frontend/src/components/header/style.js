@@ -47,10 +47,21 @@ export const NavLink = styled(Link)`
 export const NavButton = styled.button`
     border: none;
     background-color: inherit;
+    position: relative;
     color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
 
     &:focus {
         outline: none;
+    }
+
+    & > svg:nth-child(2) {
+        display: ${props => props.visible ? 'block' : 'none'};
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        color: red;
     }
 `
 

@@ -15,6 +15,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChatIcon from "@mui/icons-material/Chat";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import EditIcon from "@mui/icons-material/Edit";
 import GroupIcon from "@mui/icons-material/Group";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -42,6 +43,7 @@ export default function Header() {
     // 웹 소켓, 알람
     const socketRef = useRef(null);
     const [notifys, setNotifys] = useState([]);
+    const [newNotify, setNewNotify] = useState(false);
 
     useEffect(() => {
         if (!user.accessToken) {
@@ -81,6 +83,8 @@ export default function Header() {
         socketRef.current.onmessage = (e) => {
             const data = JSON.parse(e.data);
             console.log(data);
+
+            setNewNotify(true);
 
             if (data.command === "newNotify") {
                 const { notifyContentId, notifyHeader, notifyBody, checked, notifyType } = data;
@@ -162,6 +166,8 @@ export default function Header() {
         setSelectNotify(true);
         setSelectFollow(false);
         setSelectBookmark(false);
+
+        setNewNotify(false);
     };
 
     // 알람 wrapper 클릭
@@ -326,6 +332,7 @@ export default function Header() {
                     <S.NavListItem visible={true}>
                         <S.NavButton onClick={onClickNotify} color={color1}>
                             <NotificationsActiveIcon />
+                            <NewReleasesIcon visible={newNotify} />
                         </S.NavButton>
                         <S.ModalWrapper onClick={onClickWrapper} visible={selectNotify}>
                             <S.AlarmModal onClick={onClickBody}>
