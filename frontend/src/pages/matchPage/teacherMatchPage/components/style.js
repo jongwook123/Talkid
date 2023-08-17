@@ -42,6 +42,7 @@ export const ButtonWrapper2 = styled.div`
 
 export const ButtonWrapper3 = styled.div`
   display: grid;
+  /* grid-template-columns: 1fr 1fr; */
   justify-items: right;
   & > button {
     width: 20%;

@@ -63,3 +63,47 @@ export const ApplyMeeting = async (token, meetingScheduleId, groupId) => {
         console.log(e);
     }
 }
+
+//미팅 매치 요청 수락
+export const AcceptMeeting = async (token, meetingJoinReqId) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + '/meeting/accept',
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                "meetingJoinReqId" : meetingJoinReqId,
+            })
+        });
+
+        const result = await response.json();
+        return result;
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+//미팅 매치 요청 거절
+export const RejectMeeting = async (token, meetingJoinReqId) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + '/meeting/reject',
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                "meetingJoinReqId" : meetingJoinReqId,
+            })
+        });
+
+        const result = await response.json();
+        return result;
+
+    } catch (e) {
+        console.log(e);
+    }
+}
