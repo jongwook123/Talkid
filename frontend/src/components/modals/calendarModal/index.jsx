@@ -36,7 +36,7 @@ function CalendarModal() {
     e.preventDefault();
 
     if (!inputs.groupName) {
-      alert("그룹이름을 입력하세요.");
+      alert("Insert a group name.");
       return;
     }
 
@@ -55,11 +55,11 @@ function CalendarModal() {
         // Refresh the page (you need to define refreshPage function)
         refreshPage();
       } else {
-        alert("해당 그룹을 찾을 수 없습니다.");
+        alert("Cannot find the group.");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
+      alert("error.");
     }
   };
 

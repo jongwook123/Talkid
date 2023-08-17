@@ -257,7 +257,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
                             </S.ListChat>
                             <S.FormWrapper>
                                 <S.FormChat>
-                                    <label htmlFor="newChat">대화 입력</label>
+                                    <label htmlFor="newChat">Insert words</label>
                                     <S.FormInput id="newChat" value={newChat} onChange={onChangeInput} placeholder="Send Message" />
                                     <S.FormButton onClick={sendMessage}>send</S.FormButton>
                                 </S.FormChat>

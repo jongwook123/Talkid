@@ -30,11 +30,11 @@ export default function VideoCarousel({ props: { list } }) {
                 }
             </S.VideoList>
             <S.LeftButton onClick={leftClick}>
-                <span>왼쪽으로 이동</span>
+                <span>Move Left</span>
                 <p>{"<"}</p>
             </S.LeftButton>
             <S.RightButton onClick={rightClick}>
-                <span>오른쪽으로 이동</span>
+                <span>Move Right</span>
                 <p>{">"}</p>
             </S.RightButton>
         </S.CaruoselWrapper>

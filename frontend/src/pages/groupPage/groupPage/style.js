@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import IROnly from "styles/IROnly";
 
 export const PageMain = styled.main`
     position: relative;
@@ -22,4 +21,9 @@ export const CardItem = styled.li`
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         transform: scale(1.05);
   }
+`
+
+export const ButtonWrapper = styled.div`
+    width: 40%;
+
 `

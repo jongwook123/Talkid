@@ -35,13 +35,13 @@ export default function SigninPage() {
     const buttonClickHandler = async (e) => {
         e.preventDefault();
         if (!inputs.id) {
-            alert("email을 입력하세요.");
+            alert("Insert your email.");
 
             return;
         }
 
         if (!inputs.password) {
-            alert("Password를 입력하세요.");
+            alert("Insert your Password.");
 
             return;
         }
@@ -49,7 +49,7 @@ export default function SigninPage() {
         const regex = new RegExp(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/);
 
         if (!regex.test(inputs.id)) {
-            alert("이메일 형식이 유효하지 않습니다.");
+            alert("Invalid E-mail.");
 
             return;
         }
@@ -58,7 +58,7 @@ export default function SigninPage() {
             const result = await TrySignin(inputs.id, inputs.password);
 
             if (!result.success) {
-                alert("이메일 혹은 비밀번호가 일치하지 않습니다.")
+                alert("Check your E-mail or password.")
             } else {
                 dispatch(signinUser({
                     "accessToken": result.response.accessToken,
@@ -81,7 +81,7 @@ export default function SigninPage() {
                 <S.SigninSection>
                     <S.SigninSectionHeader>
                         <Link to='/'>
-                            <h2>로그인 영역</h2>
+                            <h2>Signin Section</h2>
                             <img src={TALKIDS} alt="" />
                         </Link>
                     </S.SigninSectionHeader>

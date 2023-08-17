@@ -61,7 +61,7 @@ export const ModalView = styled.dialog`
   border: 3px solid;
   border-color: ${(props) => props.theme.colors.theme.green};
   width: 500px;
-  height: 400px;
+  height: 250px;
   background-color: #ffffff;
   padding: 50px;
   > div.desc {

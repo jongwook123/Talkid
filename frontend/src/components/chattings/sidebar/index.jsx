@@ -23,7 +23,7 @@ function Sidebar() {
                 <S.SidebarchannelHeader>
                     <S.SidebarHeader>
                         <KeyboardArrowDownIcon/>
-                        참가자
+                        participants
                     </S.SidebarHeader>
                             <S.Sidebaraddchannel>
                                 <AddIcon/>

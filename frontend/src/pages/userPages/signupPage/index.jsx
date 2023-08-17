@@ -161,37 +161,37 @@ export default function SignupPage({ max = 3 }) {
         e.preventDefault();
 
         if (!inputs.name) {
-            alert("이름을 입력하세요.");
+            alert("Insert Your Name.");
 
             return;
         }
 
         if (!inputs.id) {
-            alert("Email을 입력하세요.");
+            alert("Insert Email.");
 
             return;
         }
 
         if (!inputs.password) {
-            alert("Password를 입력하세요.");
+            alert("Insert Password.");
 
             return;
         }
 
         if (inputs.password !== inputs.password_confirm) {
-            alert("비밀번호를 다시 확인해주세요.");
+            alert("Check Your Password.");
 
             return;
         }
 
         if (!selectedCountry) {
-            alert("국가를 다시 확인해주세요.");
+            alert("Check Your Country.");
 
             return;
         }
 
         if (!selectedLanguage) {
-            alert("언어를 다시 확인해주세요.");
+            alert("Check Your Language.");
 
             return;
         }
@@ -199,7 +199,7 @@ export default function SignupPage({ max = 3 }) {
         const regex = new RegExp(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/);
 
         if (!regex.test(inputs.id)) {
-            alert("이메일 형식이 유효하지 않습니다.");
+            alert("Invaild E-mail.");
 
             return;
         }
@@ -247,7 +247,7 @@ export default function SignupPage({ max = 3 }) {
                     <S.SigninSection>
                         <S.SigninSectionHeader>
                             <Link to='/'>
-                                <h2>회원가입 영역</h2>
+                                <h2>Signup Section</h2>
                                 <img src={TALKIDS} alt="" />
                             </Link>
                         </S.SigninSectionHeader>
