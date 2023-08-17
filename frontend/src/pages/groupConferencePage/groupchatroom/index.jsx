@@ -186,7 +186,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
                                         }
 
                                         const Translate = async () => {
-                                            const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + (user.language.languageCode === 'ko' ? '/ko/en/' : '/en/ko/') + chat.messageContent);
+                                            const response = await fetch(process.env.REACT_APP_TRANSLATION_SERVER + (user.language.languageCode === 'ko' ? '/en/ko/' : '/ko/en/') + chat.messageContent);
                                             const result = await response.json();
 
                                             setChats(chats => chats.map(c => {
@@ -215,7 +215,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
                                                                         {
                                                                             <S.TranslateWrapper>
                                                                                 {
-                                                                                    !chat.translate && <S.TranslateButton onClick={Translate}>번역</S.TranslateButton>
+                                                                                    // !chat.translate && <S.TranslateButton onClick={Translate}>번역</S.TranslateButton>
                                                                                 }
                                                                             </S.TranslateWrapper>
                                                                         }

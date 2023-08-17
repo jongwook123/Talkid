@@ -263,17 +263,32 @@ export default function Header() {
                                 <S.AlarmModalHeader color={color1}>Alarms</S.AlarmModalHeader>
                                 <S.AlarmModalList color={color1}>
                                     {notifys.map((notify) => {
-                                        return (
-                                            <li key={notify.notifyContentId}>
-                                                <DropBox2
-                                                    props={{
-                                                        title: notify.notifyHeader,
-                                                        content: notify.notifyBody,
-                                                        color: color1,
-                                                    }}
-                                                />
-                                            </li>
-                                        );
+                                        if (notify.notifyType === "MATCHING") {
+                                            return (
+                                                <li key={notify.notifyContentId}>
+                                                    <DropBox2
+                                                        props={{
+                                                            title: notify.notifyHeader,
+                                                            content: notify.notifyBody,
+                                                            color: color1,
+                                                        }}
+                                                    />
+                                                </li>
+                                            );
+                                        } else {
+                                            return (
+                                                <li key={notify.notifyContentId}>
+                                                    <DropBox2
+                                                        props={{
+                                                            title: notify.notifyHeader,
+                                                            content: notify.notifyBody,
+                                                            color: color1,
+                                                        }}
+                                                    />
+                                                </li>
+                                            )
+                                        }
+                                        
                                     })}
                                 </S.AlarmModalList>
                                 <S.AlarmModalButton onClick={onClickModalClose} color={color1}>

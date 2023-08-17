@@ -160,6 +160,10 @@ export const MyChatWrapper = styled.div`
 
 export const OppositeChatWrapper = styled.div`
     margin-right: auto;
+
+    &:hover > div > div > button {
+        display: block;
+    }
 `
 
 const UserName = styled.p`
