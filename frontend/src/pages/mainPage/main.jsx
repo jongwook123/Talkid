@@ -3,13 +3,20 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Canvas } from "@react-three/fiber";
 import { Sky, OrbitControls } from "@react-three/drei";
-import { Wrapper } from "components/dropboxes/dropbox1/style";
 import GrassWithFlowers from "./Grass";
 import Ground from "./Ground";
 import Cloud1 from "./Clouds";
 import { TryGetUser, TryGetExp } from "apis/GetUserAPIs";
 import { useState, useEffect } from "react";
 import { Experience } from "components/Experience";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  width: 100vw;
+  height: calc(100vh - 80px);
+  margin-top: 80px;
+  position: relative;
+`
 
 
 export default function MainPage() {
@@ -23,11 +30,6 @@ export default function MainPage() {
       navigate("/signin");
     }
   }, []);
-
-  return (
-    <Wrapper>
-      {/* <Canvas style={{ width: "100%", height: "100vh" }} camera={{ position: [0, 0, 150]}}>
-  
   const token = useSelector(state => state.user.accessToken);
 
   const [exp, setExp] = useState(0)
@@ -44,7 +46,7 @@ export default function MainPage() {
 
   return (
     <Wrapper>
-      <Canvas style={{ width: "100%", height: "100vh" }} camera={{ position: [0, 0, 150]}}>
+      <Canvas style={{ width: "100%" }} camera={{ position: [0, 0, 150]}}>
         <Sky azimuth={0.5} inclination={0.6} distance={1000} />
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
@@ -58,8 +60,12 @@ export default function MainPage() {
           <Cloud1 position={[-50, 53, -25]}  scale={[7, 7, 12]} />
           <Cloud1 position={[-40, 47, -25]}  scale={[10, 10, 14]} rotation={[0, -90, 0]}/>
         </Suspense>
-        <OrbitControls minPolarAngle={Math.PI / 2.5} maxPolarAngle={Math.PI / 2.5} enableZoom={true} />
-      </Canvas> */}
+        <OrbitControls
+          minPolarAngle={Math.PI / 2.5}
+          maxPolarAngle={Math.PI / 2.5}
+          enableZoom={false} // 줌 기능 비활성화
+        />
+      </Canvas>
     </Wrapper>
   );
 }

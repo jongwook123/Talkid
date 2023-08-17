@@ -31,7 +31,7 @@ export const Experience = ({exp}) => {
   
   return (
     <>
-      <OrbitControls />
+      <OrbitControls enableZoom={false}/>
 
       <ambientLight intensity={0.1} />
       <directionalLight position={[0, 20, 20]} intensity={1} />
