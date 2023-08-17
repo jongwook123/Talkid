@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { TryGetGroup } from "apis/GroupPageAPIs";
 import { useEffect } from "react";
 import MatchApplyModal from "components/modals/matchapplymodal";
+import LongButton1 from "components/buttons/longbutton1";
 
 export default function List(props) {
   const clickedData = props.clickedData;
@@ -14,14 +15,11 @@ export default function List(props) {
 
   const [groups, setGroups] = useState([]);
 
-  const handleFindGroups = async () => {
-    const result = await TryGetGroup(token);
-    console.log(result);
-    setGroups([...result.response]);
-  };
-
   useEffect(() => {
-    handleFindGroups();
+    (async () => {
+      const result = await TryGetGroup(token);
+      setGroups([...result.response]);
+    })();
   }, []);
 
   return (
@@ -64,15 +62,24 @@ export default function List(props) {
                     {item.meetingScheduleStart.slice(11, 16)} ~{" "}
                     {item.meetingScheduleEnd.slice(11, 16)}
                   </p>
-                  {clickedData.type === "schedules" && (
-                    <S.ButtonWrapper3>
-                      <MatchApplyModal
-                        token={token}
-                        groups={groups}
-                        meetingScheduleId={item.meetingScheduleId}
-                      />
-                    </S.ButtonWrapper3>
-                  )}
+                  {clickedData.type === "schedules" &&
+                    (item.sended ? (
+                      <S.ButtonWrapper3>
+                        <LongButton1
+                          props={{
+                            text: "Cancel Request",
+                          }}
+                        />
+                      </S.ButtonWrapper3>
+                    ) : (
+                      <S.ButtonWrapper3>
+                        <MatchApplyModal
+                          token={token}
+                          groups={groups}
+                          meetingScheduleId={item.meetingScheduleId}
+                        />
+                      </S.ButtonWrapper3>
+                    ))}
                 </>
               )}
             </li>

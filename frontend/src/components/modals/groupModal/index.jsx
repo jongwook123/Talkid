@@ -149,42 +149,17 @@ function GroupModal() {
                   id: "groupName",
                   desc: "Insert groupname",
                   color: "orange",
-                  placeholder: "Group Name",
+                  placeholder: "Insert a Group Name",
                   type: "text",
                   value: inputs.groupName,
                   callback: onChangeHandler,
                 }}
               />
-              <S.StyledImageFieldset visible={true}>
-                <legend>이미지 입력 영역</legend>
-                <S.StyledImageUploadBox>
-                  <S.StyledImageUploadLabel
-                    htmlFor="imgInput"
-                    ref={uploadBoxRef}
-                  >
-                    <S.StyledImageUploadTextBox>
-                      <p>Click or drag image into here to upload image</p>
-                    </S.StyledImageUploadTextBox>
-                  </S.StyledImageUploadLabel>
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    id="imgInput"
-                    ref={inputRef}
-                  />
-                  <S.StyledPreviewWrapper exist={previewImages.length !== 0}>
-                    <S.StyledPreviewContainer>
-                      {previewImages}
-                    </S.StyledPreviewContainer>
-                  </S.StyledPreviewWrapper>
-                </S.StyledImageUploadBox>
-              </S.StyledImageFieldset>
               <S.ButtonWrapper>
                 <LongButton1
                   props={{
                     color: "green",
-                    text: "Sign in",
+                    text: "Make a Group",
                     callback: buttonClickHandler,
                   }}
                 />
