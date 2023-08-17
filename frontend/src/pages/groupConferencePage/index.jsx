@@ -66,7 +66,7 @@ export default function ChattingPage() {
         }
     }, [user, groupId, cleanup]);
 
-    if (!state.groupId) {
+    if (!state) {
         navigate('/');
 
         return;
