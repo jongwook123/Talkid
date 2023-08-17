@@ -83,11 +83,11 @@ export default function Header() {
             console.log(data);
 
             if (data.command === "newNotify") {
-                const { notifyContentId, notifyHeader, notifyBody, checked } = data;
+                const { notifyContentId, notifyHeader, notifyBody, checked, notifyType } = data;
 
                 setNotifys((prev) => [
                     ...prev,
-                    { notifyContentId, notifyHeader, notifyBody, checked },
+                    { notifyContentId, notifyHeader, notifyBody, checked, notifyType },
                 ]);
             }
         };
@@ -263,6 +263,7 @@ export default function Header() {
 
     // 미팅 알람 클릭
     const onClickMeetingAlarm = (groupId) => {
+        setSelectNotify(false);
         navigate("/conference", {
             state: {
                 groupId: groupId,
@@ -349,7 +350,7 @@ export default function Header() {
                                         } else {
                                             return (
                                                 <li key={notify.notifyContentId}>
-                                                    <S.AlarmListButton onClick={() => { onClickMeetingAlarm(notify.notifyBody) }}>{notify.notifyHeader}</S.AlarmListButton>
+                                                    <S.AlarmListButton onClick={() => { onClickMeetingAlarm(notify.notifyBody) }} color={color1}>{notify.notifyHeader}</S.AlarmListButton>
                                                 </li>
                                             )
                                         }

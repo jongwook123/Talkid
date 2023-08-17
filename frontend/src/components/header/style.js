@@ -123,9 +123,15 @@ export const AlarmModalList = styled.ul`
 export const AlarmListButton = styled.button`
     width: 100%;
     height: 48px;
-    font-size: ${props => props.theme.font_size.lv3};
-    color: ${props => props.theme.colors.font.light_black};
     padding: 0 12px;
+    border: none;
+    font-size: ${props => props.theme.font_size.lv3};
+    color: ${props => props.theme.colors.font.white};
+    background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+
+    &:focus {
+        outline: none;
+    }
 `
 
 export const AlarmModalButton = styled.button`
