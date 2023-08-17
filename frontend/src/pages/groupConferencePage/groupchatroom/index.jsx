@@ -264,7 +264,7 @@ export default function GroupChatRoom({ props: { socketUpdated, socket, user, gr
                             </S.FormWrapper>
                         </S.VideoWrapper>
                     }
-                    <Dictionary props={{ dictionaryClicked }} />
+                    <Dictionary props={{ dictionaryClicked, user }} />
                 </S.DictionaryWrapper>
             </S.SectionChat >
         </S.SectionWrapper>
