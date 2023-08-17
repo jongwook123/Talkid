@@ -32,7 +32,7 @@ export default function ChattingPage() {
     }, [socketRef, user]);
 
     useEffect(() => {
-        if (!state.groupId) {
+        if (!state) {
             return;
         }
 
@@ -49,7 +49,7 @@ export default function ChattingPage() {
     useEffect(() => {
         window.addEventListener('beforeunload', cleanup);
 
-        if (!user.memberName || !groupId) {
+        if (!user.memberName || !groupId || !state) {
             return () => {
                 cleanup();
                 window.removeEventListener('beforeunload', cleanup);
