@@ -234,8 +234,8 @@ public class MeetingServiceImpl implements MeetingService{
         
         CreateNotifyDto.Request body = CreateNotifyDto.Request.builder()
                                         .notifyHeader(headBuilder.toString())
-                                        .notifyBody("무엇인가 보낼 본문")
-                                        .notifyType(NotifyType.MATCHING)
+                                        .notifyBody(String.valueOf(newMeeting.getMeetingId()))
+                                        .notifyType(NotifyType.MEETING_START)
                                         .build();
         notifyService.notifyGroup(groupRes, body);
         notifyService.notifyGroup(groupReq, body);
