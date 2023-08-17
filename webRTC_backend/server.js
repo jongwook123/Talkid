@@ -1,16 +1,24 @@
 import express from "express";
 import http from "http";
+import https from 'https';
+import fs from 'fs';
 import cors from "cors";
 import socketio from "socket.io";
 
 const app = express();
-const server = http.createServer(app);
+
+const options = {
+    key: fs.readFileSync('./privkey5.pem'),
+    cert: fs.readFileSync('./cert5.pem'),
+}
+
+const server = https.createServer(options, app);
 const io = socketio.listen(server);
 
 const PORT = 8090;
 const users = {};
 const socketToRoom = {};
-const maximum = 4;
+const maximum = 6;
 
 app.use(cors());
 
