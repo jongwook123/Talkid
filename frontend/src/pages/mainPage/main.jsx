@@ -5,16 +5,11 @@ import { Sky, OrbitControls } from "@react-three/drei";
 import { Wrapper } from "components/dropboxes/dropbox1/style";
 import GrassWithFlowers from "./Grass";
 import Ground from "./Ground";
-import { Tree3 } from "./Tree3";
 import Cloud1 from "./Clouds";
-import { AShapeStructure, DShapeStructure, IShapeStructure, KShapeStructure, LShapeStructure, SShapeStructure, TShapeStructure } from "./ShapeStructure";
-import { Tree2 } from "./Tree2";
-import { Tree1 } from "./Tree1";
-import { Bookmark } from "./Bookmark";
-
 import { TryGetUser, TryGetExp } from "apis/GetUserAPIs";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { Experience } from "components/Experience";
 
 
 export default function MainPage() {
@@ -42,38 +37,12 @@ export default function MainPage() {
         <Suspense fallback={null}>
           <GrassWithFlowers />
           <Ground position={[0, -15, 0]}/>
-
-          {exp >= 0 & exp < 100 && (
-            <>
-            <Tree1 position={[0,0,50]} rotation={[0, 4, 0]} scale={[7, 8, 6]} />
-          </>
-          )}
-          {exp >= 100 & exp < 200 && (
-          <>
-             <Tree2 position={[0,0,50]} rotation={[0, 10, 0]} scale={[10, 10, 20]} />
-          </>
-          )}
-          {exp >= 200 && (
-          <>
-            <Tree3 position={[0, 0, 50]}  scale={[15, 15, 10]} />
-          </>
-          )}
-       
-          <TShapeStructure position={[-44, 8, 80]} />
-          <AShapeStructure position={[-30, 10, 80]} rotation={[50,0,0]} />
-          <LShapeStructure position={[-15, 10, 80]} />
-          <KShapeStructure position={[-5, 10, 80]} />
-          <IShapeStructure position={[8, 10, 80]}/>
-          <DShapeStructure position={[15, 10, 80]} />
-          <SShapeStructure position={[34, 7, 80]} rotation={[50,0,0]}/>
+          <Experience exp={exp}/>
           <Cloud1 position={[100, 35, -25]}  scale={[10, 10, 12]} rotation={[0, 55, 0]} opacity={10}/>
-          {/* <Cloud1 position={[50, 50, -25]}  scale={[7, 7, 12]} rotation={[0, -10, 0]}/> */}
           <Cloud1 position={[-98, 53, -25]}  scale={[7, 7, 12]} rotation={[0, -10, 0]}/>
-          <Cloud1 position={[-110, 47, -25]}  scale={[10, 10, 14]}/>
-          <Cloud1 position={[40, 53, -25]}  scale={[7, 7, 12]} rotation={[0, -30, 0]}/>
-          <Cloud1 position={[50, 47, -25]}  scale={[10, 10, 14]}/>
-          {/* <Bookmark position={[60,10, 80]}  scale={[1, 1, 1]}/> */}
-            
+          <Cloud1 position={[-110, 40, -25]}  scale={[10, 10, 14]}/>
+          <Cloud1 position={[-50, 53, -25]}  scale={[7, 7, 12]} />
+          <Cloud1 position={[-40, 47, -25]}  scale={[10, 10, 14]} rotation={[0, -90, 0]}/>
         </Suspense>
         <OrbitControls minPolarAngle={Math.PI / 2.5} maxPolarAngle={Math.PI / 2.5} enableZoom={true} />
       </Canvas>

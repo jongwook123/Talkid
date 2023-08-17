@@ -22,7 +22,6 @@ import GroupApplyPage from "pages/groupPage/groupApplyPage"
 
 
 
-
 export default function App() {
     return (
         <ThemeProvider theme={theme}>
