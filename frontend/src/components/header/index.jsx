@@ -180,7 +180,7 @@ export default function Header() {
         setFollowTab("following");
     }
         
-    const getUserFollow = async () => {
+    const getUserFollow = useCallback(async () => {
         if (!user.accessToken) {
             navigate('/signin');
 
@@ -195,11 +195,11 @@ export default function Header() {
         } else {
             navigate("/signin");
         }
-    }
+    }, [user, navigate]);
 
     useEffect(() => {
         getUserFollow(user.accessToken);
-    }, [user, navigate]);
+    }, [user, navigate, getUserFollow]);
 
     // 팔로워 버튼 클릭
     const onClickFollower = (e) => {
@@ -215,7 +215,7 @@ export default function Header() {
     const onClickUnfollow = async (memberId) => {
         await TryFollow(user.accessToken, memberId);
 
-        setFollowing(following.filter(follow => follow.followMemberId != memberId));
+        setFollowing(following.filter(follow => follow.followMemberId !== memberId));
     }
 
     const onClickFollowChat = async (followMail) => {

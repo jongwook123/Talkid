@@ -459,7 +459,7 @@ export default function ChatRoom({ props: { socket, room, setChatRooms, user, ch
                             </S.FormWrapper>
                         </S.VideoWrapper>
                     }
-                    <Dictionary props={{ dictionaryClicked }} />
+                    <Dictionary props={{ dictionaryClicked, user }} />
                 </S.DictionaryWrapper>
             </S.SectionChat >
         </>
