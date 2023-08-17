@@ -1,7 +1,15 @@
 import express from 'express';
+import https from 'https';
 import cors from "cors";
 
 const app = express();
+
+const options = {
+    key: fs.readFileSync('./privkey5.pem'),
+    cert: fs.readFileSync('./cert5.pem'),
+}
+
+const server = https.createServer(options, app);
 
 const port = 8091;
 
@@ -20,6 +28,6 @@ app.get('/:from/:to/:text', async (req, res) => {
     res.json(result);
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
