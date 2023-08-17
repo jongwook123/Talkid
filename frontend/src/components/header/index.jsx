@@ -50,7 +50,10 @@ export default function Header() {
     // // 서버에 웹 소켓 올리면 하기
     socketRef.current = new WebSocket(
       "ws://" +
-        process.env.REACT_APP_BASE_SERVER.replace("https://", "") +
+        process.env.REACT_APP_BASE_SERVER.replace("https://", "").replace(
+          "/api",
+          ""
+        ) +
         "/ws"
     );
 
