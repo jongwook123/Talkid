@@ -1,6 +1,5 @@
 import AlarmModal from "components/modals/alarmmodal";
 import * as S from "./style";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import LongButton1 from "components/buttons/longbutton1";
 
 import Card from "components/cards/studentcards";
@@ -60,7 +59,6 @@ export default function GroupDetailPage() {
               <p>EXP</p>
               <p>BAD WORDS</p>
             </S.CardHeaderText>
-            <PersonAddAlt1Icon />
           </S.CardHeader>
           <S.CardList>
             {students.map((student, index) => (
@@ -77,16 +75,7 @@ export default function GroupDetailPage() {
             ))}
           </S.CardList>
           <S.ButtonWrapper>
-            <LongButton1
-              props={{ color: "orange", text: "Delete", callback: open }}
-            />
-            {isOpen && (
-              <AlarmModal
-                message="그룹을 삭제하시겠습니까"
-                del={del}
-                close={close}
-              ></AlarmModal>
-            )}
+            <AlarmModal props={groupIdFromUrl}/>
           </S.ButtonWrapper>
         </S.CardSection>
       </main>

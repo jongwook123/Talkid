@@ -36,9 +36,9 @@ export const CardHeader = styled.header`
 
 export const CardHeaderText = styled.div`
   width: 95%;
-  padding: 20px 0px 30px 150px;
+  padding: 20px 0px 30px 70px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1.2fr;
   text-align: center;
   color: white;
   font-weight: 700;
