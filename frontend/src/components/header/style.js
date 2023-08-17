@@ -120,6 +120,14 @@ export const AlarmModalList = styled.ul`
     }
 `
 
+export const AlarmListButton = styled.button`
+    width: 100%;
+    height: 48px;
+    font-size: ${props => props.theme.font_size.lv3};
+    color: ${props => props.theme.colors.font.light_black};
+    padding: 0 12px;
+`
+
 export const AlarmModalButton = styled.button`
     border: none;
     padding: 6px 25px;
