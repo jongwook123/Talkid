@@ -51,7 +51,7 @@ export default function Header() {
     socketRef.current = new WebSocket(
       "ws://" +
         process.env.REACT_APP_BASE_SERVER.replace("https://", "") +
-        "/api/ws"
+        "/ws"
     );
 
     socketRef.current.onopen = () => {
