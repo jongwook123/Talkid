@@ -14,7 +14,6 @@ export default function Dictionary({ props: { dictionaryClicked, user } }) {
     const token = useSelector(state => state.user.accessToken);
 
     const onChangeInput = (e) => {
-        console.log(e);
         setInput(e.target.value);
     }
 

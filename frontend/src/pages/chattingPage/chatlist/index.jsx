@@ -25,6 +25,8 @@ export default function ChatList({ props: { socketUpdated, socket, user } }) {
     }, [setChatRooms, user, socket]);
 
     const updateNewChatRooms = useCallback((data) => {
+        console.log(data);
+
         setChatRooms(data.rooms);
         setSelectedRoom(data.rooms.filter((room) => room.dmRoomId === `${state.sender}_${state.receiver}` || room.dmRoomId === `${state.receiver}_${state.sender}`)[0]);
     }, [setChatRooms, user, socket]);
@@ -54,6 +56,8 @@ export default function ChatList({ props: { socketUpdated, socket, user } }) {
         if (!socket || !state) {
             return;
         }
+
+        console.log(state);
 
         socket.emit("joinRoom", {
             sender: state.sender,
