@@ -30,6 +30,7 @@ export default function Header() {
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const alarmFirstRef = useRef(null);
 
     const color_back = colors[Math.floor(Math.random() * 3)];
     const color1 = colors[Math.floor(Math.random() * 3)];
@@ -85,12 +86,20 @@ export default function Header() {
                 const { notifyContentId, notifyHeader, notifyBody, checked } = data;
 
                 setNotifys((prev) => [
-                    { notifyContentId, notifyHeader, notifyBody, checked },
                     ...prev,
+                    { notifyContentId, notifyHeader, notifyBody, checked },
                 ]);
             }
         };
     }, [user, navigate]);
+
+    // useEffect(() => {
+    //     if (!alarmFirstRef.current) {
+    //         return;
+    //     }
+
+    //     alarmFirstRef.current.scrollIntoView({ behavior: 'smooth' });
+    // }, [notifys]);
 
     // 사용자 타입 확인
     const [type, setType] = useState("");
@@ -321,6 +330,9 @@ export default function Header() {
                             <S.AlarmModal onClick={onClickBody}>
                                 <S.AlarmModalHeader color={color1}>Alarms</S.AlarmModalHeader>
                                 <S.AlarmModalList color={color1}>
+                                    <li>
+                                        <div ref={alarmFirstRef}></div>
+                                    </li>
                                     {notifys.map((notify) => {
                                         if (notify.notifyType === "MATCHING") {
                                             return (
@@ -500,7 +512,7 @@ export default function Header() {
                                                         <p>original : {bookmark.bookMarkOriContent}</p>
                                                         <p>translated : {bookmark.bookMarkTransContent}</p>
                                                     </S.BookmarkTextWrapper>
-                                                    <S.BookmarkListButton onClick={() => {onClickDeleteBookmark(bookmark.bookMarkId)}} color={color4}>delete</S.BookmarkListButton>
+                                                    <S.BookmarkListButton onClick={() => { onClickDeleteBookmark(bookmark.bookMarkId) }} color={color4}>delete</S.BookmarkListButton>
                                                 </S.BookmarkListItem>
                                             )
                                         })
