@@ -16,9 +16,6 @@ export const CardSection = styled.section`
     width: 100%;
     height: 60%;
   }
-  &:hover {
-    cursor: pointer;
-  }
 `;
 export const TextContainer = styled.div`
   margin: 10px;
@@ -30,6 +27,7 @@ export const TextContainer = styled.div`
   & > h3 {
     text-align: right;
     font-size: ${(props) => props.theme.font_size.lv3};
+    margin-top:50px;
 
     & > svg {
       vertical-align: middle;
