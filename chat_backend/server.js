@@ -21,7 +21,7 @@ const ConnectedUserRooms = {};
 const ConnectedUserSocket = {};
 const GroupConference = {};
 
-const backendServer = 'https://i9d106.p.ssafy.io:8080';
+const backendServer = 'https://i9d106.p.ssafy.io:8080/api';
 
 app.use(cors());
 
@@ -115,6 +115,8 @@ io.on('connection', socket => {
                 })
             });
             const result = await response.json();
+
+            console.log(result);
 
             if (data.newRoom) {
                 io.sockets.to(socket.id).emit('updateRoom');
