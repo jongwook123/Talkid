@@ -249,3 +249,17 @@ export const Listheader = styled.header`
   margin-bottom: 30px;
   text-align: center;
 `;
+
+export const ReceiveTitle = styled.h5`
+  text-align: right;
+  margin-bottom: 10px;
+`;
+
+export const Low = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 120px;
+  gap: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid gray;
+`;

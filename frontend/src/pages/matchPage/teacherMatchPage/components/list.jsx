@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import MatchApplyModal from "components/modals/matchapplymodal";
 import LongButton1 from "components/buttons/longbutton1";
 import { AcceptMeeting, RejectMeeting } from "apis/meetingPageAPIs";
+import LongButton2 from "components/buttons/longbutton2";
 
 export default function List(props) {
   const clickedData = props.clickedData;
@@ -23,19 +24,31 @@ export default function List(props) {
     })();
   }, []);
 
-  const acceptButtonClickHandler = (meetingJoinReqId) => {
-    // e.preventDefault();
+  const acceptButtonClickHandler = async (meetingJoinReqId) => {
+    const result = await AcceptMeeting(token, meetingJoinReqId);
+    const { success, error } = result;
+    if (success) {
+      //성공적으로 매칭을 수락 했으면
+      alert("Matching Accept");
+      window.location.reload();
+    } else {
+      //실패했다는 뜻
+      alert(error);
+    }
+  };
 
-    AcceptMeeting(token, meetingJoinReqId)
-  }
-
-  const rejectButtonClickHandler = (meetingJoinReqId) => {
-    // e.preventDefault();
-
-    RejectMeeting(token, meetingJoinReqId)
-  }
-
-
+  const rejectButtonClickHandler = async (meetingJoinReqId) => {
+    const result = await RejectMeeting(token, meetingJoinReqId);
+    const { success, error } = result;
+    if (success) {
+      //성공적으로 매칭을 거절 했으면
+      alert("Matching Reject");
+      window.location.reload();
+    } else {
+      //실패했다는 뜻
+      alert(error);
+    }
+  };
 
   return (
     <>
@@ -47,8 +60,8 @@ export default function List(props) {
               {clickedData && clickedData.type === "mySchedules"
                 ? "My Unmatched"
                 : clickedData.type === "schedules"
-                  ? "Unmatched"
-                  : "My Matched"}
+                ? "Unmatched"
+                : "My Matched"}
             </p>
           </>
         )}
@@ -96,27 +109,41 @@ export default function List(props) {
                       </S.ButtonWrapper3>
                     ))}
                   {clickedData.type === "mySchedules" &&
-                    item.reqs &&
+                    item.reqs.length !== 0 && (
+                      <S.ReceiveTitle>Received Request</S.ReceiveTitle>
+                    )}
+
+                  {item.reqs.length !== 0 &&
                     item.reqs.map((req, reqIndex) => (
                       <>
                         <S.ButtonWrapper3 key={reqIndex}>
-                          <p>{req.group.groupName} - teacher: {req.group.teacher.memberName}</p>
-                          <LongButton1
-                            props={{
-                              text: "Accept",
-                              callback: () => acceptButtonClickHandler(req.meetingJoinReqId),
-                            }}
-                          />
-                          <LongButton1
-                            props={{
-                              text: "Reject",
-                              callback: () => rejectButtonClickHandler(req.meetingJoinReqId),
-                            }}
-                          />
+                          <p>{req.group.groupName}</p>
+                          <p>{req.group.teacher.memberName}</p>
+                          <S.Low>
+                            <LongButton2
+                              props={{
+                                text: "Accept",
+                                callback: () =>
+                                  acceptButtonClickHandler(
+                                    req.meetingJoinReqId
+                                  ),
+                                color: "green",
+                              }}
+                            />
+                            <LongButton2
+                              props={{
+                                text: "Reject",
+                                callback: () =>
+                                  rejectButtonClickHandler(
+                                    req.meetingJoinReqId
+                                  ),
+                                color: "blue",
+                              }}
+                            />
+                          </S.Low>
                         </S.ButtonWrapper3>
                       </>
-                    )
-                    )}
+                    ))}
                 </>
               )}
             </li>
