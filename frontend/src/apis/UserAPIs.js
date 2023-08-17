@@ -86,12 +86,12 @@ export const GetUserInfo = async (accessToken) => {
             path: process.env.REACT_APP_BASE_SERVER + '/member',
             method: "GET",
             headers: {
-                "Authorization" : `Bearer ${accessToken}`
+                "Authorization": `Bearer ${accessToken}`
             }
         });
 
         const result = await response.json();
-        
+
         return result;
     } catch (e) {
         console.log(e);
@@ -104,7 +104,7 @@ export const TryModifyUser = async (accessToken, password, country, language, us
             path: process.env.REACT_APP_BASE_SERVER + `/member/edit`,
             method: "PUT",
             headers: {
-                "Authorization" : `Bearer ${accessToken}`
+                "Authorization": `Bearer ${accessToken}`
             },
             body: JSON.stringify({
                 "memberPassword": password,
@@ -128,7 +128,7 @@ export const TryDeleteUser = async (accessToken) => {
             path: process.env.REACT_APP_BASE_SERVER + `/member`,
             method: "DELETE",
             headers: {
-                "Authorization" : `Bearer ${accessToken}`
+                "Authorization": `Bearer ${accessToken}`
             }
         });
 
@@ -162,7 +162,7 @@ export const TryFollow = async (accessToken, memberId) => {
             path: process.env.REACT_APP_BASE_SERVER + `/member/follow/${memberId}`,
             method: "POST",
             headers: {
-                "Authorization" : `Bearer ${accessToken}`
+                "Authorization": `Bearer ${accessToken}`
             }
         });
 
@@ -177,7 +177,7 @@ export const TryFollow = async (accessToken, memberId) => {
 export const GetFollow = async (accessToken) => {
     try {
         const user_response = await GetUserInfo(accessToken);
-        
+
         if (!user_response.success) {
             return [];
         }
@@ -186,6 +186,28 @@ export const GetFollow = async (accessToken) => {
             path: process.env.REACT_APP_BASE_SERVER + `/member/follow/${user_response.response.memberId}`,
             method: "GET",
             headers: {},
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const RegisterBookmark = async (accessToken, before, after) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + '/member/bookmark',
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                "bookMarkOriContent": before,
+                "bookMarkTransContent": after,
+            })
         });
 
         const result = await response.json();

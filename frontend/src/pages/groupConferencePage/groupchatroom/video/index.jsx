@@ -11,7 +11,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import TranslateIcon from "@mui/icons-material/Translate";
 
-export default function Video({ props: { room, user, groupId } }) {
+export default function Video({ props: { room, user, groupId, sendSpeech } }) {
     const [headsetOn, setHeadsetOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
     const [translateOn, setTranslateOn] = useState(false);
@@ -91,7 +91,7 @@ export default function Video({ props: { room, user, groupId } }) {
                             translateOn,
                         }}
                     />
-                    <Texts props={{ setPropagate, nowUser: user }} />
+                    <Texts props={{ setPropagate, nowUser: user, sendSpeech }} />
                 </>
             }
         </S.Section>
