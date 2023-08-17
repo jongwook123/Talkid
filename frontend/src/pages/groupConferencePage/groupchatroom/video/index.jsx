@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 
-import * as S from './style';
+import * as S from "./style";
 
-import Videos from './videos';
-import Texts from './texts';
+import Videos from "./videos";
+import Texts from "./texts";
 
-import MicIcon from '@mui/icons-material/Mic';
-import MicOffIcon from '@mui/icons-material/MicOff';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import VideocamOffIcon from '@mui/icons-material/VideocamOff';
-import TranslateIcon from '@mui/icons-material/Translate';
+import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import TranslateIcon from "@mui/icons-material/Translate";
 
 export default function Video({ props: { room, user, groupId } }) {
     const [headsetOn, setHeadsetOn] = useState(false);
@@ -22,27 +22,27 @@ export default function Video({ props: { room, user, groupId } }) {
         setTranslateOn(false);
         setHeadsetOn(false);
     }, [room]);
-    
+
     const onClickHeadset = () => {
         if (room === groupId && user.memberType.memberTypeId === 2) {
             return;
         }
 
-        setHeadsetOn(headset => !headset);
-    }
+        setHeadsetOn((headset) => !headset);
+    };
 
     const onClickVideo = () => {
         if (room === groupId && user.memberType.memberTypeId === 2) {
             return;
         }
 
-        setVideoOn(video => !video);
-    }
+        setVideoOn((video) => !video);
+    };
 
     const onClickTranslate = () => {
-        setTranslateOn(translate => !translate)
-    }
-    
+        setTranslateOn((translate) => !translate);
+    };
+
     return (
         <S.Section videoStart={true}>
             <S.SectionHeader>
@@ -69,7 +69,11 @@ export default function Video({ props: { room, user, groupId } }) {
                         </S.ListButtonOff>
                     </li>
                     <li>
-                        <S.ListButtonTranslate onClick={onClickTranslate} visible={true} isOn={translateOn}>
+                        <S.ListButtonTranslate
+                            onClick={onClickTranslate}
+                            visible={true}
+                            isOn={translateOn}
+                        >
                             <TranslateIcon />
                         </S.ListButtonTranslate>
                     </li>
@@ -77,10 +81,19 @@ export default function Video({ props: { room, user, groupId } }) {
             </S.SectionHeader>
             {
                 <>
-                    <Videos props={{ propagate, room, nowUser: user, videoOn, headsetOn, translateOn }} />
+                    <Videos
+                        props={{
+                            propagate,
+                            room,
+                            nowUser: user,
+                            videoOn,
+                            headsetOn,
+                            translateOn,
+                        }}
+                    />
                     <Texts props={{ setPropagate, nowUser: user }} />
                 </>
             }
         </S.Section>
-    )
+    );
 }

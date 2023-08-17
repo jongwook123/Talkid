@@ -15,7 +15,7 @@ export default function Dictionary({ props: { dictionaryClicked } }) {
         <S.Section dictionaryClicked={dictionaryClicked}>
             <S.SectionHeader>
                 <h3>Dictionary</h3>
-                <ChatPageSearch props={{ id: 'dictionaryInput', placeholder: '검색할 단어 입력', onChangeInput, input }} />
+                <ChatPageSearch props={{ id: 'dictionaryInput', placeholder: 'insert a word', onChangeInput, input }} />
             </S.SectionHeader>
         </S.Section>
     )

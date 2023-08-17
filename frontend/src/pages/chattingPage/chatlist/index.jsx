@@ -85,7 +85,7 @@ export default function ChatList({ props: { socketUpdated, socket, user } }) {
                 <ChatPageSearch
                     props={{
                         id: "userInput",
-                        placeholder: "대화 찾기",
+                        placeholder: "Search Chat",
                         onChangeInput,
                         input,
                     }}

@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dm")
+@RequestMapping("/api/dm")
 public class DmRoomController {
 
     private final DmRoomService dmRoomService;

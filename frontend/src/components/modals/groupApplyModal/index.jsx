@@ -52,7 +52,13 @@ function GroupApplyModal() {
     e.preventDefault();
     try {
       const result = await TryApplyGroup(token, selectedGroupId);
-      console.log(result);
+
+      if (result.success) {
+        alert("Apply Success!!");
+        setIsOpen(false);
+        return;
+      }
+
       if (!result.success) {
         alert(result.error.message); // 에러 메시지 표시
       }
@@ -72,9 +78,13 @@ function GroupApplyModal() {
   return (
     <>
       <S.ModalContainer>
-        <S.ModalBtn onClick={openModalHandler}>
-          <AddCircleOutlineIcon />
-        </S.ModalBtn>
+        <LongButton1
+          props={{
+            color: "green",
+            text: "Group Apply",
+            callback: openModalHandler,
+          }}
+        />
         {isOpen ? (
           <S.ModalBackdrop onClick={openModalHandler}>
             <S.ModalView onClick={(e) => e.stopPropagation()}>
@@ -83,9 +93,9 @@ function GroupApplyModal() {
                   <LongInput1
                     props={{
                       id: "keyword",
-                      desc: "검색",
+                      desc: "search",
                       color: "orange",
-                      placeholder: "내용을 입력하세요",
+                      placeholder: "insert keywords",
                       type: "text",
                       value: inputs.keyword,
                       callback: onChangeHandler,
@@ -93,8 +103,8 @@ function GroupApplyModal() {
                   />
                   <LongButton1
                     props={{
-                      color: "green",
-                      text: "검색",
+                      color: "blue",
+                      text: "search group",
                       callback: searchButtonClickHandler,
                     }}
                   />

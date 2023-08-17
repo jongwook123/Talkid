@@ -28,7 +28,7 @@ export default function FindPasswordPage() {
         e.preventDefault();
 
         if (!inputs.email) {
-            alert("E-mail를 입력하세요.");
+            alert("Insert your E-mail.");
 
             return;
         }
@@ -36,7 +36,7 @@ export default function FindPasswordPage() {
         const regex = new RegExp(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/);
 
         if (!regex.test(inputs.email)) {
-            alert("이메일 형식이 유효하지 않습니다.");
+            alert("Invalid E-mail.");
 
             return;
         }
@@ -44,9 +44,9 @@ export default function FindPasswordPage() {
         const result = await TryFindPassword(inputs.email);
 
         if (!result.success) {
-            alert("비밀번호 발급 실패, 다시 확인해주세요.");
+            alert("Failed, Try again.");
         } else {
-            alert("비밀번호 발급 성공!");
+            alert("Success! Check your e-mail");
             navigate("/signin");
         }
     };
@@ -60,7 +60,7 @@ export default function FindPasswordPage() {
                 <S.FindPasswordSection>
                     <S.FindPasswordSectionHeader>
                         <Link to='/'>
-                            <h2>비밀번호찾기 영역</h2>
+                            <h2>Find Password Section</h2>
                             <img src={TALKIDS} alt="" />
                         </Link>
                     </S.FindPasswordSectionHeader>

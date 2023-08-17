@@ -26,7 +26,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meeting")
+@RequestMapping("/api/meeting")
 public class MeetingController {
 
     private final GroupService groupService;

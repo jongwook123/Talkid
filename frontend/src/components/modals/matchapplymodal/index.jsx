@@ -16,7 +16,7 @@ function MatchApplyModal({ token, groups, meetingScheduleId }) {
   useEffect(() => {
     if (groups.length === 0) {
       //만약 선생님이 속해있는 그룹이 없으면
-      alert("속한 그룹이 없으면 매칭을 할 수 없습니다");
+      alert("You don't have any group.");
       setIsOpen(false);
       return;
     }
@@ -94,7 +94,7 @@ function MatchApplyModal({ token, groups, meetingScheduleId }) {
                   </S.DropboxFieldset>
                 </>
               ) : (
-                <p>그룹이 없습니다.</p>
+                <p>You don't have any group.</p>
               )}
               <S.ButtonWrapper>
                 <LongButton1
