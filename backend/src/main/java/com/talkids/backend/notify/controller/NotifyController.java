@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/notify")
+@RequestMapping("/api/notify")
 @AllArgsConstructor
 @EnableScheduling
 public class NotifyController {
