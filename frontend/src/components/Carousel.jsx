@@ -9,7 +9,7 @@ import { FerrisWheel } from "./Park/FerrisWheel";
 import { Podium } from "./Park/Podium";
 
 const STEP_DURATION = 5000;
-const dummyexp = 400
+
 export const Carousel = (props) => {
   const { carouselRotation } = useSpring({
     from: {
@@ -70,7 +70,7 @@ export const Carousel = (props) => {
             position={[40,8,50]}
             />
           )}
-          {dummyexp >= 100  && (
+          {props.exp >= 100  && (
           <>
             <Float speed={-1} floatIntensity={0.01}>
                 <Witch
@@ -87,7 +87,7 @@ export const Carousel = (props) => {
             
           </>
           )}
-          {dummyexp >= 200 && (
+          {props.exp >= 200 && (
           <>
             <Podium position={[-44, 8, 80]} rotation-y={Math.PI / 2} />
           </>
