@@ -206,6 +206,98 @@ export const FollowListItem = styled.li`
     }
 `
 
+export const BookmarkModal = styled.section`
+    width: 480px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    background-color: ${props => props.theme.colors.background_color.white};
+    border-radius: ${props => props.theme.border_radius.lv4};
+`
+
+export const BookmarkModalHeader = styled.h2`
+    font-family: 'Righteous', sans-serif;
+    text-align: center;
+    font-size: ${props => props.theme.font_size.lv5};
+    color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+`
+
+export const BookmarkModalList = styled.ul`
+    margin: 35px 0;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 200px;
+    overflow-y: scroll;
+    gap: 5px;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        background-color: ${props => props.theme.colors.background_color.white};
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange}` : props.color === 'green' ? `${props.theme.colors.theme.green_light}` : `${props.theme.colors.theme.blue_light}`};
+        border-radius: 10px;
+        background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+    }
+`
+
+export const BookmarkListItem = styled.li`
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+`
+
+export const BookmarkTextWrapper = styled.div`
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    & > p {
+        font-size: ${props => props.theme.font_size.lv3};
+        color: ${props => props.theme.colors.font.light_black};
+    }
+`
+
+export const BookmarkListButton = styled.button`
+    width: 80px;
+    height: 48px;
+    font-size: ${props => props.theme.font_size.lv3};
+    color: ${props => props.theme.colors.font.white};
+    background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+    padding: 0 12px;
+`
+
+export const BookmarkModalButton = styled.button`
+    border: none;
+    padding: 6px 25px;
+    margin-left: auto;
+    background-color: ${props => props.color === 'orange' ? `${props.theme.colors.theme.orange_dark}` : props.color === 'green' ? `${props.theme.colors.theme.green}` : `${props.theme.colors.theme.blue}`};
+    color: ${props => props.theme.colors.font.white};
+    font-size: ${props => props.theme.font_size.lv3_1};
+    border-radius: ${props => props.theme.border_radius.lv2};
+
+    &:focus {
+        outline: none;
+    }
+`
+
 export const TextWrapper = styled.div`
     display: flex;
     flex-direction: column;

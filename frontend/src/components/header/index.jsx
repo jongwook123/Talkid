@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signoutUser } from "redux/slice/userSlice";
 
-import { GetUserInfo, GetFollow, TryFollow } from "apis/UserAPIs";
+import { GetUserInfo, GetFollow, TryFollow, GetBookmarks, DeleteBookmark } from "apis/UserAPIs";
 
 import * as S from "./style";
 
@@ -20,6 +20,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import GroupsIcon from "@mui/icons-material/Groups";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const colors = ["orange", "green", "blue"];
@@ -109,6 +110,7 @@ export default function Header() {
     const [selectGroup, setSelectGroup] = useState(false);
     const [selectNotify, setSelectNotify] = useState(false);
     const [selectFollow, setSelectFollow] = useState(false);
+    const [selectBookmark, setSelectBookmark] = useState(false);
 
     // 윈도우 클릭
     const onClickWindow = useCallback(() => {
@@ -116,6 +118,7 @@ export default function Header() {
         setSelectGroup(false);
         setSelectNotify(false);
         setSelectFollow(false);
+        setSelectBookmark(false);
     }, []);
 
     // 유저 버튼 클릭
@@ -139,12 +142,14 @@ export default function Header() {
         setSelectGroup(false);
         setSelectNotify(true);
         setSelectFollow(false);
+        setSelectBookmark(false);
     };
 
     // 알람 wrapper 클릭
     const onClickWrapper = (e) => {
         setSelectNotify(false);
         setSelectFollow(false);
+        setSelectBookmark(false);
     };
 
     // modal body 클릭
@@ -156,6 +161,7 @@ export default function Header() {
     const onClickModalClose = (e) => {
         setSelectNotify(false);
         setSelectFollow(false);
+        setSelectBookmark(false);
     };
 
     // 헤더 링크 클릭
@@ -164,6 +170,7 @@ export default function Header() {
         setSelectGroup(false);
         setSelectNotify(false);
         setSelectFollow(false);
+        setSelectBookmark(false);
     };
 
     useEffect(() => {
@@ -204,10 +211,6 @@ export default function Header() {
         }
     };
 
-    useEffect(() => {
-        getUserFollow(user.accessToken);
-    }, [user, navigate]);
-
     // 팔로워 버튼 클릭
     const onClickFollower = (e) => {
         e.stopPropagation();
@@ -239,12 +242,50 @@ export default function Header() {
         });
     };
 
+    // 미팅 알람 클릭
     const onClickMeetingAlarm = (groupId) => {
         navigate("/conference", {
             state: {
                 groupId: groupId,
             },
         });
+    }
+
+    // 북마크 
+    const [bookmarks, setBookMarks] = useState([]);
+
+    const getBookmarks = async () => {
+        if (!user.accessToken) {
+            navigate("/signin");
+
+            return;
+        }
+
+        const result = await GetBookmarks(user.accessToken);
+
+        if (result.success) {
+            setBookMarks(result.response);
+        } else {
+            navigate("/signin");
+        }
+    };
+
+    // 북마크 버튼 클릭
+    const onClickBookmark = (e) => {
+        e.stopPropagation();
+        setSelectUser(false);
+        setSelectGroup(false);
+        setSelectNotify(false);
+        setSelectFollow(false);
+        setSelectBookmark(true);
+
+        getBookmarks();
+    };
+
+    const onClickDeleteBookmark = async (bookmarkId) => {
+        await DeleteBookmark(user.accessToken, bookmarkId);
+
+        setBookMarks(bookmarks => bookmarks.filter(bookmark => bookmark.bookMarkId !== bookmarkId));
     }
 
     // 로그아웃
@@ -286,11 +327,11 @@ export default function Header() {
                                         } else {
                                             return (
                                                 <li key={notify.notifyContentId}>
-                                                    <S.AlarmListButton onClick={() => {onClickMeetingAlarm(notify.notifyBody)}}>{notify.notifyHeader}</S.AlarmListButton>
+                                                    <S.AlarmListButton onClick={() => { onClickMeetingAlarm(notify.notifyBody) }}>{notify.notifyHeader}</S.AlarmListButton>
                                                 </li>
                                             )
                                         }
-                                        
+
                                     })}
                                 </S.AlarmModalList>
                                 <S.AlarmModalButton onClick={onClickModalClose} color={color1}>
@@ -351,6 +392,12 @@ export default function Header() {
                                 <S.ButtinListButton color={color4} onClick={onClickFollower}>
                                     <Diversity3Icon />
                                     <span>followers</span>
+                                </S.ButtinListButton>
+                            </li>
+                            <li>
+                                <S.ButtinListButton color={color4} onClick={onClickBookmark}>
+                                    <BookmarkIcon />
+                                    <span>bookmarks</span>
                                 </S.ButtinListButton>
                             </li>
                             <li>
@@ -430,6 +477,29 @@ export default function Header() {
                                     </S.FollowList>
                                 </S.FollowListWrapper>
                             </S.FollowModal>
+                        </S.ModalWrapper>
+                        <S.ModalWrapper onClick={onClickWrapper} visible={selectBookmark}>
+                            <S.BookmarkModal onClick={onClickBody}>
+                                <S.BookmarkModalHeader color={color4}>Alarms</S.BookmarkModalHeader>
+                                <S.BookmarkModalList>
+                                    {
+                                        bookmarks.map(bookmark => {
+                                            return (
+                                                <S.BookmarkListItem key={bookmark.bookMarkId}>
+                                                    <S.BookmarkTextWrapper>
+                                                        <p>original : {bookmark.bookMarkOriContent}</p>
+                                                        <p>translated : {bookmark.bookMarkTransContent}</p>
+                                                    </S.BookmarkTextWrapper>
+                                                    <S.BookmarkListButton onClick={() => {onClickDeleteBookmark(bookmark.bookMarkId)}} color={color4}>delete</S.BookmarkListButton>
+                                                </S.BookmarkListItem>
+                                            )
+                                        })
+                                    }
+                                </S.BookmarkModalList>
+                                <S.BookmarkModalButton onClick={onClickModalClose} color={color4}>
+                                    close
+                                </S.BookmarkModalButton>
+                            </S.BookmarkModal>
                         </S.ModalWrapper>
                     </S.NavListItem>
                 </S.NavList>

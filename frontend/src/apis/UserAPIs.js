@@ -217,3 +217,39 @@ export const RegisterBookmark = async (accessToken, before, after) => {
         console.log(e);
     }
 }
+
+export const GetBookmarks = async (accessToken) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + '/member/bookmark',
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const DeleteBookmark = async (accessToken, bookmarkId) => {
+    try {
+        const response = await FetchTemplate({
+            path: process.env.REACT_APP_BASE_SERVER + '/member/bookmark/' + bookmarkId,
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
