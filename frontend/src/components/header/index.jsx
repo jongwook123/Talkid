@@ -239,6 +239,14 @@ export default function Header() {
         });
     };
 
+    const onClickMeetingAlarm = (groupId) => {
+        navigate("/conference", {
+            state: {
+                groupId: groupId,
+            },
+        });
+    }
+
     // 로그아웃
     const onClickSignout = () => {
         dispatch(signoutUser());
@@ -278,13 +286,7 @@ export default function Header() {
                                         } else {
                                             return (
                                                 <li key={notify.notifyContentId}>
-                                                    <DropBox2
-                                                        props={{
-                                                            title: notify.notifyHeader,
-                                                            content: notify.notifyBody,
-                                                            color: color1,
-                                                        }}
-                                                    />
+                                                    <S.AlarmListButton onClick={() => {onClickMeetingAlarm(notify.notifyBody)}}>{notify.notifyHeader}</S.AlarmListButton>
                                                 </li>
                                             )
                                         }

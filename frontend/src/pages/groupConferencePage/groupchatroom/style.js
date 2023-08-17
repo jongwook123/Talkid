@@ -361,6 +361,7 @@ export const TranslateButton = styled.button`
     background-color: inherit;
     margin-top: auto;
     margin-bottom: 3px;
+    margin-left: 5px;
     color: ${props => props.theme.colors.font.light_gray2};
     font-size: ${props => props.theme.font_size.lv2};
 `
