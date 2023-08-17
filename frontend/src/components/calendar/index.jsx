@@ -23,8 +23,8 @@ function Calendar({ selectedMeetingStart, setSelectedMeetingStart, selectedMeeti
                     selected={selectedMeetingStart}
                     onChange={handleMeetingStartChange}
                     showTimeSelect
-                    minTime={setHours(setMinutes(new Date(), 0), 0)}
-                    maxTime={setHours(setMinutes(new Date(), 30), 24)}
+                    minTime={setHours(setMinutes(new Date(), 0), 1)}
+                    maxTime={setHours(setMinutes(new Date(), 30), 23)}
                     dateFormat="MMMM d, yyyy h:mm aa"
                 />
             </S.DateBox1>
@@ -34,8 +34,8 @@ function Calendar({ selectedMeetingStart, setSelectedMeetingStart, selectedMeeti
                     selected={selectedMeetingEnd}
                     onChange={handleMeetingEndChange}
                     showTimeSelect
-                    minTime={setHours(setMinutes(new Date(), 0), 0)}
-                    maxTime={setHours(setMinutes(new Date(), 30), 24)}
+                    minTime={setHours(setMinutes(new Date(), 0), 1)}
+                    maxTime={setHours(setMinutes(new Date(), 30), 23)}
                     dateFormat="MMMM d, yyyy h:mm aa"
                 />
             </S.DateBox2>
