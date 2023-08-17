@@ -117,9 +117,13 @@ export default function Videos({ props: { propagate, room, nowUser, videoOn, hea
 	}, []);
 
 	useEffect(() => {
+		setUsers([]);
+	}, [room])
+
+	useEffect(() => {
 		socketRef.current = io.connect(process.env.REACT_APP_VIDEO_SERVER);
 
-		// getLocalStream();
+		getLocalStream();
 
 		socketRef.current.on('all_users', (allUsers) => {
 			allUsers.forEach(async (user) => {

@@ -5,8 +5,8 @@ import * as S from './style';
 import Videos from './videos';
 import Texts from './texts';
 
-import HeadsetIcon from '@mui/icons-material/Headset';
-import HeadsetOffIcon from '@mui/icons-material/HeadsetOff';
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import TranslateIcon from '@mui/icons-material/Translate';
@@ -48,12 +48,12 @@ export default function Video({ props: { videoStart, setVideoStart, room, user }
                 <S.HeaderList>
                     <li>
                         <S.ListButtonNormal onClick={onClickHeadset} visible={headsetOn}>
-                            <HeadsetIcon />
+                            <MicIcon />
                         </S.ListButtonNormal>
                     </li>
                     <li>
                         <S.ListButtonOff onClick={onClickHeadset} visible={!headsetOn}>
-                            <HeadsetOffIcon />
+                            <MicOffIcon />
                         </S.ListButtonOff>
                     </li>
                     <li>
