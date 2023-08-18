@@ -49,6 +49,8 @@ export default function Texts({ props: { setPropagate, nowUser, sendSpeech, head
         }
 
         if (!headsetOn) {
+            resetTranscript();
+            
             return;
         }
 
