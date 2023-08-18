@@ -53,24 +53,21 @@ TALKIDS는 언어 교류를 촉진하고 기존의 제약조건을 극복하는 
 
 |그룹페이지|로그인 후 메인페이지|
 | --- | --- |
-|<img src="/uploads/99da41bc9455efc9fc0d28eb2695f6c9/그룹페이지.gif" width="300px"/>|![로그인_후_메인](/uploads/6024422308a2018c4f4997c29b4f4d99/로그인_후_메인.gif)|
+|<img src="/uploads/99da41bc9455efc9fc0d28eb2695f6c9/그룹페이지.gif" width="800px"/>|<img src="/uploads/6024422308a2018c4f4997c29b4f4d99/로그인_후_메인.gif" width="800px"/>|
+
 
 |메인화면 레벨1|메인화면 레벨2|
 | --- | --- |
-|![메인_레벨1](/uploads/33123e04f198663c59f8f95967818c3f/메인_레벨1.gif)
-|![메인_레벨2](/uploads/b295f008b70d3b4469c949b1c1a5b245/메인_레벨2.gif)
-|
+|<img src="/uploads/33123e04f198663c59f8f95967818c3f/메인_레벨1.gif" width="800px"/>|<img src="/uploads/b295f008b70d3b4469c949b1c1a5b245/메인_레벨2.gif" width="800px"/>|
 
 |메인화면 레벨3|번역 및 사전|
 | --- | --- |
-|![메인_레벨3](/uploads/f90a8933deb2aaefa4e6ec646be75058/메인_레벨3.gif)
-|![번역__사전](/uploads/3e70a74b2de78f33731c9fc439ddba99/번역__사전.gif)
-|
+|<img src="/uploads/f90a8933deb2aaefa4e6ec646be75058/메인_레벨3.gif" width="800px"/>|<img src="/uploads/3e70a74b2de78f33731c9fc439ddba99/번역__사전.gif" width="800px"/>|
+
 
 |팔로우 기능|학생 매칭 기능|
 | --- | --- |
-|![팔로우_기능](/uploads/e12bf7813e525ae133ca5730b2e7edaf/팔로우_기능.gif)
-|![학생_매칭_기능](/uploads/851480ea4bb4b5f91ff9c92a0166aa21/학생_매칭_기능.gif)|
+|<img src="/uploads/e12bf7813e525ae133ca5730b2e7edaf/팔로우_기능.gif" width="800px"/>|<img src="/uploads/851480ea4bb4b5f91ff9c92a0166aa21/학생_매칭_기능.gif" width="800px"/>|
 
 
 ## ⚙️ 기술 스택
