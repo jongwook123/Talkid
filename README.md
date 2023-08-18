@@ -1,8 +1,6 @@
 # README
 
-[https://github.com/SW-Project-Yoo-Hoo/YooHoo](https://github.com/SW-Project-Yoo-Hoo/YooHoo)
-
-![Untitled](README%202fd77e7e946543cc905a42af42fbacef/Untitled.png)
+![로고](/uploads/6f14ff0bbf3b6baf60140cbc2c6f6ff7/로고.png)
 
 ## 📰 프로젝트 소개
 
@@ -53,10 +51,27 @@ TALKIDS는 언어 교류를 촉진하고 기존의 제약조건을 극복하는 
 
 ---
 
-|  |  |
+|그룹페이지|로그인 후 메인페이지|
 | --- | --- |
-|  |  |
-|  |  |
+|![그룹페이지](/uploads/99da41bc9455efc9fc0d28eb2695f6c9/그룹페이지.gif)|![로그인_후_메인](/uploads/6024422308a2018c4f4997c29b4f4d99/로그인_후_메인.gif)|
+
+|메인화면 레벨1|메인화면 레벨2|
+| --- | --- |
+|![메인_레벨1](/uploads/33123e04f198663c59f8f95967818c3f/메인_레벨1.gif)
+|![메인_레벨2](/uploads/b295f008b70d3b4469c949b1c1a5b245/메인_레벨2.gif)
+|
+
+|메인화면 레벨3|번역 및 사전|
+| --- | --- |
+|![메인_레벨3](/uploads/f90a8933deb2aaefa4e6ec646be75058/메인_레벨3.gif)
+|![번역__사전](/uploads/3e70a74b2de78f33731c9fc439ddba99/번역__사전.gif)
+|
+
+|팔로우 기능|학생 매칭 기능|
+| --- | --- |
+|![팔로우_기능](/uploads/e12bf7813e525ae133ca5730b2e7edaf/팔로우_기능.gif)
+|![학생_매칭_기능](/uploads/851480ea4bb4b5f91ff9c92a0166aa21/학생_매칭_기능.gif)|
+
 
 ## ⚙️ 기술 스택
 
