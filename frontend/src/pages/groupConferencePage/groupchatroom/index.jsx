@@ -128,7 +128,7 @@ export default function GroupChatRoom({
   };
 
   const sendSpeech = (message) => {
-    socket.emit("requestMessage", {
+    socket.emit("requestGroupMessage", {
       roomId: selectedRoom,
       sender: user.memberName,
       messageContent: message,
