@@ -91,7 +91,7 @@ export default function Video({ props: { room, user, groupId, sendSpeech } }) {
                             translateOn,
                         }}
                     />
-                    <Texts props={{ setPropagate, nowUser: user, sendSpeech }} />
+                    <Texts props={{ setPropagate, nowUser: user, sendSpeech, headsetOn }} />
                 </>
             }
         </S.Section>
