@@ -52,16 +52,20 @@ export default function Texts({ props: { setPropagate, nowUser, sendSpeech, head
             return;
         }
 
+        if (!headsetOn) {
+            resetTranscript();
+            
+            return;
+        }
+
         if (prev.prevText === transcript) {
             if (epmtyCount < 2) {
                 setEmptyCount(epmtyCount => epmtyCount + 1)
 
                 return;
             }
-
-            if (headsetOn) {
-                sendSpeech(transcript);
-            }
+            
+            sendSpeech(transcript);
             resetTranscript();
             setTranslate("");
             setEmptyCount(0);
@@ -73,7 +77,6 @@ export default function Texts({ props: { setPropagate, nowUser, sendSpeech, head
                         "Content-Type": "application/json",
                     }
                 });
-
                 const result = await response.json();
 
                 setTranslate(result.translated);
@@ -83,14 +86,6 @@ export default function Texts({ props: { setPropagate, nowUser, sendSpeech, head
             prev.setPrevText(transcript);
         }
     }, 1000);
-
-    useEffect(() => {
-        if (headsetOn) {
-            SpeechRecognition.startListening();
-        } else {
-            SpeechRecognition.stopListening();
-        }
-    }, [headsetOn]);
 
     useEffect(() => {
         setPropagate(translate);

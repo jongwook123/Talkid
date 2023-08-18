@@ -49,6 +49,8 @@ export default function Texts({ props: { setPropagate, nowUser, sendSpeech, head
         }
 
         if (!headsetOn) {
+            resetTranscript();
+            
             return;
         }
 
@@ -80,14 +82,6 @@ export default function Texts({ props: { setPropagate, nowUser, sendSpeech, head
             prev.setPrevText(transcript);
         }
     }, 1000);
-
-    useEffect(() => {
-        if (headsetOn) {
-            SpeechRecognition.startListening();
-        } else {
-            SpeechRecognition.stopListening();
-        }
-    }, [headsetOn]);
 
     useEffect(() => {
         setPropagate(translate);
