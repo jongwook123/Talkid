@@ -82,6 +82,14 @@ export default function Texts({ props: { setPropagate, nowUser, sendSpeech, head
     }, 1000);
 
     useEffect(() => {
+        if (headsetOn) {
+            SpeechRecognition.startListening();
+        } else {
+            SpeechRecognition.stopListening();
+        }
+    }, [headsetOn]);
+
+    useEffect(() => {
         setPropagate(translate);
     }, [translate, setPropagate]);
 
