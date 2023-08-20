@@ -1,10 +1,12 @@
 # README
 
-![로고](/uploads/6f14ff0bbf3b6baf60140cbc2c6f6ff7/로고.png)
+<div align="center">
+<img src="/uploads/6f14ff0bbf3b6baf60140cbc2c6f6ff7/로고.png" width="600px" />
+</div>
+
+<br>  
 
 ## 📰 프로젝트 소개
-
----
 
 **TALKIDS: 언어교류를 위한 온라인 플랫폼**
 
@@ -12,9 +14,9 @@ TALKIDS는 언어 교류를 촉진하고 기존의 제약조건을 극복하는 
 
 개발 기간 : `23.07.17 ~ 23.08.18`
 
-## 💡 주요 기능
+<br>  
 
----
+## 💡 주요 기능
 
 ### 화상 전화
 
@@ -47,9 +49,9 @@ TALKIDS는 언어 교류를 촉진하고 기존의 제약조건을 극복하는 
 
 - React-three-fiber를 이용하여 사용자의 경험치를 시각화, 흥미로운 3D 요소 적용.
 
-## 💻 실행 화면
+<br>  
 
----
+## 💻 실행 화면
 
 |그룹페이지|로그인 후 메인페이지|
 | --- | --- |
@@ -69,10 +71,10 @@ TALKIDS는 언어 교류를 촉진하고 기존의 제약조건을 극복하는 
 | --- | --- |
 |<img src="/uploads/e12bf7813e525ae133ca5730b2e7edaf/팔로우_기능.gif" width="800px"/>|<img src="/uploads/851480ea4bb4b5f91ff9c92a0166aa21/학생_매칭_기능.gif" width="800px"/>|
 
+<br>  
+
 
 ## ⚙️ 기술 스택
-
----
 
 ### Frontend
 
@@ -104,25 +106,48 @@ TALKIDS는 언어 교류를 촉진하고 기존의 제약조건을 극복하는 
 <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white">
 <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
-<img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
+<img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"> <br>  
 
 
+<br>  
+
+  
 ## 📊 ERD
 
----
+<img src="/uploads/206e8e09d9e7b41addfb9885a0bf4b71/ERDCloud.png" width="700px"/>  <br>  
 
-![ERDCloud.png](README%202fd77e7e946543cc905a42af42fbacef/ERDCloud.png)
-
+<br>  
+ 
+  
 ## 📄 아키텍처 설계도
 
----
+<img src="/uploads/cef1a59d22bdecf3a9a008fe44973570/시스템_구조도.png" width="700px"/>  <br>  
 
-![시스템 구조도.png](README%202fd77e7e946543cc905a42af42fbacef/%25EC%258B%259C%25EC%258A%25A4%25ED%2585%259C_%25EA%25B5%25AC%25EC%25A1%25B0%25EB%258F%2584.png)
+<br>  
+
+
 
 ## ✨ 팀원 소개
-
----
-
-| Front-End |  |  | Back-End |  |
-| --- | --- | --- | --- | --- |
-| 김선영 | 박종욱 | 서동현 | 유영서 | 이우철 |
+<table>
+ <tr align="center">
+   <th colspan="3">Front-End</th>
+   <th colspan="2">Back-End</th>
+ </tr>
+ <tr align = "center">
+  <td>
+   김선영
+  </td>
+  <td>
+   박종욱
+  </td>
+  <td>
+   서동현
+  </td>
+    <td>
+   유영서
+  </td>
+    <td>
+   이우철
+  </td>
+ </tr>
+</table>
